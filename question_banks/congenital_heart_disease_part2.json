@@ -1,0 +1,573 @@
+{
+  "questionBank": {
+    "metadata": {
+      "title": "USMLE Step 1 Question Bank: Congenital Heart Disease - Part 2",
+      "description": "Questions 9-16: PDA, TGA, and Genetic Syndromes",
+      "partNumber": 2,
+      "totalParts": 5,
+      "questionsInPart": 8,
+      "version": "1.0",
+      "targetAudience": "MS2 Students"
+    },
+    "questions": [
+      {
+        "id": 9,
+        "title": "Patent Ductus Arteriosus - Pharmacologic Closure",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Patent Ductus Arteriosus",
+        "subtopic": "Pharmacologic Management",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "An 8-day-old premature boy on mechanical ventilation for respiratory distress syndrome has a continuous murmur at the left infraclavicular region with bounding pulses and widened pulse pressure. Echocardiography demonstrates a persistent vascular connection between the descending aorta and the pulmonary artery. To promote closure of this connection, the neonate receives a medication that reduces prostaglandin E₂ synthesis.",
+        "questionText": "Which of the following best describes the drug's mechanism of action?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Inhibition of cyclooxygenase (COX-1 and COX-2)",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "Competitive inhibition of prostaglandin E synthase",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Inhibition of phospholipase A₂",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Antagonism of prostaglandin E (EP) receptors on ductal smooth muscle",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Inhibition of nitric oxide synthase",
+            "isCorrect": false
+          },
+          {
+            "letter": "F",
+            "text": "Blockade of endothelin-1 receptors",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "The ductus arteriosus normally closes within the first 2 days after birth as rising oxygen tension and declining placental prostaglandin E₂ trigger constriction of ductal smooth muscle. Premature infants often have elevated PGE₂ levels or increased sensitivity to prostaglandins, leading to persistent patency (PDA). NSAIDs such as indomethacin or ibuprofen inhibit cyclooxygenase (COX-1 and COX-2), the enzyme converting arachidonic acid to prostaglandin H₂, thereby decreasing downstream PGE₂ production. Loss of PGE₂'s vasodilatory effect causes functional and then anatomic ductal closure.",
+          "incorrect": {
+            "B": "PGE synthase inhibition theoretically would ↓ PGE₂, but no neonatal drug acts here.",
+            "C": "Phospholipase A₂ inhibition by corticosteroids blocks this upstream enzyme → ↓ all eicosanoids. Too broad; not used for PDA closure.",
+            "D": "EP-receptor antagonism would directly oppose PGE₂ signaling but no approved neonatal agent works at this level.",
+            "E": "Nitric oxide synthase inhibition causes ↓ NO → vasoconstriction system-wide, unrelated to prostaglandins.",
+            "F": "Endothelin-1 receptor blockade (Bosentan) causes pulmonary vasodilation; used in pulmonary hypertension."
+          }
+        },
+        "educationalObjective": "Indomethacin and ibuprofen close a patent ductus arteriosus by inhibiting cyclooxygenase (COX-1 and COX-2), decreasing prostaglandin E₂ levels. Loss of this vasodilatory stimulus causes ductal smooth-muscle constriction and functional closure.",
+        "keyFacts": [
+          "PDA closure: indomethacin or ibuprofen (COX inhibitors)",
+          "Mechanism: ↓ PGE₂ → smooth muscle contraction",
+          "Adverse effects: ↓ renal perfusion, NEC risk",
+          "If medical fails → surgical ligation",
+          "Opposite: PGE₁ (alprostadil) keeps ductus OPEN in ductal-dependent lesions"
+        ],
+        "tags": [
+          "patent-ductus-arteriosus",
+          "pharmacology",
+          "nsaids",
+          "prostaglandins",
+          "neonatal-cardiology",
+          "indomethacin"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Knowledge"
+      },
+      {
+        "id": 10,
+        "title": "Ductal-Dependent Lesion - PGE₁ Therapy",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Transposition of Great Arteries",
+        "subtopic": "Prostaglandin Therapy",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A term male newborn becomes severely cyanotic within 30 minutes after birth. Pregnancy and delivery were uncomplicated. On examination, the infant is tachypneic with subcostal retractions, a single loud S₂, and no significant murmur. Pulse oximetry shows oxygen saturations of 68% on room air and 70% after 10 minutes of 100% oxygen. Chest radiograph shows a narrow mediastinum. The infant is started on an intravenous drug that rapidly improves oxygenation by promoting blood mixing between the pulmonary and systemic circulations.",
+        "questionText": "This medication acts through which of the following mechanisms?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Activation of prostaglandin E (EP) receptors on ductal smooth muscle",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "Activation of nitric-oxide synthase in pulmonary vascular endothelium",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Inhibition of cyclooxygenase (COX-1 and COX-2)",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Blockade of endothelin-1 receptors",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Inhibition of phosphodiesterase III in cardiac myocytes",
+            "isCorrect": false
+          },
+          {
+            "letter": "F",
+            "text": "Competitive inhibition of phospholipase A₂",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "This infant has transposition of the great arteries (TGA), indicated by severe cyanosis at birth, poor response to 100% O₂ (hyperoxia test failure), single loud S2, and narrow mediastinum ('egg-on-a-string' on CXR). In TGA, systemic and pulmonary circulations run in parallel. Survival depends on blood mixing through a patent ductus arteriosus (PDA), atrial septal defect, or VSD. Prostaglandin E₁ (alprostadil) binds Gs-coupled EP receptors on ductal smooth muscle → ↑ cAMP → smooth-muscle relaxation → ductal vasodilation and patency.",
+          "incorrect": {
+            "B": "NO synthase activation raises NO → systemic vasodilation, but doesn't target the ductus specifically.",
+            "C": "COX inhibition by NSAIDs ↓ PGE₂ → ductal closure — opposite effect.",
+            "D": "Endothelin-1 blockade is used for pulmonary hypertension; no effect on ductal tone.",
+            "E": "PDE III inhibition (Milrinone) ↑ cAMP in heart → ↑ inotropy & vasodilation; not used for ductal patency.",
+            "F": "PLA₂ inhibition by corticosteroids blocks eicosanoid synthesis broadly, not selective for PDA."
+          }
+        },
+        "educationalObjective": "In ductal-dependent congenital heart disease (e.g., transposition of the great arteries, pulmonary atresia, tricuspid atresia), continuous infusion of prostaglandin E₁ (alprostadil) activates EP receptors on ductal smooth muscle, increasing cAMP and causing vasodilation that maintains ductal patency until surgical repair.",
+        "keyFacts": [
+          "Ductal-dependent lesions: TGA, pulmonary atresia, tricuspid atresia, critical coarctation",
+          "PGE₁ (alprostadil) → EP receptor → ↑ cAMP → ductus stays open",
+          "Side effects: apnea (needs monitoring), fever, hypotension",
+          "Bridge to: balloon atrial septostomy or definitive surgery"
+        ],
+        "tags": [
+          "transposition-great-arteries",
+          "prostaglandin-e1",
+          "ductal-dependent-lesions",
+          "neonatal-emergency",
+          "alprostadil",
+          "pharmacology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 11,
+        "title": "PDA Ligation - Nerve Injury",
+        "subject": "Anatomy",
+        "system": "Cardiovascular",
+        "topic": "Patent Ductus Arteriosus",
+        "subtopic": "Surgical Complications",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 3-week-old infant develops respiratory distress and a continuous murmur heard best below the left clavicle. Surgical correction is performed through a left thoracotomy. Several hours later, the infant's cry becomes weak and the chest radiograph shows an elevated left hemidiaphragm. Laryngoscopy reveals the left vocal cord fixed in a paramedian position, but the right cord moves normally.",
+        "questionText": "Which of the following best explains both postoperative findings?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Ligation injury to the left recurrent laryngeal nerve coursing posterior to the ligamentum arteriosum",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "Ischemic neuropathy of the left phrenic nerve running anterior to the lung root",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Bilateral vagal nerve traction near the esophageal hiatus",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Transection of the left sympathetic chain adjacent to the aortic arch",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Entrapment of the right recurrent laryngeal nerve under the right subclavian artery",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "During surgical repair of a patent ductus arteriosus, the left recurrent laryngeal nerve (RLN)—a branch of the vagus—can be injured because it loops under the aortic arch, posterior to the ligamentum arteriosum (postnatal remnant of the ductus arteriosus, derived from the left 6th aortic arch). The left RLN branches from vagus, loops under aortic arch posterior to ligamentum arteriosum, ascends in tracheoesophageal groove, and innervates all intrinsic laryngeal muscles (except cricothyroid). Injury causes ipsilateral vocal-cord paralysis → hoarseness, weak cry, stridor, ineffective cough, and may also cause elevated hemidiaphragm if neighboring vagal fibers are inflamed.",
+          "incorrect": {
+            "B": "Phrenic nerve injury runs anterior to the lung root along the pericardium; injury → diaphragm paralysis but no hoarseness.",
+            "C": "Bilateral vagal traction could impair both cords and parasympathetic tone → bilateral cord paralysis, bradycardia; only left cord affected here.",
+            "D": "Sympathetic chain transection causes Horner syndrome (ptosis, miosis, anhidrosis), unrelated to cry or diaphragm.",
+            "E": "Right RLN loops under right subclavian in neck, not affected by PDA surgery."
+          }
+        },
+        "educationalObjective": "During surgical repair of a patent ductus arteriosus, the left recurrent laryngeal nerve (RLN)—a branch of the vagus—can be injured because it loops under the aortic arch, posterior to the ligamentum arteriosum. Damage produces ipsilateral vocal-cord paralysis (hoarseness, weak cry) and occasionally elevated hemidiaphragm.",
+        "keyFacts": [
+          "Left RLN loops under aortic arch (from left 6th arch)",
+          "Right RLN loops under right subclavian (in neck)",
+          "Injury → hoarse cry, stridor, weak cough",
+          "Associated with: PDA ligation, aortic arch surgery, thyroidectomy",
+          "'Ortner syndrome' = LA enlargement compressing left RLN"
+        ],
+        "tags": [
+          "patent-ductus-arteriosus",
+          "surgical-complications",
+          "recurrent-laryngeal-nerve",
+          "vocal-cord-paralysis",
+          "anatomy",
+          "nerve-injury"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 12,
+        "title": "Transposition of Great Arteries - Embryology",
+        "subject": "Embryology",
+        "system": "Cardiovascular",
+        "topic": "Transposition of Great Arteries",
+        "subtopic": "Embryologic Development",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A term male infant born at 39 weeks gestation becomes notably cyanotic shortly after delivery. Fetal ultrasound during the third trimester had identified abnormal positioning of the great vessels. Despite ongoing prostaglandin E₁ therapy, pulse oximetry remains at 50% on the right upper extremity and 51% on the left lower extremity. Postnatal echocardiography demonstrates d-transposition of the great arteries with a highly restrictive patent foramen ovale (1.5 mm) and a large patent ductus arteriosus.",
+        "questionText": "Which embryologic mechanism best explains this infant's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Failure of the aorticopulmonary (conotruncal) septum to spiral",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "Anterior malalignment of the infundibular septum",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Failure of the endocardial cushions to fuse",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Failure of the pulmonary veins to connect to the left atrium",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Failure of the truncus arteriosus to divide due to neural crest migration defect",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "D-transposition of the great arteries (d-TGA) results when the aorticopulmonary (conotruncal) septum fails to follow its normal spiral course during weeks 5-6 of embryogenesis. Normally, truncal ridges twist as they separate the outflow tract, and aorta and pulmonary artery criss-cross, resulting in ventriculoarterial concordance. In d-TGA, the septum forms 'straight' instead of spiraled, causing the aorta to connect to right ventricle and pulmonary artery to connect to left ventricle, creating parallel circulations. This results in deoxygenated blood (RV → Aorta → body) and oxygenated blood (LV → PA → lungs), with survival requiring mixing (PDA, ASD, VSD).",
+          "incorrect": {
+            "B": "Anterior malalignment of infundibular septum causes Tetralogy of Fallot (boot-shaped heart, harsh murmur, tet spells).",
+            "C": "Endocardial cushion fusion failure causes AVSD (primum ASD + inlet VSD + common AV valve; associated with Down syndrome).",
+            "D": "Pulmonary vein connection failure causes TAPVR (total anomalous pulmonary venous return).",
+            "E": "Truncus failure to divide causes persistent truncus arteriosus (single outflow vessel, often with 22q11 deletion)."
+          }
+        },
+        "educationalObjective": "Transposition of the great arteries results from failed spiraling of the aorticopulmonary septum, creating ventriculoarterial discordance and parallel pulmonary and systemic circuits. Urgent therapy promotes mixing (prostaglandin E₁ infusion and balloon atrial septostomy) before definitive arterial switch repair.",
+        "keyFacts": [
+          "d-TGA = ventriculoarterial discordance (aorta from RV, PA from LV)",
+          "Embryology: failure of AP septum to spiral",
+          "'Egg-on-a-string' CXR (narrow mediastinum)",
+          "Hyperoxia test failure",
+          "Treatment: PGE₁ + balloon atrial septostomy + arterial switch (day 1-2 weeks)"
+        ],
+        "tags": [
+          "transposition-great-arteries",
+          "embryology",
+          "conotruncal-defects",
+          "cardiac-development",
+          "cyanotic-heart-disease"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Knowledge"
+      },
+      {
+        "id": 13,
+        "title": "Trisomy 21 (Down Syndrome) - Complete AVSD",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "Down Syndrome",
+        "subtopic": "Cardiac Manifestations",
+        "difficulty": 1,
+        "difficultyLabel": "Easy",
+        "estimatedTimeSeconds": 75,
+        "vignette": "A 4-month-old male infant is brought to the pediatrician for poor feeding and failure to gain weight. He was born at term to a 37-year-old woman after an uncomplicated pregnancy. Physical examination reveals mild generalized hypotonia, a soft holosystolic murmur heard best at the left lower sternal border, and mild abdominal distension. The infant has up-slanting palpebral fissures and a short neck with excess skin folds posteriorly. Abdominal radiography demonstrates a 'double-bubble' gas pattern.",
+        "questionText": "Which of the following chromosomal abnormalities is most likely responsible for this infant's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "45, X (Turner syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "47, XXY (Klinefelter syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "47, XY, +21 (Down syndrome)",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "47, XY, +18 (Edwards syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "47, XY, +13 (Patau syndrome)",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This infant has Trisomy 21 (Down syndrome), suggested by: Cardiac findings (soft holosystolic murmur from AV canal defect or VSD), GI findings ('Double bubble' = duodenal atresia), Neuromotor findings (hypotonia), Craniofacial findings (up-slanting palpebral fissures, redundant nuchal skin), and maternal risk factor (advanced maternal age - 37 years). The most common cardiac defect in Down syndrome is Complete atrioventricular septal defect (AVSD) consisting of primum ASD + inlet VSD + common AV valve, resulting from endocardial cushion fusion defect.",
+          "incorrect": {
+            "A": "Turner (45,X) presents in females with webbed neck, coarctation, bicuspid aortic valve; this is a male infant.",
+            "B": "Klinefelter (47,XXY) presents in males with tall stature, gynecomastia, small testes at puberty, not in infancy.",
+            "D": "Edwards (47,+18) presents with micrognathia, overlapping clenched fingers, rocker-bottom feet; different pattern.",
+            "E": "Patau (47,+13) presents with midline defects (cleft lip/palate, holoprosencephaly, cutis aplasia, polydactyly); not seen here."
+          }
+        },
+        "educationalObjective": "Down syndrome (Trisomy 21) most commonly results from maternal meiotic nondisjunction. Characteristic manifestations include hypotonia, congenital heart defects (complete AVSD or VSD), duodenal atresia, and developmental delay. Associated risks include acute leukemia and early-onset Alzheimer disease.",
+        "keyFacts": [
+          "Most common: complete AVSD (40-50%)",
+          "Also: VSD, ASD, TOF",
+          "GI: duodenal atresia, Hirschsprung",
+          "Heme: ALL, transient myeloproliferative disorder",
+          "Later: hypothyroidism, Alzheimer (APP gene)"
+        ],
+        "tags": [
+          "down-syndrome",
+          "trisomy-21",
+          "avsd",
+          "genetic-syndromes",
+          "congenital-heart-disease",
+          "chromosomal-abnormalities"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 14,
+        "title": "Trisomy 18 (Edwards Syndrome)",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "Edwards Syndrome",
+        "subtopic": "Clinical Presentation",
+        "difficulty": 1,
+        "difficultyLabel": "Easy",
+        "estimatedTimeSeconds": 75,
+        "vignette": "A small-for-gestational-age premature girl is delivered at 36 weeks to a 39-year-old mother. The pregnancy was complicated by polyhydramnios. Physical examination reveals micrognathia, low-set ears, and hands that remain tightly clenched with the index finger overlapping the middle finger and the little finger overlapping the ring finger. The infant's feet have a flat plantar surface with a prominent heel. A harsh systolic murmur is heard along the left lower sternal border.",
+        "questionText": "Which of the following chromosomal abnormalities is most likely responsible for this infant's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Trisomy 13 (Patau syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Trisomy 18 (Edwards syndrome)",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Trisomy 21 (Down syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Turner syndrome (45, X)",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Klinefelter syndrome (47, XXY)",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has Trisomy 18 (Edwards syndrome), characterized by: Craniofacial features (micrognathia, low-set ears, prominent occiput), Hand abnormalities (overlapping fingers with clenched fists - index over middle, little over ring - this is pathognomonic), Foot abnormalities (rocker-bottom feet with flat plantar surface and prominent heel), Cardiac defects (VSD most common, also ASD, PDA), and other findings (growth restriction, severe intellectual disability). Prognosis is poor with most infants dying within the first year.",
+          "incorrect": {
+            "A": "Patau (Trisomy 13) presents with midline defects (cleft lip/palate, microphthalmia, cutis aplasia, polydactyly, omphalocele); no cleft or scalp defect here.",
+            "C": "Down (Trisomy 21) presents with flat facies, up-slanting eyes, single palmar crease, hypotonia; different facial pattern.",
+            "D": "Turner (45,X) presents in females with webbed neck, lymphedema, coarctation; not present here.",
+            "E": "Klinefelter (47,XXY) presents in males with tall stature, gynecomastia, infertility; not a neonatal presentation."
+          }
+        },
+        "educationalObjective": "Edwards syndrome (trisomy 18) is caused by meiotic nondisjunction, resulting in 47, XX/XY, +18. It presents with growth restriction, micrognathia, low-set ears, prominent occiput, and overlapping fingers with clenched fists. The feet show rocker-bottom appearance. Congenital heart defects (especially VSD) are common, and most affected infants die within the first year.",
+        "keyFacts": [
+          "Overlapping clenched fingers (pathognomonic)",
+          "Rocker-bottom feet",
+          "Micrognathia + low-set ears",
+          "VSD most common heart defect",
+          "Poor prognosis (<10% survive 1 year)"
+        ],
+        "tags": [
+          "edwards-syndrome",
+          "trisomy-18",
+          "genetic-syndromes",
+          "chromosomal-abnormalities",
+          "congenital-anomalies"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 15,
+        "title": "Trisomy 13 (Patau Syndrome)",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "Patau Syndrome",
+        "subtopic": "Clinical Presentation",
+        "difficulty": 1,
+        "difficultyLabel": "Easy",
+        "estimatedTimeSeconds": 75,
+        "vignette": "A small-for-gestational-age premature infant is born to a 38-year-old woman after limited prenatal care. Physical examination reveals microcephaly, microphthalmia, and a cleft lip and palate. There is a punched-out scalp lesion covered by a thin membrane and a membranous sac containing bowel protruding from the abdominal midline. Extra digits are present on both hands.",
+        "questionText": "Which of the following chromosomal abnormalities is most likely responsible for this patient's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Trisomy 21",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Trisomy 13",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Trisomy 18",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "47, XXY (Klinefelter syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "45, X (Turner syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "F",
+            "text": "Triploidy (69, XXX or 69, XXY)",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has Trisomy 13 (Patau syndrome), characterized by: Midline defects (cleft lip/palate, holoprosencephaly, microphthalmia, omphalocele - abdominal midline defect), Cutis aplasia (scalp defect), Polydactyly, and Cardiac defects (VSD, PDA, ASD). The mechanism involves extra chromosome 13 → defective midline development via abnormal prechordal-mesoderm fusion. Prognosis is the worst of autosomal trisomies with most dying within 6 months; profound developmental delay in survivors.",
+          "incorrect": {
+            "A": "Down (Trisomy 21) presents with flat facies, single palmar crease, hypotonia, duodenal atresia, AVSD; no midline facial/abdominal defects.",
+            "C": "Edwards (Trisomy 18) presents with micrognathia, overlapping fingers, rocker-bottom feet; no polydactyly or facial cleft.",
+            "D": "Klinefelter (47,XXY) presents in males with tall stature, gynecomastia, infertility; not a neonatal issue.",
+            "E": "Turner (45,X) presents in females with webbed neck, lymphedema, coarctation; no midline or craniofacial defects.",
+            "F": "Triploidy presents with multiple anomalies, partial mole, severe growth restriction; extremely rare; differs phenotypically."
+          }
+        },
+        "educationalObjective": "Patau syndrome (trisomy 13) results from meiotic nondisjunction. Extra chromosome 13 → defective midline development → holoprosencephaly, cleft lip/palate, microphthalmia, omphalocele, polydactyly, cutis aplasia. Most die within 6 months.",
+        "keyFacts": [
+          "Midline defects (cleft, holoprosencephaly, omphalocele)",
+          "Cutis aplasia (scalp defect)",
+          "Polydactyly",
+          "VSD, PDA most common cardiac defects",
+          "Worst prognosis of autosomal trisomies"
+        ],
+        "tags": [
+          "patau-syndrome",
+          "trisomy-13",
+          "genetic-syndromes",
+          "midline-defects",
+          "chromosomal-abnormalities"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 16,
+        "title": "Turner Syndrome - Coarctation",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "Turner Syndrome",
+        "subtopic": "Cardiac Manifestations",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 14-year-old girl is evaluated for primary amenorrhea. She has never had menarche and reports poor breast development. Her height is below the 5th percentile. On examination, she has a short, broad neck with lateral skin folds, a low posterior hairline, and widely spaced nipples. Cardiac auscultation reveals a systolic murmur best heard at the right upper sternal border. Blood pressure is higher in the arms than in the legs. Pelvic ultrasound shows a small uterus and streak-like gonads.",
+        "questionText": "Which of the following chromosomal abnormalities is most likely responsible for this patient's findings?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "45, X (monosomy X)",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "47, XXY (Klinefelter syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "46, XX, 5p deletion (Cri-du-chat syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "47, XX, +18 (Edwards syndrome)",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "46, XY, 22q11 deletion (DiGeorge syndrome)",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "This patient has Turner syndrome (45,X), characterized by: Reproductive features (streak ovaries → primary amenorrhea, infertility, ↓ estrogen → ↑ FSH/LH), Short stature (SHOX gene haploinsufficiency), Cardiac abnormalities (bicuspid aortic valve, coarctation of aorta → arm-leg BP differential), Lymphatic features (webbed neck, low hairline, shield chest from congenital lymphedema), and other features (horseshoe kidney, hypothyroidism, normal intelligence). Coarctation findings include systolic murmur at RUSB (bicuspid valve) or back (coarct), upper extremity hypertension, weak/delayed femoral pulses, and rib notching on CXR (collateral flow).",
+          "incorrect": {
+            "B": "Klinefelter (47,XXY) presents in males with tall stature, small firm testes, gynecomastia; different sex and findings.",
+            "C": "Cri-du-chat (5p−) presents with cat-like cry, microcephaly, facial anomalies; not this pattern.",
+            "D": "Edwards (47,+18) presents with growth restriction, clenched hands, rocker-bottom feet; infant presentation.",
+            "E": "DiGeorge (22q11) presents with conotruncal heart defects, hypocalcemia, cleft palate, immunodeficiency; neonatal presentation."
+          }
+        },
+        "educationalObjective": "Turner syndrome (45,X) results from complete or partial monosomy of the X chromosome, leading to streak ovaries, short stature, broad chest, and webbed neck. Cardiac anomalies include bicuspid aortic valve and coarctation of the aorta. Estrogen deficiency causes amenorrhea, infertility, and osteoporosis.",
+        "keyFacts": [
+          "45,X (complete), or mosaic",
+          "Streak ovaries → ↑ FSH/LH, amenorrhea",
+          "Short stature (SHOX gene)",
+          "Cardiac: bicuspid aortic valve (30%), coarctation (15%)",
+          "Treatment: growth hormone, estrogen replacement"
+        ],
+        "tags": [
+          "turner-syndrome",
+          "monosomy-x",
+          "coarctation-aorta",
+          "genetic-syndromes",
+          "primary-amenorrhea",
+          "sex-chromosome-abnormalities"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      }
+    ]
+  }
+}
