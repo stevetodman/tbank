@@ -8,10 +8,12 @@ This repository is a lightweight, student-facing question bank designed for seco
   - [Part 1 workbook](question_banks/congenital_heart_disease_part1.md): Tetralogy of Fallot and foundational shunt lesions.
   - [Part 2 workbook](question_banks/congenital_heart_disease_part2.md): PDA/TGA management pearls and high-yield chromosomal syndromes.
   - [Part 3 workbook](question_banks/congenital_heart_disease_part3.md): Syndromic lesions, catheterization clues, and ductal-dependent physiology.
+  - [Part 4 workbook](question_banks/congenital_heart_disease_part4.md): Vascular rings, paradoxical emboli, neonatal transition, and Turner pearls.
 - If you prefer structured data for Anki, flashcard platforms, or custom tooling, the exact same questions are mirrored in the JSON exports:
   - [Part 1 dataset](question_banks/congenital_heart_disease_part1.json)
   - [Part 2 dataset](question_banks/congenital_heart_disease_part2.json)
   - [Part 3 dataset](question_banks/congenital_heart_disease_part3.json)
+  - [Part 4 dataset](question_banks/congenital_heart_disease_part4.json)
 - Clone or fork this repository to track your progress, annotate explanations, or contribute future congenital heart disease parts.
 
 ## Roadmap
@@ -19,6 +21,7 @@ This repository is a lightweight, student-facing question bank designed for seco
 - Part 1 (available): Tetralogy of Fallot and shunt lesions fundamentals.
 - Part 2 (available): PDA pharmacology, ductal-dependent mixing strategies, and congenital genetic syndromes.
 - Part 3 (available): Williams syndrome, DiGeorge, hemodynamics maneuvers, and ductal-dependent emergencies.
+- Part 4 (available): Vascular rings, paradoxical emboli, neonatal transition physiology, advanced cath interpretation, and Turner syndrome.
 - Planned expansions: neonatal cyanosis differentials, congenital heart disease imaging interpretation, and surgical management timelines.
 
 Contributions that keep the bank student-friendly—clear vignettes, concise rationales, and board-style formatting—are welcome.
