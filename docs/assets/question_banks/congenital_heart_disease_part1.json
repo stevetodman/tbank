@@ -1,0 +1,531 @@
+{
+  "questionBank": {
+    "metadata": {
+      "title": "USMLE Step 1 Question Bank: Congenital Heart Disease - Part 1",
+      "description": "Questions 1-8: Tetralogy of Fallot and Shunt Lesions",
+      "partNumber": 1,
+      "totalParts": 5,
+      "questionsInPart": 8,
+      "version": "1.0",
+      "targetAudience": "MS2 Students"
+    },
+    "questions": [
+      {
+        "id": 1,
+        "title": "Tetralogy of Fallot - Squatting Physiology",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Hemodynamics",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 6-year-old boy is brought to the emergency department for sudden shortness of breath and bluish discoloration of the lips while playing. His symptoms resolve when he squats. The parents note that he often assumes this posture spontaneously during exertion. The child's growth has been below the 10th percentile since infancy. Physical examination reveals central cyanosis, digital clubbing, and a harsh systolic murmur at the left upper sternal border. Echocardiography shows anterior deviation of the infundibular septum.",
+        "questionText": "Which of the following hemodynamic changes best explains why squatting relieves this child's symptoms?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Decreased pulmonary vascular resistance",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Decreased venous return",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Increased pulmonary blood flow due to higher systemic vascular resistance",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Increased right-to-left shunting across the ventricular septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Reduced right ventricular afterload",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This child has Tetralogy of Fallot (ToF), the most common cyanotic congenital heart disease in children beyond infancy. ToF consists of: Right ventricular outflow tract obstruction (pulmonary stenosis), Right ventricular hypertrophy, Ventricular septal defect (VSD), and Overriding aorta. Cyanosis results from a right-to-left shunt through the VSD caused by obstruction to pulmonary flow. Squatting increases systemic vascular resistance (SVR) without significantly increasing pulmonary vascular resistance (PVR). The elevated SVR directs more blood into the pulmonary circulation rather than across the VSD into the aorta, thereby improving arterial oxygenation.",
+          "incorrect": {
+            "A": "Squatting does not significantly reduce pulmonary vascular resistance; most vascular compression occurs in the lower body, not the lungs.",
+            "B": "Squatting actually increases venous return by compressing leg and abdominal veins.",
+            "D": "This would worsen cyanosis, not improve it. Squatting does the opposite.",
+            "E": "Right ventricular afterload in ToF depends on the degree of pulmonary stenosis, which is unaffected by squatting."
+          }
+        },
+        "educationalObjective": "In Tetralogy of Fallot, squatting increases systemic vascular resistance, decreasing the magnitude of right-to-left shunting through the ventricular septal defect and improving arterial oxygenation.",
+        "keyFacts": [
+          "ToF: PROV (Pulmonary stenosis, RV hypertrophy, Overriding aorta, VSD)",
+          "Squatting ↑ SVR → ↓ R→L shunt → ↑ pulmonary blood flow",
+          "Boot-shaped heart on CXR",
+          "Tet spells relieved by knee-to-chest position"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "physiology",
+          "hemodynamics",
+          "cyanotic-heart-disease",
+          "pediatric-cardiology",
+          "right-to-left-shunt"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 2,
+        "title": "Tetralogy of Fallot - Tet Spells Mechanism",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Cyanotic Spells",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 2-year-old girl with a history of congenital heart disease is brought to the emergency department for worsening cyanosis and irritability. The parents report that she has frequent episodes of deep bluish discoloration of her lips and fingertips during crying or feeding. Oxygen saturation drops to 78%. She assumes a knee-to-chest position that rapidly relieves her distress. Physical examination reveals a harsh systolic murmur over the left upper sternal border and clubbing of the fingers.",
+        "questionText": "Which of the following best explains the mechanism underlying these acute cyanotic episodes?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Decrease in systemic vascular resistance during exertion",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Increase in pulmonary blood flow during crying",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Increase in left-to-right shunting across the ventricular septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Sudden spasm of the infundibular (right ventricular outflow) region",
+            "isCorrect": true
+          },
+          {
+            "letter": "E",
+            "text": "Transient increase in left atrial pressure",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": {
+          "correct": "Tet spells are paroxysms of cyanosis in Tetralogy of Fallot triggered by crying, feeding, or exertion. Acute spasm of the infundibular (subpulmonic) region increases obstruction to right ventricular outflow, forcing a greater proportion of deoxygenated blood through the VSD into the systemic circulation. This right-to-left shunt lowers arterial O₂ saturation and produces intense cyanosis. Infants instinctively assume the knee-to-chest position, which raises systemic vascular resistance, increasing left-sided pressure and diverting more blood through the pulmonary circuit—terminating the episode.",
+          "incorrect": {
+            "A": "This precipitates, not relieves, Tet spells by promoting right-to-left shunting.",
+            "B": "Pulmonary blood flow initially decreases because of outflow obstruction.",
+            "C": "Right-to-left shunting predominates in ToF during spells.",
+            "E": "Unrelated to the cyanotic episodes in ToF."
+          }
+        },
+        "educationalObjective": "Cyanotic ('Tet') spells in Tetralogy of Fallot are caused by acute right-ventricular outflow tract spasm, which increases right-to-left shunting and hypoxemia; squatting or knee-to-chest positioning reverses this by raising systemic vascular resistance.",
+        "keyFacts": [
+          "Tet spells = infundibular spasm → ↑ RVOT obstruction → ↑ R→L shunt",
+          "Triggers: crying, feeding, defecation, exertion",
+          "Relief: knee-to-chest, squatting, β-blockers",
+          "Emergency treatment: knee-chest, oxygen, morphine, β-blocker, phenylephrine"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "tet-spells",
+          "cyanotic-spells",
+          "pediatric-emergency",
+          "right-ventricular-outflow-obstruction",
+          "hypoxemia"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 3,
+        "title": "Tetralogy of Fallot - Classic Chest Radiography",
+        "subject": "Pathology",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Imaging",
+        "difficulty": 1,
+        "difficultyLabel": "Easy",
+        "estimatedTimeSeconds": 75,
+        "vignette": "A 4-year-old boy with cyanotic heart disease presents for routine follow-up. His pediatrician reviews a recent chest radiograph that shows an upturned cardiac apex and a concave pulmonary artery segment. Surgical repair is planned for the next month.",
+        "questionText": "Which radiographic finding best supports the diagnosis described in this child?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Egg-on-a-string appearance of the heart",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Snowman sign due to supracardiac total anomalous pulmonary venous return",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Boot-shaped silhouette with decreased pulmonary vascular markings",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Figure-of-three sign along the aortic contour",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Diffuse bilateral pulmonary edema with Kerley B lines",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "Tetralogy of Fallot classically produces a \"boot-shaped\" heart on chest radiography caused by right ventricular hypertrophy that elevates the apex and a concave main pulmonary artery segment from outflow tract obstruction.",
+          "incorrect": {
+            "A": "The egg-on-a-string sign suggests transposition of the great arteries due to a narrow superior mediastinum.",
+            "B": "The snowman sign is seen in supracardiac total anomalous pulmonary venous return, not Tetralogy of Fallot.",
+            "D": "The figure-of-three sign occurs with aortic coarctation from pre- and post-stenotic dilation of the aorta.",
+            "E": "Pulmonary edema and Kerley B lines are features of left-sided heart failure, not primary cyanotic congenital lesions."
+          }
+        },
+        "educationalObjective": "The boot-shaped heart is a classic radiographic clue for Tetralogy of Fallot due to right ventricular hypertrophy and hypoplastic pulmonary arteries.",
+        "keyFacts": [
+          "Boot-shaped heart = Tetralogy of Fallot",
+          "Right ventricular hypertrophy elevates the cardiac apex",
+          "Decreased pulmonary vascularity from RVOT obstruction"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "radiology",
+          "congenital-heart-disease",
+          "right-ventricular-hypertrophy"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Recall"
+      },
+      {
+        "id": 4,
+        "title": "Tetralogy of Fallot - Embryologic Cause",
+        "subject": "Embryology",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Development",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 100,
+        "vignette": "A fetus is diagnosed with Tetralogy of Fallot on prenatal ultrasound. Genetic counseling reveals a 22q11.2 deletion syndrome. The parents ask what embryologic process led to the cardiac malformation.",
+        "questionText": "Which embryologic abnormality most directly results in Tetralogy of Fallot?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Failure of endocardial cushion fusion",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Incorrect neural crest migration causing anterior deviation of the infundibular septum",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Persistent truncus arteriosus due to lack of septation",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Abnormal regression of the left cardinal vein",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Excessive apoptosis of the bulbus cordis",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Tetralogy of Fallot arises from anterior and cephalad deviation of the infundibular (conal) septum, a neural crest-derived structure. The malalignment produces right ventricular outflow tract obstruction, overriding aorta, ventricular septal defect, and right ventricular hypertrophy.",
+          "incorrect": {
+            "A": "Endocardial cushion defects lead to atrioventricular septal defects, common in Down syndrome.",
+            "C": "Persistent truncus arteriosus is a separate conotruncal defect that lacks aorticopulmonary septation entirely.",
+            "D": "Regression of the left cardinal vein produces a normal left brachiocephalic vein; failure causes a persistent left superior vena cava, not Tetralogy of Fallot.",
+            "E": "Bulbus cordis contributes to ventricular outflow tracts; excessive apoptosis is not the mechanism for ToF."
+          }
+        },
+        "educationalObjective": "Neural crest migration errors that shift the infundibular septum anteriorly underlie the constellation of findings in Tetralogy of Fallot.",
+        "keyFacts": [
+          "ToF linked with 22q11 syndromes",
+          "Anterior deviation of infundibular septum",
+          "Results in RVOT obstruction and overriding aorta"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "embryology",
+          "neural-crest",
+          "conotruncal-defects"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 5,
+        "title": "Tetralogy of Fallot - Surgical Repair Timing",
+        "subject": "Surgery",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Management",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 110,
+        "vignette": "A 2-month-old infant with Tetralogy of Fallot has progressive cyanosis and poor weight gain. Echocardiography shows severe right ventricular outflow tract obstruction and significant right-to-left shunting. Oxygen saturation remains 82% on room air despite beta-blocker therapy.",
+        "questionText": "What is the most appropriate next step in management?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Initiate prostaglandin E1 infusion and defer surgery until age 2 years",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Schedule complete surgical repair in early infancy",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Perform balloon atrial septostomy",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Recommend observation until symptoms worsen",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Initiate ACE inhibitor therapy to reduce afterload",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Symptomatic infants with Tetralogy of Fallot and significant right-to-left shunting require early complete surgical repair, typically within the first few months of life, to relieve outflow obstruction and close the VSD.",
+          "incorrect": {
+            "A": "Prostaglandin E1 maintains ductal patency for duct-dependent lesions; ToF is not duct-dependent once pulmonary blood flow is surgically augmented.",
+            "C": "Balloon atrial septostomy is used in transposition of the great arteries to improve mixing, not for ToF.",
+            "D": "Observation risks worsening hypoxemia and developmental delay in symptomatic infants.",
+            "E": "ACE inhibitors do not address the fixed obstruction or shunting in ToF."
+          }
+        },
+        "educationalObjective": "Symptomatic Tetralogy of Fallot in infancy is managed with early complete surgical repair to prevent hypoxic spells and improve growth.",
+        "keyFacts": [
+          "Early repair indicated for symptomatic ToF infants",
+          "Surgery relieves RVOT obstruction and closes VSD",
+          "Delaying repair risks progressive hypoxemia"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "pediatric-cardiology",
+          "cardiac-surgery",
+          "management"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 6,
+        "title": "Tetralogy of Fallot - Murmur Characteristics",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Tetralogy of Fallot",
+        "subtopic": "Physical Exam",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 80,
+        "vignette": "A 3-year-old child with cyanosis is evaluated for surgical repair of Tetralogy of Fallot. Auscultation reveals a harsh crescendo-decrescendo systolic ejection murmur best heard at the left upper sternal border. There is a single second heart sound.",
+        "questionText": "Which physiological event primarily produces the murmur heard in this patient?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Flow across the ventricular septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Turbulent flow across the narrowed right ventricular outflow tract",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Regurgitation through an insufficient tricuspid valve",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Patent ductus arteriosus shunting into the pulmonary artery",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Mitral valve prolapse causing late systolic murmur",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "The classic murmur of Tetralogy of Fallot is caused by turbulent flow through the stenotic right ventricular outflow tract/pulmonary valve during systole, producing a harsh systolic ejection murmur at the left upper sternal border.",
+          "incorrect": {
+            "A": "VSD flow is usually silent or produces a holosystolic murmur at the lower left sternal border when left-to-right shunting predominates.",
+            "C": "Tricuspid regurgitation causes a holosystolic murmur at the left lower sternal border that increases with inspiration.",
+            "D": "A PDA produces a continuous \"machinery\" murmur best heard at the left infraclavicular area.",
+            "E": "Mitral valve prolapse causes a mid- to late-systolic murmur at the apex with a click."
+          }
+        },
+        "educationalObjective": "The harsh systolic ejection murmur in Tetralogy of Fallot results from obstruction to flow across the right ventricular outflow tract.",
+        "keyFacts": [
+          "Murmur intensity correlates with RVOT obstruction severity",
+          "Single S2 due to diminished pulmonary component",
+          "VSD flow is often quiet when right-to-left shunting occurs"
+        ],
+        "tags": [
+          "tetralogy-of-fallot",
+          "cardiac-murmurs",
+          "pediatric-cardiology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Understanding"
+      },
+      {
+        "id": 7,
+        "title": "Atrial Septal Defect - Hemodynamic Changes",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Atrial Septal Defect",
+        "subtopic": "Hemodynamics",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 95,
+        "vignette": "A 10-year-old girl is evaluated for fatigue and frequent respiratory infections. Examination reveals a widely split, fixed second heart sound. Echocardiography confirms a secundum atrial septal defect with significant left-to-right shunting.",
+        "questionText": "Which of the following hemodynamic findings is most characteristic of this lesion?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Elevated right ventricular systolic pressure above systemic levels",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Increased pulmonary blood flow with eventual pulmonary hypertension",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Decreased pulmonary venous return to the left atrium",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Right-to-left shunting across the atrial septum in early life",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Reduced flow through the pulmonary valve with oligemic lung fields",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Secundum atrial septal defects cause a chronic left-to-right shunt that increases pulmonary blood flow. Over time the pulmonary vasculature remodels, leading to pulmonary hypertension and potential Eisenmenger physiology if untreated.",
+          "incorrect": {
+            "A": "Right ventricular pressures are initially sub-systemic until late pulmonary vascular disease develops.",
+            "C": "Pulmonary venous return increases, delivering more oxygenated blood to the left atrium.",
+            "D": "Early shunting is left-to-right because left atrial pressure exceeds right atrial pressure.",
+            "E": "Oligemic lung fields occur with decreased pulmonary flow lesions such as Tetralogy of Fallot."
+          }
+        },
+        "educationalObjective": "Chronic left-to-right shunting in atrial septal defects increases pulmonary blood flow and can progress to pulmonary vascular disease and Eisenmenger syndrome.",
+        "keyFacts": [
+          "Secundum ASD = fixed split S2",
+          "Left-to-right shunt increases pulmonary flow",
+          "Late complication: Eisenmenger physiology"
+        ],
+        "tags": [
+          "atrial-septal-defect",
+          "hemodynamics",
+          "pediatric-cardiology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 8,
+        "title": "Patent Ductus Arteriosus - Pharmacologic Closure",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Patent Ductus Arteriosus",
+        "subtopic": "Management",
+        "difficulty": 1,
+        "difficultyLabel": "Easy",
+        "estimatedTimeSeconds": 70,
+        "vignette": "A premature neonate born at 30 weeks' gestation has a continuous murmur at the left infraclavicular area and bounding peripheral pulses. Echocardiography confirms a moderate patent ductus arteriosus with left-to-right shunting.",
+        "questionText": "Which medication is most appropriate to initiate ductal closure in this patient?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Indomethacin",
+            "isCorrect": true
+          },
+          {
+            "letter": "B",
+            "text": "Prostaglandin E1",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Alprostadil",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Epinephrine",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Milrinone",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": {
+          "correct": "Indomethacin, a prostaglandin synthesis inhibitor, promotes closure of a patent ductus arteriosus in premature infants by reducing prostaglandin E2 levels.",
+          "incorrect": {
+            "B": "Prostaglandin E1 maintains ductal patency and is used for duct-dependent lesions.",
+            "C": "Alprostadil is another formulation of prostaglandin E1 that keeps the ductus open.",
+            "D": "Epinephrine treats cardiac arrest and anaphylaxis, not PDA.",
+            "E": "Milrinone is an inodilator for heart failure and pulmonary hypertension, not for ductal closure."
+          }
+        },
+        "educationalObjective": "Cyclooxygenase inhibitors such as indomethacin are first-line therapy to close a patent ductus arteriosus in premature infants with left-to-right shunts.",
+        "keyFacts": [
+          "PDA murmur = continuous machinery sound",
+          "Indomethacin inhibits prostaglandin synthesis",
+          "Prostaglandin E1 keeps the ductus open"
+        ],
+        "tags": [
+          "patent-ductus-arteriosus",
+          "pharmacology",
+          "prematurity",
+          "congenital-heart-disease"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Recall"
+      }
+    ]
+  }
+}
