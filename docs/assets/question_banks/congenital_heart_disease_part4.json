@@ -1,0 +1,357 @@
+{
+  "questionBank": {
+    "metadata": {
+      "title": "USMLE Step 1 Question Bank: Congenital Heart Disease - Part 4",
+      "description": "Questions 33-37: Vascular Rings, Paradoxical Emboli, Fetal Transition, Advanced Cath Clues, Turner Syndrome",
+      "partNumber": 4,
+      "totalParts": 5,
+      "questionsInPart": 5,
+      "version": "1.0",
+      "targetAudience": "MS2 Students"
+    },
+    "questions": [
+      {
+        "id": 33,
+        "title": "Vascular Ring - Right Aortic Arch with Aberrant Left Subclavian",
+        "subject": "Anatomy/Pathology",
+        "system": "Cardiovascular",
+        "topic": "Vascular Rings",
+        "subtopic": "Right Aortic Arch",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 6-month-old infant is brought to the pediatrician for evaluation of noisy breathing and difficulty swallowing solids. The parents report the infant has had stridor since birth that worsens with feeding and when lying supine. The infant frequently coughs and gags when eating pureed foods. Physical examination reveals inspiratory stridor and mild intercostal retractions. Cardiac examination shows normal S1 and S2 without murmurs. Chest radiograph shows the aortic arch on the right side. Barium esophagram demonstrates a posterior indentation of the esophagus. CT angiography shows a right-sided aortic arch with the left subclavian artery arising as the fourth branch and coursing posterior to the esophagus.",
+        "questionText": "Which of the following embryologic structures contributes to the formation of this patient's vascular anomaly?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Persistence of the left fourth aortic arch",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Persistence of the right fourth aortic arch",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Failure of regression of the right dorsal aorta",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Persistence of the left sixth aortic arch",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Abnormal migration of neural crest cells",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has a right aortic arch with aberrant left subclavian artery—a vascular ring that causes dysphagia lusoria (difficulty swallowing) and stridor from compression of the esophagus and trachea. Normal development: The left fourth aortic arch normally persists to form the transverse aortic arch, while the right fourth arch regresses. In this anomaly, the opposite occurs: the right fourth aortic arch persists (forming the arch on the right side), and the left fourth arch regresses. The left subclavian artery arises as the last (fourth) branch of the aortic arch and courses leftward behind the esophagus to reach the left arm. When combined with a ligamentum arteriosum (remnant of ductus arteriosus) connecting the left pulmonary artery to the descending aorta, a complete vascular ring forms around the trachea and esophagus. The posterior compression from the aberrant left subclavian artery causes the characteristic posterior esophageal indentation on barium study. This differs from mirror-image right aortic arch (associated with TOF), which is typically asymptomatic because there's no posterior vessel and no complete ring.",
+          "incorrect": {
+            "A": "Persistence of the left fourth arch describes normal aortic arch development. In this patient with a right arch, the right fourth arch persisted instead.",
+            "C": "Although persistence of the right dorsal aorta contributes to variants, the key embryologic event creating a right aortic arch is persistence of the right fourth arch, not the dorsal aorta.",
+            "D": "The sixth arches form the proximal pulmonary arteries and ductus arteriosus. Persistence of the left sixth arch would produce a patent ductus arteriosus, not this vascular ring.",
+            "E": "Neural crest migration defects cause conotruncal abnormalities (e.g., truncus arteriosus, TOF) and DiGeorge syndrome associations, not isolated vascular rings."
+          }
+        },
+        "educationalObjective": "Right aortic arch results from persistence of the right fourth aortic arch with regression of the left fourth arch. An aberrant left subclavian artery passing behind the esophagus creates a vascular ring that compresses the trachea and esophagus, producing stridor and dysphagia lusoria.",
+        "keyFacts": [
+          "Right aortic arch = persistence of right 4th arch",
+          "Aberrant left subclavian courses behind esophagus",
+          "Vascular ring causes stridor and dysphagia lusoria",
+          "Posterior esophageal indentation on barium study",
+          "Differentiate from mirror-image right arch (usually asymptomatic)"
+        ],
+        "tags": [
+          "vascular-ring",
+          "right-aortic-arch",
+          "aberrant-subclavian-artery",
+          "dysphagia-lusoria",
+          "stridor",
+          "embryology",
+          "aortic-arch-anomaly"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 34,
+        "title": "Patent Foramen Ovale and Paradoxical Embolus",
+        "subject": "Pathophysiology",
+        "system": "Cardiovascular",
+        "topic": "Patent Foramen Ovale",
+        "subtopic": "Clinical Findings",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 38-year-old woman presents to the emergency department with sudden onset of right-sided weakness and aphasia that began 2 hours ago. She has no significant past medical history except for a recent 8-hour international flight one week ago, during which she noticed her right calf became swollen and tender. On examination, she has right hemiparesis and expressive aphasia. MRI brain shows an acute infarction in the left middle cerebral artery territory. Venous Doppler ultrasound of the right leg reveals a deep venous thrombosis in the femoral vein. Transthoracic echocardiogram with bubble study shows passage of microbubbles from the right atrium to the left atrium within three cardiac cycles following injection.",
+        "questionText": "Which of the following physical examination findings would most likely be present in this patient?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Fixed splitting of the second heart sound",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Holosystolic murmur at the left lower sternal border",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Continuous machinery murmur at the left infraclavicular area",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Mid-systolic click with late systolic murmur",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Normal cardiac examination",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "E",
+        "explanation": {
+          "correct": "This patient has suffered a paradoxical embolus—a venous thrombus that crossed from the venous system to the arterial system through a patent foramen ovale (PFO), causing a stroke. The bubble study confirms a PFO: microbubbles appeared in the left heart after right heart injection, proving right-to-left shunting at the atrial level. A PFO is present in approximately 25-30% of adults and results from incomplete fusion of the septum primum and septum secundum. It remains functionally closed as long as left atrial pressure exceeds right atrial pressure. However, transient increases in right atrial pressure (Valsalva, cough, straining during air travel) can cause temporary right-to-left shunting, allowing venous emboli to bypass the lungs. Critically, a PFO does not cause any cardiac murmur or abnormal heart sounds because the orifice is small and usually not traversed at rest. Therefore, the cardiac examination is completely normal.",
+          "incorrect": {
+            "A": "Fixed splitting of S2 is characteristic of an atrial septal defect with a significant left-to-right shunt, not a PFO.",
+            "B": "A holosystolic murmur at the left lower sternal border suggests a ventricular septal defect or tricuspid regurgitation, neither of which is present here.",
+            "C": "A continuous machinery murmur is characteristic of a patent ductus arteriosus, which is unrelated to a PFO.",
+            "D": "A mid-systolic click with a late systolic murmur indicates mitral valve prolapse, not a PFO."
+          }
+        },
+        "educationalObjective": "Patent foramen ovale allows paradoxical emboli but produces no abnormal cardiac findings on examination because shunting is minimal or absent at rest.",
+        "keyFacts": [
+          "PFO present in 25-30% of adults",
+          "Allows paradoxical emboli during transient ↑ RA pressure",
+          "Physical exam is typically normal (no murmur)",
+          "Diagnosis made with bubble study demonstrating R→L shunt",
+          "Differentiate from ASD (fixed split S2)"
+        ],
+        "tags": [
+          "patent-foramen-ovale",
+          "pfo",
+          "paradoxical-embolus",
+          "cryptogenic-stroke",
+          "bubble-study",
+          "dvt",
+          "right-to-left-shunt"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 35,
+        "title": "Fetal Circulation - Transition at Birth",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Fetal-Neonatal Transition",
+        "subtopic": "Pulmonary Hemodynamics",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A term newborn is delivered via normal spontaneous vaginal delivery. Immediately after birth, the infant begins to cry vigorously and the umbilical cord is clamped. The neonate's oxygen saturation, initially 60% at 1 minute of life, rises to 92% by 5 minutes of life. The infant is pink with good perfusion. The obstetrician explains to the medical student that several important cardiovascular changes occurred within the first few minutes after birth that allowed the transition from fetal to neonatal circulation.",
+        "questionText": "Which of the following hemodynamic changes occurs as a direct result of lung expansion at birth?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Increased systemic vascular resistance from cord clamping",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Closure of the foramen ovale due to reversal of atrial pressure gradient",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Decreased pulmonary vascular resistance from alveolar oxygenation",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Constriction of the ductus arteriosus from increased oxygen tension",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Closure of the ductus venosus from cessation of umbilical venous flow",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "The transition from fetal to neonatal circulation involves multiple coordinated changes, but the direct result of lung expansion is a dramatic decrease in pulmonary vascular resistance. When the infant takes the first breaths, the lungs expand and fill with oxygen-rich air, causing pulmonary vasodilation and a large increase in pulmonary blood flow. The decreased pulmonary vascular resistance then leads to increased pulmonary venous return and subsequent changes such as foramen ovale closure.",
+          "incorrect": {
+            "A": "Increased systemic vascular resistance occurs because of cord clamping, not lung expansion.",
+            "B": "Foramen ovale closure is secondary to increased left atrial pressure following the drop in pulmonary resistance, not a direct result of lung expansion.",
+            "D": "Ductus arteriosus constriction is triggered by increased oxygen tension and decreased prostaglandins; this is not the immediate direct effect of lung expansion.",
+            "E": "Closure of the ductus venosus is due to cessation of umbilical venous flow when the cord is clamped."
+          }
+        },
+        "educationalObjective": "Lung expansion and oxygenation at birth rapidly reduce pulmonary vascular resistance, allowing a surge in pulmonary blood flow that initiates subsequent neonatal circulatory changes.",
+        "keyFacts": [
+          "Birth breaths dramatically ↓ pulmonary vascular resistance",
+          "↑ Pulmonary blood flow → ↑ LA pressure → closes foramen ovale",
+          "Cord clamping raises systemic vascular resistance",
+          "↑ PaO2 helps close ductus arteriosus (hours)",
+          "Loss of umbilical flow closes ductus venosus"
+        ],
+        "tags": [
+          "fetal-circulation",
+          "neonatal-transition",
+          "pulmonary-vascular-resistance",
+          "foramen-ovale",
+          "ductus-arteriosus",
+          "physiology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 36,
+        "title": "Oxygen Step-Up Study - Cardiac Catheterization",
+        "subject": "Physiology/Diagnostics",
+        "system": "Cardiovascular",
+        "topic": "Cardiac Catheterization",
+        "subtopic": "Oxygen Saturation Analysis",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A 2-year-old boy undergoes cardiac catheterization for evaluation of a cardiac murmur and mild cyanosis. Oxygen saturation measurements are obtained from various cardiac chambers and great vessels. The results show: superior vena cava 65%, inferior vena cava 68%, right atrium 67%, right ventricle 82%, pulmonary artery 81%, pulmonary veins 98%, left atrium 97%, left ventricle 85%, and ascending aorta 84%. The patient's systemic and pulmonary blood flows are calculated to be approximately equal.",
+        "questionText": "Based on these oxygen saturation measurements, which of the following is the most likely diagnosis?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Atrial septal defect with left-to-right shunt",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Ventricular septal defect with bidirectional shunt",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Patent ductus arteriosus with left-to-right shunt",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Total anomalous pulmonary venous return to the right atrium",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Tetralogy of Fallot with significant right-to-left shunt",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "During cardiac catheterization, an oxygen saturation step-up in the right ventricle indicates a left-to-right shunt at the ventricular level. The simultaneous desaturation of systemic arterial blood demonstrates a right-to-left component. Together, these findings are most consistent with a ventricular septal defect with bidirectional flow, as seen when pulmonary vascular resistance approaches systemic levels.",
+          "incorrect": {
+            "A": "An atrial septal defect would produce a step-up at the atrial level, not in the right ventricle, and would not desaturate the aorta.",
+            "C": "A patent ductus arteriosus causes a step-up between the right ventricle and pulmonary artery; the saturations here are equal, arguing against a PDA.",
+            "D": "Total anomalous pulmonary venous return would cause very high right atrial saturation and low left atrial saturation, which is not seen.",
+            "E": "Tetralogy of Fallot with significant right-to-left shunt would not produce an oxygen step-up in the right ventricle; saturations would be uniformly low in the right heart and aorta."
+          }
+        },
+        "educationalObjective": "An oxygen saturation step-up in the right ventricle plus systemic desaturation indicates bidirectional shunting across a ventricular septal defect, typically due to elevated pulmonary vascular resistance.",
+        "keyFacts": [
+          "Step-up location pinpoints shunt level (RV = VSD)",
+          "Bidirectional shunt occurs when PVR ≈ SVR",
+          "Systemic desaturation signals right-to-left component",
+          "PDA would show step-up in pulmonary artery",
+          "ASD shows step-up at atrial level"
+        ],
+        "tags": [
+          "cardiac-catheterization",
+          "oxygen-step-up",
+          "vsd",
+          "bidirectional-shunt",
+          "eisenmenger-physiology",
+          "diagnostic-procedure"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 37,
+        "title": "Turner Syndrome - Associated Cardiac Defects",
+        "subject": "Genetics/Pathology",
+        "system": "Cardiovascular",
+        "topic": "Turner Syndrome",
+        "subtopic": "Cardiac Associations",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 15-year-old girl is brought to the clinic for evaluation of short stature and absent menstrual periods. Physical examination reveals a height of 4 feet 8 inches, webbed neck, shield chest with widely spaced nipples, and a low posterior hairline. Cardiovascular examination demonstrates a blood pressure of 145/85 mmHg in both arms and decreased femoral pulses. A systolic ejection murmur is heard at the right upper sternal border with radiation to the back between the scapulae. Karyotype analysis shows 45,X. Echocardiography is ordered to evaluate for congenital heart disease.",
+        "questionText": "Which of the following cardiac abnormalities is most likely to be found in this patient?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Atrial septal defect with partial anomalous pulmonary venous return",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Bicuspid aortic valve with coarctation of the aorta",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Atrioventricular septal defect with common atrioventricular valve",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Ventricular septal defect with aortic regurgitation",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Tetralogy of Fallot with right aortic arch",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Turner syndrome is strongly associated with left-sided obstructive lesions, particularly bicuspid aortic valve and coarctation of the aorta. Hypertension in the upper extremities, diminished femoral pulses, and a systolic murmur radiating to the back are classic clues for coarctation, while a systolic ejection murmur at the right upper sternal border suggests a bicuspid aortic valve.",
+          "incorrect": {
+            "A": "Partial anomalous pulmonary venous return can occur in Turner syndrome but is far less common and would not explain the pulse findings described.",
+            "C": "Atrioventricular septal defects are most closely linked to trisomy 21, not Turner syndrome.",
+            "D": "A ventricular septal defect with aortic regurgitation would present with a holosystolic and diastolic murmur pattern rather than hypertension with diminished femoral pulses.",
+            "E": "Tetralogy of Fallot with a right aortic arch is associated with 22q11.2 deletion syndromes rather than Turner syndrome."
+          }
+        },
+        "educationalObjective": "Turner syndrome commonly features bicuspid aortic valve and coarctation of the aorta, leading to upper extremity hypertension, diminished femoral pulses, and a systolic murmur radiating to the back.",
+        "keyFacts": [
+          "Turner syndrome = left-sided obstructive lesions",
+          "Bicuspid aortic valve in ~30-50%",
+          "Coarctation in ~10-15% (arm-leg BP gradient)",
+          "Requires lifelong imaging surveillance",
+          "Also monitor for aortic dilation/dissection risk"
+        ],
+        "tags": [
+          "turner-syndrome",
+          "45x",
+          "coarctation-of-aorta",
+          "bicuspid-aortic-valve",
+          "genetic-syndrome",
+          "left-sided-obstruction"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      }
+    ]
+  }
+}
