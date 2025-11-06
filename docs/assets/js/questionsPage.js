@@ -84,6 +84,66 @@
     return list;
   }
 
+  function createRationaleList(question) {
+    const explanations = question.explanation || {};
+    const incorrect = explanations.incorrect || {};
+    const hasCorrectLetter = typeof question.correctAnswer === "string" && question.correctAnswer.length > 0;
+
+    const reasonMap = new Map();
+    if (hasCorrectLetter && typeof explanations.correct === "string" && explanations.correct.trim().length > 0) {
+      reasonMap.set(question.correctAnswer.trim(), explanations.correct.trim());
+    }
+    Object.entries(incorrect).forEach(([letter, rationale]) => {
+      if (typeof rationale === "string" && rationale.trim().length > 0) {
+        reasonMap.set(letter.trim(), rationale.trim());
+      }
+    });
+
+    if (!question.answerChoices || question.answerChoices.length === 0 || reasonMap.size === 0) {
+      return null;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "question-rationales";
+
+    const heading = document.createElement("p");
+    heading.className = "rationales-heading";
+    heading.textContent = "Answer rationales";
+    wrapper.appendChild(heading);
+
+    const list = document.createElement("dl");
+    list.className = "rationale-list";
+
+    question.answerChoices.forEach((choice) => {
+      const letter = choice.letter?.trim();
+      if (!letter || !reasonMap.has(letter)) return;
+
+      const item = document.createElement("div");
+      item.className = "rationale-item";
+      const isCorrect = choice.isCorrect || (hasCorrectLetter && letter === question.correctAnswer.trim());
+      if (isCorrect) {
+        item.classList.add("rationale-item--correct");
+      }
+
+      const term = document.createElement("dt");
+      term.textContent = `${letter}. ${choice.text}`;
+      item.appendChild(term);
+
+      const detail = document.createElement("dd");
+      detail.textContent = reasonMap.get(letter);
+      item.appendChild(detail);
+
+      list.appendChild(item);
+    });
+
+    if (list.children.length === 0) {
+      return null;
+    }
+
+    wrapper.appendChild(list);
+    return wrapper;
+  }
+
   function createQuestionCard(question) {
     const item = document.createElement("article");
     item.className = "question-item";
@@ -150,6 +210,11 @@
         factList.appendChild(li);
       });
       answer.appendChild(factList);
+    }
+
+    const rationales = createRationaleList(question);
+    if (rationales) {
+      answer.appendChild(rationales);
     }
 
     answer.hidden = true;
