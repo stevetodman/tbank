@@ -62,6 +62,46 @@
   color: var(--color-primary);
 }
 
+.question-rationales {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rationales-heading {
+  margin: 0;
+  font-weight: 600;
+}
+
+.rationale-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.rationale-item {
+  margin: 0;
+}
+
+.rationale-item dt {
+  font-weight: 600;
+}
+
+.rationale-item dd {
+  margin: 0.25rem 0 0;
+  color: var(--color-muted);
+}
+
+.rationale-item--correct dt {
+  color: var(--color-primary);
+}
+
+.rationale-item--correct dd {
+  color: var(--color-primary);
+}
+
 .toggle-answer {
   align-self: flex-start;
   padding: 0.5rem 0.9rem;
