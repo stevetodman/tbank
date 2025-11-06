@@ -2,10 +2,10 @@
   "questionBank": {
     "metadata": {
       "title": "USMLE Step 1 Question Bank: Congenital Heart Disease - Part 3",
-      "description": "Questions 17-24: Williams, DiGeorge, HCM, VSD, PPHN, and Oxygen Step-Up",
+      "description": "Questions 17-32: Williams, DiGeorge, HCM, VSD, PPHN, Eisenmenger, AVSD, TAPVR, Truncus, Tricuspid Atresia, Ebstein, ALCAPA, and HLHS",
       "partNumber": 3,
       "totalParts": 5,
-      "questionsInPart": 8,
+      "questionsInPart": 16,
       "version": "1.0",
       "targetAudience": "MS2 Students"
     },
@@ -554,6 +554,584 @@
           "neonatal-emergency",
           "critical-coarctation",
           "preductal"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 25,
+        "title": "Eisenmenger Syndrome - Pathophysiology",
+        "subject": "Pathophysiology",
+        "system": "Cardiovascular System",
+        "topic": "Eisenmenger Syndrome",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A 28-year-old woman presents to the cardiology clinic with progressive dyspnea and fatigue over the past year. She was diagnosed with a large ventricular septal defect in childhood but her family could not afford surgery. Physical examination reveals central cyanosis, digital clubbing, and a prominent right ventricular heave. A loud P2 is heard, but the previously documented holosystolic murmur is no longer present. Chest radiograph shows enlarged central pulmonary arteries with peripheral pruning. Echocardiography demonstrates severe pulmonary hypertension with bidirectional shunting across the VSD.",
+        "questionText": "Which of the following pathophysiologic processes best explains the change in this patient's murmur?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Spontaneous closure of the ventricular septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Development of right ventricular outflow tract obstruction",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Reversal of shunt direction due to elevated pulmonary vascular resistance",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Progressive left ventricular systolic dysfunction",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Development of tricuspid regurgitation masking the VSD murmur",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This patient has Eisenmenger syndrome, the irreversible pulmonary arterial hypertension that develops from long-standing left-to-right shunts. Initially, the large VSD caused a left-to-right shunt with high pulmonary blood flow, producing a holosystolic murmur. Years of excessive pulmonary flow caused progressive pulmonary vascular remodeling with medial hypertrophy, intimal proliferation, and ultimately plexiform lesions. As pulmonary vascular resistance (PVR) increases and eventually exceeds systemic vascular resistance (SVR), the shunt reverses to right-to-left. With equalized pressures across the VSD, there is no longer a pressure gradient to produce a murmur—hence the disappearance of the holosystolic murmur. The loud P2 reflects pulmonary hypertension. Central cyanosis and clubbing result from deoxygenated blood bypassing the lungs via the right-to-left shunt. This condition is inoperable because the pulmonary vascular disease is fixed.",
+          "incorrect": {
+            "A": "Spontaneous VSD closure - While small VSDs can close spontaneously, large VSDs (which cause Eisenmenger syndrome) rarely close. Moreover, if the VSD closed, the patient would not have bidirectional shunting on echo and would likely have worsening right heart failure from pure pulmonary hypertension without a pop-off mechanism.",
+            "B": "RVOT obstruction - This would create a new murmur (systolic ejection murmur), not eliminate the existing VSD murmur. RVOT obstruction is characteristic of Tetralogy of Fallot, not Eisenmenger syndrome.",
+            "D": "LV dysfunction - Would cause symptoms of heart failure but wouldn't eliminate the VSD murmur. In fact, LV dysfunction might reduce shunt volume but a pressure gradient would still exist if the shunt were left-to-right.",
+            "E": "TR masking VSD murmur - Tricuspid regurgitation does commonly develop with pulmonary hypertension, but it creates its own holosystolic murmur (different location and characteristics), rather than masking the VSD murmur."
+          }
+        },
+        "educationalObjective": "Eisenmenger syndrome occurs when long-standing left-to-right shunts cause irreversible pulmonary vascular disease. As pulmonary vascular resistance exceeds systemic resistance, the shunt reverses to right-to-left. The previously audible murmur disappears as pressures equalize across the defect, and patients develop cyanosis and clubbing from chronic hypoxemia.",
+        "keyFacts": [
+          "Eisenmenger = irreversible pulmonary arterial hypertension from chronic L→R shunt",
+          "Pathophysiology: Excessive pulmonary flow → vascular remodeling → PVR > SVR",
+          "Shunt reversal: L→R becomes R→L when PVR exceeds SVR",
+          "Murmur disappears: No pressure gradient = no murmur",
+          "Physical exam: Cyanosis, clubbing, loud P2, loss of original murmur",
+          "Inoperable: Fixed pulmonary vascular disease",
+          "Complications: Hemoptysis, paradoxical emboli, arrhythmias, sudden death",
+          "Treatment: Supportive care, pulmonary vasodilators, transplant only option"
+        ],
+        "tags": [
+          "eisenmenger-syndrome",
+          "pulmonary-hypertension",
+          "shunt-reversal",
+          "pulmonary-vascular-disease",
+          "vsd-complications"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 26,
+        "title": "Complete AVSD - Down Syndrome Association",
+        "subject": "Genetics/Pathology",
+        "system": "Cardiovascular System",
+        "topic": "Atrioventricular Septal Defect",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 2-month-old infant with trisomy 21 is brought to the pediatrician for poor feeding and tachypnea. The parents report the infant sweats profusely during feeds and takes frequent breaks. Physical examination reveals tachypnea, a hyperdynamic precordium, and a holosystolic murmur heard best at the lower left sternal border with radiation to the axilla. The liver edge is palpable 3 cm below the right costal margin. Chest radiograph shows cardiomegaly with increased pulmonary vascular markings. Echocardiography demonstrates a large primum atrial septal defect, inlet ventricular septal defect, and a common atrioventricular valve.",
+        "questionText": "Which of the following embryologic abnormalities best explains this infant's cardiac defect?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Failure of neural crest cell migration",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Incomplete fusion of endocardial cushions",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Abnormal septation of the truncus arteriosus",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Premature closure of the foramen ovale",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Persistence of the ostium secundum",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has complete atrioventricular septal defect (AVSD), also called endocardial cushion defect or atrioventricular canal defect, which is the most common cardiac anomaly in Down syndrome (40-45% of cardiac defects in trisomy 21). Complete AVSD results from failure of the superior and inferior endocardial cushions to fuse during weeks 4-5 of embryonic development. These cushions normally fuse to form the lower portion of the atrial septum (septum primum), the upper portion of the ventricular septum, and separate the mitral and tricuspid valves. When fusion fails, the result is: (1) primum ASD (lower atrial septum defect), (2) inlet VSD (upper ventricular septum defect), and (3) a common AV valve with a characteristic 'cleft' in the anterior mitral leaflet. The large left-to-right shunt causes excessive pulmonary blood flow, leading to congestive heart failure (tachypnea, hepatomegaly, poor feeding). The holosystolic murmur represents either the VSD or AV valve regurgitation (or both).",
+          "incorrect": {
+            "A": "Neural crest cell failure - Neural crest cells contribute to conotruncal development and aortic arch formation. Defects in neural crest migration cause conotruncal abnormalities (truncus arteriosus, transposition, tetralogy of Fallot) and aortic arch anomalies (interrupted aortic arch, coarctation). Neural crest cells are not involved in endocardial cushion or AV valve formation.",
+            "C": "Truncus septation abnormality - Abnormal septation of the truncus arteriosus produces conotruncal defects such as persistent truncus arteriosus, transposition of great arteries, or tetralogy of Fallot. These are characterized by abnormal great vessel relationships, not AV valve or septal defects at the crux of the heart.",
+            "D": "Premature foramen ovale closure - The foramen ovale normally remains patent throughout fetal life and closes functionally at birth (and anatomically over months to years). Premature closure would cause fetal hydrops and stillbirth, not the cardiac anatomy seen here. This doesn't create AVSDs.",
+            "E": "Persistent ostium secundum - Persistent ostium secundum creates a secundum ASD (central atrial septal defect), not the primum ASD seen in AVSD. Secundum ASDs result from excessive resorption of septum primum or inadequate growth of septum secundum, completely separate from endocardial cushion development. Secundum ASDs don't involve the AV valves or ventricular septum."
+          }
+        },
+        "educationalObjective": "Complete atrioventricular septal defect (AVSD) results from failure of endocardial cushion fusion, creating a primum ASD, inlet VSD, and common AV valve. AVSD is the most common cardiac defect in Down syndrome and presents with congestive heart failure from excessive pulmonary blood flow.",
+        "keyFacts": [
+          "AVSD = endocardial cushion defect, most common CHD in Down syndrome",
+          "Embryology: Failure of superior + inferior endocardial cushion fusion (weeks 4-5)",
+          "Anatomy: Primum ASD + inlet VSD + common AV valve (5 leaflets total)",
+          "Physiology: Large L→R shunt → pulmonary overcirculation → CHF",
+          "Presentation: Poor feeding, tachypnea, failure to thrive, hepatomegaly",
+          "Physical exam: Hyperdynamic precordium, holosystolic murmur, fixed split S2",
+          "CXR: Cardiomegaly, increased pulmonary vascular markings",
+          "Types: Partial AVSD (primum ASD + cleft mitral) vs Complete AVSD",
+          "Associated with: Down syndrome (40-45%), heterotaxy syndromes",
+          "Management: Early surgical repair (3-6 months) to prevent Eisenmenger"
+        ],
+        "tags": [
+          "avsd",
+          "endocardial-cushion-defect",
+          "down-syndrome",
+          "trisomy-21",
+          "congestive-heart-failure",
+          "embryology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 27,
+        "title": "Total Anomalous Pulmonary Venous Return - Obstructed",
+        "subject": "Pathology/Physiology",
+        "system": "Cardiovascular System",
+        "topic": "Total Anomalous Pulmonary Venous Return",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A term newborn develops severe respiratory distress and cyanosis within hours of birth. The infant is lethargic with poor perfusion. Physical examination reveals tachypnea, grunting, retractions, and central cyanosis. Oxygen saturation is 65% despite 100% inspired oxygen. A loud single S2 is heard, but no murmur is audible. The liver is not enlarged. Chest radiograph shows a normal-sized heart with diffuse ground-glass opacities and prominent interstitial markings. Initial assessment suggests severe persistent pulmonary hypertension, but echocardiography reveals all four pulmonary veins draining into a vertical vein posterior to the left atrium, which descends and enters a hepatic vein below the diaphragm.",
+        "questionText": "Which of the following best explains this infant's severe presentation in the first hours of life?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Mixing at the atrial level through a restrictive foramen ovale",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Pulmonary venous obstruction from compression of the vertical vein",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Decreased pulmonary blood flow from right ventricular hypoplasia",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Severe left ventricular outflow tract obstruction",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Parallel circulation with inadequate ductal mixing",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has infracardiac (type 3) total anomalous pulmonary venous return (TAPVR) with obstruction—the most critical variant of TAPVR requiring emergency surgery. In TAPVR, all four pulmonary veins fail to connect to the left atrium and instead drain anomalously into the systemic venous system. In the infracardiac type, a vertical vein descends through the diaphragm to join the portal venous system or ductus venosus. This pathway is inherently restrictive because: (1) the vertical vein traverses the diaphragm and can be compressed during breathing, (2) the hepatic sinusoids offer high resistance, and (3) mixing with deoxygenated blood occurs before reaching the heart. Obstruction causes severe pulmonary venous congestion with pulmonary edema (ground-glass appearance on CXR mimicking respiratory distress syndrome), pulmonary hypertension, and right heart failure. The infant presents with severe cyanosis unresponsive to oxygen because blood cannot adequately return from the lungs. The normal heart size distinguishes this from typical CHF (which causes cardiomegaly). This is a surgical emergency—delayed diagnosis is fatal.",
+          "incorrect": {
+            "A": "Restrictive foramen ovale - While TAPVR requires an ASD for survival (oxygenated blood must reach the left heart somehow), a restrictive foramen ovale would cause right heart failure and cyanosis but not the severe pulmonary edema seen here. The severity and presentation (immediate after birth, diffuse pulmonary edema) point to pulmonary venous obstruction, not inadequate atrial mixing.",
+            "C": "RV hypoplasia - Right ventricular hypoplasia is not a feature of TAPVR. The right ventricle receives increased preload in TAPVR (all pulmonary and systemic venous return), leading to RV dilation, not hypoplasia. The presentation here is from venous obstruction, not inadequate RV output.",
+            "D": "LVOT obstruction - TAPVR doesn't involve left ventricular outflow obstruction. The left ventricle is typically small due to reduced preload (since pulmonary veins don't connect to LA), but there's no anatomic LVOT obstruction. This wouldn't explain the pulmonary edema pattern.",
+            "E": "Parallel circulation - This describes transposition of great arteries (TGA), where aorta and pulmonary artery arise from opposite ventricles. TGA presents with cyanosis but typically NOT with pulmonary edema or respiratory distress, and it has a different chest X-ray appearance (egg-on-string silhouette, not ground-glass opacities)."
+          }
+        },
+        "educationalObjective": "Obstructed total anomalous pulmonary venous return (especially infracardiac type) presents in the first hours of life with severe cyanosis and respiratory distress from pulmonary venous congestion. The chest radiograph shows pulmonary edema with a normal-sized heart, mimicking severe lung disease. This is a surgical emergency.",
+        "keyFacts": [
+          "TAPVR = all pulmonary veins drain to systemic venous system (not LA)",
+          "Types: Supracardiac (to SVC/innominate), cardiac (to RA/coronary sinus), infracardiac (below diaphragm), mixed",
+          "Infracardiac = most likely to be obstructed = surgical emergency",
+          "Obstruction → severe pulmonary venous congestion → pulmonary edema + PH",
+          "Presentation: Immediate cyanosis, respiratory distress, shock, pulmonary edema",
+          "CXR: Normal heart size + ground-glass/interstitial markings (mimics RDS or PPHN)",
+          "Diagnosis: Echo shows anomalous venous connection, no veins entering LA",
+          "Requires ASD for survival (systemic blood reaches LV through atrial shunt)",
+          "Treatment: Emergency surgical repair (reconnect veins to LA)",
+          "Differential: PPHN, RDS, obstructed TAPVR—echo differentiates"
+        ],
+        "tags": [
+          "tapvr",
+          "obstructed-tapvr",
+          "infracardiac-tapvr",
+          "pulmonary-venous-obstruction",
+          "neonatal-emergency",
+          "pulmonary-edema"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 28,
+        "title": "Truncus Arteriosus - Presentation",
+        "subject": "Pathology/Physiology",
+        "system": "Cardiovascular System",
+        "topic": "Truncus Arteriosus",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 3-week-old infant is brought to the pediatrician for poor feeding and rapid breathing. The infant was born at term without complications. Over the past week, the parents have noticed increasing difficulty with feeding, with the infant becoming tired and sweaty during feeds. Physical examination reveals tachypnea, a hyperdynamic precordium, and a harsh systolic murmur heard at the left sternal border. A loud single S2 is noted. The infant has mild cyanosis of the lips. Chest radiograph shows cardiomegaly with increased pulmonary vascular markings. Echocardiography demonstrates a single large arterial trunk arising from the heart, giving rise to the aorta, pulmonary arteries, and coronary arteries, with a large ventricular septal defect directly beneath the truncal valve.",
+        "questionText": "Which of the following hemodynamic abnormalities best explains this infant's clinical presentation?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Decreased pulmonary blood flow from severe pulmonary stenosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Parallel circulations with minimal mixing",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Excessive pulmonary blood flow from low pulmonary vascular resistance",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Complete mixing with balanced systemic and pulmonary blood flow",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Pulmonary venous obstruction with pulmonary edema",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This infant has persistent truncus arteriosus, a conotruncal defect where failure of the truncus arteriosus to divide results in a single great vessel supplying the systemic, pulmonary, and coronary circulations. The truncal valve overrides a large VSD, and the pulmonary arteries arise directly from the common trunk. The hemodynamic consequence is torrential pulmonary blood flow because: (1) the pulmonary arteries receive blood directly from the high-pressure truncus (systemic-level pressure), (2) as pulmonary vascular resistance naturally drops in the first weeks of life, pulmonary blood flow increases dramatically, and (3) there is obligate complete mixing of oxygenated and deoxygenated blood in the common trunk. The result is pulmonary overcirculation with congestive heart failure (tachypnea, poor feeding, sweating, hepatomegaly) plus mild cyanosis from mixing. The single S2 reflects the single truncal valve. Without surgery in infancy, these patients develop Eisenmenger syndrome rapidly due to early irreversible pulmonary vascular disease from chronic high-flow, high-pressure pulmonary circulation.",
+          "incorrect": {
+            "A": "Decreased pulmonary flow - The opposite is true. Truncus arteriosus is characterized by EXCESSIVE pulmonary blood flow because the pulmonary arteries receive blood at systemic pressure directly from the trunk. This patient has CHF from pulmonary overcirculation, not cyanosis from reduced pulmonary flow.",
+            "B": "Parallel circulations - This describes transposition of great arteries (TGA), where the aorta and pulmonary artery arise from opposite ventricles, creating two separate circuits that must mix at the atrial or ductal level. Truncus arteriosus has a single vessel supplying both circulations—complete mixing occurs at the truncal level, not parallel circuits.",
+            "D": "Balanced flow - While there is complete mixing in truncus arteriosus, the flow is NOT balanced. The low PVR in early infancy causes preferential flow to the lungs, resulting in pulmonary overcirculation and systemic underperfusion. The presentation (CHF, not severe cyanosis) confirms excessive rather than balanced pulmonary flow.",
+            "E": "Pulmonary venous obstruction - This occurs in conditions like obstructed TAPVR or cor triatriatum, where pulmonary venous return is impeded, causing pulmonary edema and respiratory distress. Truncus arteriosus has normal pulmonary venous drainage to the left atrium—the problem is arterial (excessive flow TO the lungs), not venous (obstruction FROM the lungs)."
+          }
+        },
+        "educationalObjective": "Persistent truncus arteriosus results in torrential pulmonary blood flow once PVR drops after birth, causing congestive heart failure with mild cyanosis. The single arterial trunk supplies both systemic and pulmonary circulations at systemic pressure, leading to pulmonary overcirculation and early development of pulmonary vascular disease if not surgically corrected.",
+        "keyFacts": [
+          "Truncus arteriosus = single arterial trunk supplying systemic + pulmonary + coronary circulations",
+          "Embryology: Failure of truncus arteriosus and conus to divide (weeks 5-6)",
+          "Anatomy: Large VSD, single truncal valve, pulmonary arteries arise from trunk",
+          "Types: Type I (short main PA from trunk), Type II (separate branch PAs), Type III (PAs from aorta—actually interrupted aortic arch with PDA)",
+          "Hemodynamics: Complete mixing + torrential pulmonary flow → CHF + mild cyanosis",
+          "Presentation: CHF at 2-4 weeks (as PVR drops): poor feeding, tachypnea, failure to thrive",
+          "Physical exam: Single loud S2, systolic murmur, hyperdynamic precordium, ± diastolic murmur (truncal valve regurgitation)",
+          "Associated findings: Truncal valve abnormalities (stenosis/regurgitation), 22q11.2 deletion (DiGeorge)",
+          "Natural history: Early Eisenmenger syndrome (by 1-2 years) if untreated",
+          "Treatment: Surgical repair in first weeks/months of life (VSD closure + RV-to-PA conduit)"
+        ],
+        "tags": [
+          "truncus-arteriosus",
+          "conotruncal-defect",
+          "pulmonary-overcirculation",
+          "congestive-heart-failure",
+          "single-s2",
+          "22q11-deletion"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 29,
+        "title": "Tricuspid Atresia - Pathophysiology",
+        "subject": "Pathology/Physiology",
+        "system": "Cardiovascular System",
+        "topic": "Tricuspid Atresia",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A term newborn develops progressive cyanosis over the first 24 hours of life. The infant appears comfortable at rest but becomes more cyanotic with crying. Physical examination reveals central cyanosis, tachypnea, and a single S2. A soft systolic murmur is heard at the left sternal border, but no diastolic murmur is present. Oxygen saturation is 70% and does not improve significantly with supplemental oxygen. Chest radiograph shows decreased pulmonary vascular markings and a boot-shaped cardiac silhouette. Echocardiography demonstrates absence of the tricuspid valve with no flow from the right atrium to the right ventricle, along with an atrial septal defect and ventricular septal defect.",
+        "questionText": "Which of the following pathways is essential for this infant's survival?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Right-to-left shunting at the atrial level",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Patent ductus arteriosus providing pulmonary blood flow",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Left-to-right shunting through the ventricular septal defect",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Anomalous pulmonary venous return to the right atrium",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Coronary arterial fistula to the right ventricle",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This infant has tricuspid atresia, a cyanotic congenital heart disease characterized by complete absence of the tricuspid valve and no connection between the right atrium and right ventricle. For survival, blood must follow an alternative pathway: (1) systemic venous return enters the RA but cannot reach the RV, so it MUST cross an ASD (right-to-left) to reach the left atrium, (2) blood then enters the LV where it mixes with pulmonary venous return, (3) from the LV, blood must reach the pulmonary circulation somehow—this occurs through LEFT-TO-RIGHT flow across a VSD into the hypoplastic RV, and then to the pulmonary artery. The VSD is the critical pathway allowing blood to reach the lungs. If the VSD is too small (restrictive), pulmonary blood flow is inadequate, causing severe cyanosis. The patient may also require a PDA to supplement pulmonary blood flow, but the VSD is the primary route. Without a VSD (or an alternative communication), no blood would reach the lungs and the infant would not survive. The physiology requires obligate mixing at the atrial level (for survival) and obligate L→R flow at the ventricular level (for oxygenation).",
+          "incorrect": {
+            "A": "R→L shunting at atrial level - While right-to-left shunting across the ASD is NECESSARY (systemic venous return must reach the left side) to survive, it is not SUFFICIENT. The ASD allows survival but doesn't explain how blood gets to the lungs. The complete answer requires both the ASD (for systemic return to reach the left side) AND the VSD (for blood to reach the pulmonary circulation). Choice C is more complete.",
+            "B": "PDA for pulmonary flow - The PDA does provide additional pulmonary blood flow in some cases of tricuspid atresia and may be essential if the VSD is restrictive or if there's associated pulmonary stenosis. However, the PRIMARY route for pulmonary blood flow in tricuspid atresia is through the VSD (L→R shunt from LV to hypoplastic RV to PA). The PDA is supplementary, not the main pathway.",
+            "D": "Anomalous pulmonary venous return - This is not a feature of tricuspid atresia. Pulmonary veins drain normally to the left atrium. Anomalous pulmonary venous connection describes different lesions (TAPVR, partial APVR) where veins drain to the right-sided circulation—not present here.",
+            "E": "Coronary fistula to RV - Coronary arterial fistulas are rare anomalies where coronary arteries connect abnormally to cardiac chambers or vessels. This is not a feature of tricuspid atresia and would not provide a pathway for pulmonary blood flow. This is a distractor."
+          }
+        },
+        "educationalObjective": "Tricuspid atresia requires obligate right-to-left shunting at the atrial level (for systemic venous return to reach the left heart) and left-to-right shunting through a VSD (for blood to reach the lungs via the hypoplastic RV). Survival depends on adequate communication at both levels.",
+        "keyFacts": [
+          "Tricuspid atresia = absent tricuspid valve, no RA→RV connection",
+          "Obligate pathways: ASD (R→L) for survival + VSD (L→R) for pulmonary blood flow",
+          "Blood flow: Systemic venous return → RA → ASD → LA → LV → (VSD) → hypoplastic RV → PA",
+          "Complete mixing in LA → cyanosis inevitable",
+          "Pulmonary blood flow depends on VSD size ± PDA",
+          "RV and PA are hypoplastic (reduced flow during development)",
+          "Presentation: Cyanosis (severe if VSD restrictive), ± CHF if unrestricted VSD",
+          "CXR: Decreased pulmonary markings (restrictive VSD) OR increased markings (large VSD)",
+          "Single ventricle physiology requiring staged palliation",
+          "Treatment: Stage 1 (Blalock-Taussig shunt or PDA stent in neonatal period), Stage 2 (Glenn at 4-6 months), Stage 3 (Fontan at 2-4 years)"
+        ],
+        "tags": [
+          "tricuspid-atresia",
+          "cyanotic-chd",
+          "single-ventricle",
+          "obligate-shunt",
+          "hypoplastic-right-ventricle",
+          "fontan-physiology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 30,
+        "title": "Ebstein Anomaly - Tricuspid Valve Malformation",
+        "subject": "Pathology",
+        "system": "Cardiovascular System",
+        "topic": "Ebstein Anomaly",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 16-year-old girl presents to the cardiology clinic for evaluation of exercise intolerance and palpitations. She reports becoming short of breath with mild exertion and occasionally feels her heart racing. She has a history of 'a heart murmur' since infancy but has not had regular cardiology follow-up. Physical examination reveals mild cyanosis of the lips and a prominent jugular venous pulsation with a prominent V wave. Cardiac auscultation reveals a widely split S1 with a soft, holosystolic murmur at the lower left sternal border that increases with inspiration. Chest radiograph shows massive cardiomegaly with a 'box-shaped' heart. Electrocardiogram demonstrates a right bundle branch block pattern and tall, peaked P waves in lead II.",
+        "questionText": "Echocardiography in this patient would most likely show which of the following findings?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Anterior displacement of the posterior leaflet of the mitral valve",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Apical displacement of the septal leaflet of the tricuspid valve",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Bicuspid aortic valve with fusion of the right and left coronary cusps",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Myxomatous degeneration with prolapse of the anterior mitral leaflet",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Thickening and fusion of the tricuspid valve leaflets with doming during diastole",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This patient has Ebstein anomaly, a congenital malformation of the tricuspid valve characterized by apical displacement (downward movement) of the septal and posterior leaflets of the tricuspid valve into the right ventricle. The anterior leaflet is typically elongated and 'sail-like'. This displacement creates an 'atrialized' portion of the RV (the part of the RV above the displaced valve functions as part of the RA), resulting in: (1) a very enlarged right atrium (causing massive cardiomegaly and 'box-shaped' heart on CXR), (2) tricuspid regurgitation (holosystolic murmur that increases with inspiration), (3) reduced functional RV size, (4) predisposition to atrial arrhythmias (palpitations) and right-to-left shunting via patent foramen ovale or ASD (causing cyanosis). The widely split S1 is pathognomonic—it results from delayed closure of the elongated, displaced tricuspid valve compared to the mitral valve. Ebstein anomaly has a wide spectrum of severity from asymptomatic to severe heart failure/cyanosis in infancy. It is associated with maternal lithium use during pregnancy and with Wolff-Parkinson-White syndrome (accessory pathway, causing palpitations).",
+          "incorrect": {
+            "A": "Anterior displacement of posterior mitral leaflet - This describes mitral valve prolapse (MVP), specifically of the posterior leaflet. MVP would cause a mid-systolic click followed by a late systolic murmur, not a holosystolic murmur. It wouldn't explain the massive RA enlargement, cyanosis, or the constellation of findings pointing to a right-sided lesion.",
+            "C": "Bicuspid aortic valve - A congenital aortic valve anomaly that may be asymptomatic or cause aortic stenosis/regurgitation. Would produce a systolic ejection murmur at the right upper sternal border (not left lower sternal border) and wouldn't cause cyanosis, massive cardiomegaly, or right atrial abnormalities. This is a left-sided lesion.",
+            "D": "Myxomatous mitral valve prolapse - Mitral valve prolapse from myxomatous degeneration produces a mid-systolic click and late systolic murmur (as the valve prolapses back into the LA during systole). The murmur would radiate to the axilla, not be heard at the LLSB with inspiration increase. MVP doesn't cause cyanosis or the characteristic ECG/CXR findings seen here.",
+            "E": "Tricuspid stenosis - Thickening and fusion of tricuspid leaflets describes rheumatic tricuspid stenosis, which is extremely rare (almost always occurs with mitral stenosis). Tricuspid stenosis produces a diastolic rumble at the LLSB, not a holosystolic murmur. It also doesn't cause the massive cardiomegaly or congenital presentation seen here. Ebstein is a malformation, not stenosis."
+          }
+        },
+        "educationalObjective": "Ebstein anomaly is characterized by apical displacement of the septal and posterior tricuspid valve leaflets into the right ventricle, creating an atrialized RV and enlarged RA. The widely split S1 (delayed tricuspid closure) is pathognomonic. Patients present with tricuspid regurgitation, arrhythmias, and cyanosis from right-to-left shunting.",
+        "keyFacts": [
+          "Ebstein anomaly = apical displacement of septal + posterior tricuspid leaflets",
+          "Pathognomonic finding: Widely split S1 (delayed tricuspid closure)",
+          "Anatomy: Atrialized RV + massive RA + elongated 'sail-like' anterior leaflet",
+          "Hemodynamics: Severe TR + reduced functional RV size",
+          "Associated with: PFO/ASD (causing cyanosis), WPW syndrome (15-20%)",
+          "Presentation: Wide spectrum from asymptomatic to neonatal heart failure",
+          "Physical exam: Cyanosis, prominent V wave (severe TR), holosystolic murmur ↑ with inspiration",
+          "CXR: Massive cardiomegaly, 'box-shaped' heart, clear lung fields",
+          "ECG: Tall P waves (RA enlargement), RBBB, possible WPW (delta wave)",
+          "Risk factor: Maternal lithium exposure during pregnancy",
+          "Treatment: Varies by severity—observation, tricuspid valve repair/replacement, or cardiac transplantation"
+        ],
+        "tags": [
+          "ebstein-anomaly",
+          "tricuspid-valve-malformation",
+          "atrialized-right-ventricle",
+          "tricuspid-regurgitation",
+          "wolff-parkinson-white",
+          "lithium-exposure"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 31,
+        "title": "ALCAPA - Coronary Artery Anomaly",
+        "subject": "Pathology/Physiology",
+        "system": "Cardiovascular System",
+        "topic": "Anomalous Left Coronary Artery from Pulmonary Artery",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A 4-month-old infant is brought to the emergency department for irritability during feeding and profuse sweating. The parents report the infant has been less active over the past month and occasionally appears uncomfortable, drawing up the legs and crying inconsolably for 10-15 minutes. Physical examination reveals a pale, diaphoretic infant with tachypnea and tachycardia. The infant appears fatigued. A soft systolic murmur is heard at the apex with radiation to the axilla. The liver edge is palpable 3 cm below the right costal margin. Electrocardiogram shows deep Q waves in leads I and aVL with ST-segment depression and T-wave inversion in the lateral leads. Chest radiograph reveals cardiomegaly. Echocardiography demonstrates severe left ventricular dysfunction, mitral regurgitation, and bright echogenic areas in the anterolateral left ventricular wall.",
+        "questionText": "Which of the following is the most likely cause of this infant's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Viral myocarditis causing diffuse ventricular dysfunction",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Anomalous origin of the left coronary artery from the pulmonary artery",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Idiopathic dilated cardiomyopathy",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Critical aortic stenosis with endocardial fibroelastosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Kawasaki disease with coronary artery aneurysms",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has anomalous left coronary artery from the pulmonary artery (ALCAPA), also known as Bland-White-Garland syndrome. In this rare congenital anomaly, the left coronary artery arises from the pulmonary artery instead of the aorta. Pathophysiology: In utero and immediately after birth, pulmonary artery pressure is elevated (near systemic), so the left coronary artery receives adequate flow. However, as PVR drops over the first weeks of life, pulmonary artery pressure falls dramatically, resulting in: (1) decreased perfusion pressure to the left coronary system → myocardial ischemia, (2) reversal of flow in the left coronary artery (blood flows from the RCA via collaterals TO the LCA and then into the low-pressure pulmonary artery—a 'coronary steal'), (3) chronic myocardial ischemia → anterolateral MI → LV dysfunction, mitral regurgitation (from papillary muscle dysfunction), and CHF. Presentation mimics angina in infants: irritability, sweating, inconsolable crying during feeds (when cardiac demand increases). ECG shows anterolateral MI pattern (deep Q waves in I and aVL). Echo shows bright myocardial areas (fibrosis/infarction) and severe LV dysfunction. This is a surgical emergency—the LCA must be reimplanted into the aorta.",
+          "incorrect": {
+            "A": "Viral myocarditis - Can cause acute heart failure and LV dysfunction in infants, but typically presents with sudden onset (days to weeks), often with preceding viral illness (fever, URI symptoms), and diffuse rather than regional wall motion abnormalities. The ECG would show diffuse ST-T changes, not the specific anterolateral MI pattern seen here. Echo findings of bright myocardium in a specific distribution (anterolateral) point to infarction, not diffuse myocarditis.",
+            "C": "Dilated cardiomyopathy - Idiopathic or familial dilated cardiomyopathy can present with heart failure in infancy but typically shows global ventricular dilation and diffuse hypokinesis without regional wall motion abnormalities. The ECG wouldn't show pathologic Q waves (indicating MI). The clinical presentation (episodes of irritability/pain during feeding) strongly suggests ischemia rather than primary muscle disease.",
+            "D": "Critical aortic stenosis - Presents in the first days/weeks of life (not months) with shock, poor perfusion, and ductal-dependent systemic circulation. Echo would show severe aortic valve stenosis and concentric LV hypertrophy with or without endocardial fibroelastosis. There would be no regional wall motion abnormalities or MI pattern on ECG—the LV dysfunction is global from pressure overload, not ischemia.",
+            "E": "Kawasaki disease - Causes coronary artery aneurysms and can lead to myocardial infarction, BUT Kawasaki disease presents with acute febrile illness (fever >5 days) plus specific mucocutaneous findings (conjunctivitis, rash, strawberry tongue, erythema of hands/feet, cervical lymphadenopathy). This infant has none of these features. Additionally, Kawasaki typically affects older infants/toddlers (peak 18-24 months), and coronary complications occur 2-4 weeks after fever onset, not as the presenting finding at 4 months."
+          }
+        },
+        "educationalObjective": "Anomalous left coronary artery from the pulmonary artery (ALCAPA) presents at 2-4 months of age with myocardial ischemia and heart failure as PVR drops. Infants have angina-equivalent symptoms (irritability, sweating, crying with feeds), ECG shows anterolateral MI pattern, and echo demonstrates regional LV dysfunction with bright myocardial areas. Surgical reimplantation is required.",
+        "keyFacts": [
+          "ALCAPA = left coronary artery arises from pulmonary artery (not aorta)",
+          "Pathophysiology: As PVR drops → ↓ PA pressure → ↓ LCA perfusion + coronary steal (blood flows LCA→PA)",
+          "Presentation: 2-4 months old, 'angina equivalent' (irritability, sweating, crying with feeds)",
+          "Mimics MI in infants: Anterolateral ischemia/infarction",
+          "Physical exam: Pallor, diaphoresis, tachycardia, CHF signs, mitral regurgitation murmur",
+          "ECG: Deep Q waves in I and aVL, ST depression, T-wave inversion (anterolateral MI pattern)",
+          "Echo: Regional wall motion abnormality (anterolateral), bright myocardium (infarction/fibrosis), severe LV dysfunction, MR",
+          "Chronic ischemia → LV failure, mitral regurgitation (papillary muscle dysfunction)",
+          "Natural history: 90% mortality by age 1 year without surgery",
+          "Treatment: Surgical reimplantation of LCA into aorta (emergency)",
+          "Mnemonic: ALCAPA = 'Angina-Like Crying And Poor Appetite'"
+        ],
+        "tags": [
+          "alcapa",
+          "anomalous-coronary-artery",
+          "myocardial-ischemia",
+          "infant-heart-failure",
+          "coronary-steal",
+          "anterolateral-mi",
+          "surgical-emergency"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 32,
+        "title": "Hypoplastic Left Heart Syndrome - Ductal-Dependent Systemic Circulation",
+        "subject": "Pathology/Physiology",
+        "system": "Cardiovascular System",
+        "topic": "Hypoplastic Left Heart Syndrome",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 120,
+        "vignette": "A term newborn appears well immediately after birth but develops progressive lethargy, poor feeding, and mottled skin over the first 24 hours of life. By 36 hours, the infant is in extremis with profound metabolic acidosis, absent femoral pulses, and severe hypotension. Physical examination reveals a gray, cool infant with weak central pulses and absent peripheral pulses. A single loud S2 is heard without murmurs. Oxygen saturation is 85% in the right hand and 88% in the feet. Chest radiograph shows cardiomegaly with pulmonary edema. Echocardiography demonstrates severe hypoplasia of the left ventricle, mitral valve, and ascending aorta with aortic valve atresia. The patent ductus arteriosus is closing.",
+        "questionText": "Which of the following interventions would most likely stabilize this infant pending definitive surgical management?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Immediate atrial septostomy to improve mixing",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Prostaglandin E1 infusion to maintain ductal patency",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Supplemental oxygen to improve systemic oxygen delivery",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Inotropic support with dopamine and milrinone",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Emergent surgical closure of the patent ductus arteriosus",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has hypoplastic left heart syndrome (HLHS), the most severe form of left-sided obstructive lesion where the left ventricle, mitral valve, and ascending aorta are severely underdeveloped and the aortic valve is atretic (closed). In HLHS, systemic blood flow is ENTIRELY dependent on the right ventricle and patent ductus arteriosus: (1) the RV pumps blood to the pulmonary artery, (2) blood reaches the lungs normally, (3) oxygenated blood returns to the LA but cannot enter the hypoplastic LV, (4) blood crosses the atrial septum (R→L) to reach the RA and RV, (5) from the pulmonary artery, blood flows RETROGRADE through the PDA to supply the systemic circulation (including coronaries, which fill retrograde from the descending aorta). When the ductus begins to close (as it naturally does after birth), systemic perfusion ceases catastrophically → shock, acidosis, absent pulses, death. The IMMEDIATE intervention is prostaglandin E1 infusion to maintain ductal patency and restore systemic blood flow. This buys time for stabilization and surgical planning (Norwood procedure or cardiac transplant). Without PGE1, the infant will die within hours.",
+          "incorrect": {
+            "A": "Atrial septostomy - Atrial septostomy (balloon dilation of the atrial septum) is used to improve mixing when the atrial communication is restrictive. While HLHS does require adequate atrial-level shunting for survival, the PRIMARY problem in this decompensating infant is DUCTAL CLOSURE causing loss of systemic blood flow. Improving atrial mixing won't restore systemic perfusion if the duct is closed. PGE1 is the first priority.",
+            "C": "Supplemental oxygen - In HLHS, excessive oxygen is actually HARMFUL. High FiO2 causes pulmonary vasodilation, which increases pulmonary blood flow (Qp) at the expense of systemic blood flow (Qs). This worsens systemic perfusion. The goal in HLHS is BALANCED Qp:Qs (ideally 1:1), achieved by limiting oxygen (keep FiO2 ~21%, sats 75-85%) and sometimes adding CO2 to maintain PVR. Oxygen does not address the closed duct.",
+            "D": "Inotropes - While inotropic support may be used as an adjunct for shock, it does NOT address the fundamental problem: the duct is closing and there is no pathway for systemic blood flow. Dopamine and milrinone will not restore systemic perfusion if the ductus is closed. PGE1 must be given first to reopen the duct, then inotropes may help support cardiac output.",
+            "E": "Close the PDA - This would be FATAL. The PDA is the ONLY source of systemic blood flow in HLHS. Closing it would eliminate all systemic circulation and cause immediate death. The goal is to keep the ductus OPEN (with PGE1), not close it."
+          }
+        },
+        "educationalObjective": "Hypoplastic left heart syndrome (HLHS) is a ductal-dependent systemic circulation where the RV supplies both pulmonary and systemic (via PDA) blood flow. When the ductus begins to close, systemic perfusion fails catastrophically. Immediate prostaglandin E1 infusion is life-saving by maintaining ductal patency. Excessive oxygen is harmful as it increases pulmonary blood flow at the expense of systemic perfusion.",
+        "keyFacts": [
+          "HLHS = hypoplastic LV, mitral valve, and ascending aorta + aortic atresia",
+          "Ductal-dependent SYSTEMIC circulation (RV supplies Qs via PDA)",
+          "Blood flow: RV → PA → (1) lungs and (2) PDA → systemic circulation (retrograde)",
+          "Coronaries fill retrograde from descending aorta via PDA",
+          "Presentation: Initially well → shock/collapse at 24-72 hours as ductus closes",
+          "Physical exam: Shock, absent peripheral pulses, single S2, no murmur",
+          "Oxygen paradox: High O2 → ↓ PVR → ↑ Qp → ↓ Qs → worse shock",
+          "Management: (1) PGE1 (life-saving), (2) limit FiO2 to 21%, (3) balance Qp:Qs",
+          "Definitive treatment: Staged surgical palliation (Norwood, Glenn, Fontan) or transplant",
+          "Without PGE1: Death within hours/days of ductal closure",
+          "Goal: Keep sats 75-85% with balanced Qp:Qs (not 100%)"
+        ],
+        "tags": [
+          "hypoplastic-left-heart-syndrome",
+          "ductal-dependent-systemic",
+          "prostaglandin-e1",
+          "neonatal-shock",
+          "single-ventricle",
+          "norwood-procedure",
+          "oxygen-paradox"
         ],
         "blueprintCategory": "Cardiovascular System",
         "bloomsTaxonomy": "Analysis"

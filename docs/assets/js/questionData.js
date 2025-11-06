@@ -43,5 +43,26 @@ const QUESTION_SETS = [
       json: "assets/question_banks/congenital_heart_disease_part3.json",
       markdown: "assets/question_banks/congenital_heart_disease_part3.md"
     }
+  },
+  {
+    id: "chd-part4",
+    title: "Congenital Heart Disease – Part 4",
+    subtitle: "Vascular Rings, Paradoxical Emboli, and Transition Pearls",
+    difficulty: "Advanced",
+    tags: [
+      "Vascular rings",
+      "Patent foramen ovale",
+      "Neonatal circulation",
+      "Cardiac catheterization",
+      "Turner syndrome"
+    ],
+    questionCount: 5,
+    description:
+      "Spotlights airway-compressing vascular anomalies, paradoxical emboli workups, neonatal circulation shifts, and nuanced cath interpretation clues for complex board scenarios.",
+    interactivePath: "questions/index.html?set=chd-part4",
+    downloads: {
+      json: "assets/question_banks/congenital_heart_disease_part4.json",
+      markdown: "assets/question_banks/congenital_heart_disease_part4.md"
+    }
   }
 ];
