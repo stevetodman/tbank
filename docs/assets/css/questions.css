@@ -216,6 +216,25 @@
   color: #333;
 }
 
+.question-stem .vignette {
+  margin: 0 0 1.5rem 0;
+  line-height: 1.8;
+  color: #333;
+  font-size: 1rem;
+}
+
+.question-stem .question-text {
+  margin: 0;
+  line-height: 1.7;
+  color: #111;
+  font-size: 1.05rem;
+}
+
+.question-stem .question-text strong {
+  font-weight: 600;
+  color: #000;
+}
+
 .question-stem p {
   margin: 0;
   line-height: 1.6;
