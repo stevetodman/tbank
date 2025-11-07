@@ -78,6 +78,11 @@
   overflow-y: auto;
 }
 
+/* Ensure hidden attribute works */
+.question-menu[hidden] {
+  display: none !important;
+}
+
 .question-menu-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--color-border);
@@ -1326,6 +1331,11 @@
   justify-content: center;
   z-index: 300;
   animation: fadeIn 0.2s ease;
+}
+
+/* Ensure hidden attribute works even with modal styles */
+.modal[hidden] {
+  display: none !important;
 }
 
 @keyframes fadeIn {
