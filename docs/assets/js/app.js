@@ -5,6 +5,9 @@
   let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true } }
   let showWelcome = true; // Show welcome screen on first load
   let keyboardHintShown = false; // Track if keyboard hint was shown
+  let currentStreak = 0; // Track consecutive correct answers
+  let bestStreak = 0; // Track best streak
+  let milestonesShown = []; // Track which milestones have been shown
 
   // DOM elements
   const questionDisplay = document.getElementById("question-display");
@@ -305,8 +308,93 @@
     userAnswers[currentQuestionIndex].submitted = true;
     userAnswers[currentQuestionIndex].correct = isCorrect;
 
+    // Update streak tracking
+    if (isCorrect) {
+      currentStreak++;
+      if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+      }
+
+      // Show streak notification for 3, 5, 10 in a row
+      if (currentStreak === 3 || currentStreak === 5 || currentStreak === 10) {
+        setTimeout(() => showStreakNotification(currentStreak), 600);
+      }
+    } else {
+      currentStreak = 0;
+    }
+
     renderQuestion();
     updateStats();
+
+    // Check for milestone celebrations
+    checkMilestones();
+  }
+
+  // Show streak notification
+  function showStreakNotification(streak) {
+    const messages = {
+      3: '🔥 3 in a row! You\'re on fire!',
+      5: '🌟 5 correct in a row! Amazing streak!',
+      10: '🎯 10 in a row! Incredible mastery!'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = 'streak-toast';
+    toast.innerHTML = messages[streak] || `🔥 ${streak} in a row!`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // Check and show milestone celebrations
+  function checkMilestones() {
+    const answered = Object.values(userAnswers).filter(a => a.submitted).length;
+    const milestones = [10, 25, 40, 52];
+
+    milestones.forEach(milestone => {
+      if (answered === milestone && !milestonesShown.includes(milestone)) {
+        milestonesShown.push(milestone);
+        setTimeout(() => showMilestoneCelebration(milestone), 800);
+      }
+    });
+  }
+
+  // Show milestone celebration
+  function showMilestoneCelebration(milestone) {
+    const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
+    const percentage = Math.round((correct / milestone) * 100);
+
+    const messages = {
+      10: '🎉 10 Questions Down!',
+      25: '🚀 Halfway There! 25 Questions!',
+      40: '⭐ Almost There! 40 Questions!',
+      52: '🏆 Test Complete! Congratulations!'
+    };
+
+    const overlay = document.createElement('div');
+    overlay.className = 'milestone-overlay';
+    overlay.innerHTML = `
+      <div class="milestone-card">
+        <h2>${messages[milestone]}</h2>
+        <p class="milestone-stats">${correct} correct • ${percentage}% accuracy</p>
+        <p class="milestone-encouragement">
+          ${percentage >= 80 ? 'Outstanding performance! Keep it up!' :
+            percentage >= 70 ? 'Great work! You\'re doing well!' :
+            'Every question is a learning opportunity!'}
+        </p>
+        <button class="milestone-continue-btn" onclick="this.parentElement.parentElement.remove()">
+          ${milestone === 52 ? 'Review Results' : 'Continue'}
+        </button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    setTimeout(() => overlay.classList.add('show'), 100);
   }
 
   // Navigation
@@ -371,9 +459,28 @@
     const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
 
-    answeredCount.textContent = `Answered: ${answered}/${questions.length}`;
-    correctCount.textContent = `Correct: ${correct}`;
-    percentageDisplay.textContent = `${percentage}%`;
+    // Add emoji based on performance
+    let emoji = '📊';
+    if (percentage >= 90) emoji = '🏆';
+    else if (percentage >= 80) emoji = '🌟';
+    else if (percentage >= 70) emoji = '✨';
+    else if (percentage >= 60) emoji = '💪';
+
+    answeredCount.textContent = `${answered}/${questions.length} answered`;
+    correctCount.textContent = `${correct} correct ${emoji}`;
+
+    // Show percentage with encouragement
+    let encouragement = '';
+    if (percentage >= 80) encouragement = ' Outstanding!';
+    else if (percentage >= 70) encouragement = ' Great!';
+    else if (percentage >= 60) encouragement = ' Good!';
+
+    percentageDisplay.textContent = `${percentage}%${encouragement}`;
+
+    // Add streak display if active
+    if (currentStreak >= 2) {
+      percentageDisplay.textContent += ` 🔥 ${currentStreak} streak`;
+    }
   }
 
   // Menu controls
