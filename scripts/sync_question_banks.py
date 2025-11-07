@@ -29,10 +29,19 @@ def sync_question_banks() -> None:
     elif existing.is_dir():
       shutil.rmtree(existing)
 
-  for path in SOURCE_DIR.iterdir():
-    if path.suffix.lower() not in {".json", ".md"}:
+  for source_path in SOURCE_DIR.rglob("*"):
+    relative_path = source_path.relative_to(SOURCE_DIR)
+    destination_path = DEST_DIR / relative_path
+
+    if source_path.is_dir():
+      destination_path.mkdir(parents=True, exist_ok=True)
       continue
-    shutil.copy2(path, DEST_DIR / path.name)
+
+    if source_path.suffix.lower() not in {".json", ".md"}:
+      continue
+
+    destination_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_path, destination_path)
 
 
 if __name__ == "__main__":
