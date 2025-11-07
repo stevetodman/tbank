@@ -1,0 +1,1009 @@
+{
+  "questionBank": {
+    "metadata": {
+      "title": "USMLE Step 1 Question Bank: Congenital Heart Disease - Part 5",
+      "description": "Questions 38-52: Maternal Risk Factors, Rare Structural Defects, and Complications",
+      "partNumber": 5,
+      "totalParts": 5,
+      "questionsInPart": 15,
+      "version": "1.0",
+      "targetAudience": "MS2 Students"
+    },
+    "questions": [
+      {
+        "id": 38,
+        "title": "Maternal Diabetes - Congenital Heart Disease Risk",
+        "subject": "Pathology",
+        "system": "Cardiovascular",
+        "topic": "Congenital Heart Disease Risk Factors",
+        "subtopic": "Maternal Disease",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 95,
+        "vignette": "A newborn infant is delivered to a 32-year-old woman with poorly controlled type 1 diabetes mellitus (hemoglobin A1c 9.2% during pregnancy). The infant has macrosomia and is found to have severe cyanosis at birth. Echocardiography reveals parallel great vessels arising from their respective ventricles, with the aorta anterior and to the right of the pulmonary artery.",
+        "questionText": "Which of the following congenital cardiac defects is most strongly associated with maternal diabetes?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Tetralogy of Fallot",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Transposition of the great arteries",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Patent ductus arteriosus",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Atrial septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Truncus arteriosus",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Infants of diabetic mothers have a 3-5 fold increased risk of congenital heart disease, particularly transposition of the great arteries (TGA), ventricular septal defects, coarctation of the aorta, and hypoplastic left heart syndrome. The risk is highest with poor glycemic control during organogenesis (first 8 weeks). Hyperglycemia disrupts cardiac neural crest cell migration and alters gene expression critical for cardiac septation and outflow tract development. This infant's presentation of severe cyanosis at birth with parallel circulation is classic for d-TGA, one of the most strongly associated CHD lesions with maternal diabetes.",
+          "incorrect": {
+            "A": "While TOF occurs in infants of diabetic mothers, it is more strongly associated with 22q11 deletion syndrome than maternal diabetes specifically.",
+            "C": "PDA is associated with maternal rubella infection and prematurity, not specifically with maternal diabetes.",
+            "D": "ASD has a weaker association with maternal diabetes compared to TGA, VSD, and coarctation.",
+            "E": "Truncus arteriosus is primarily associated with 22q11 deletion syndrome (DiGeorge) rather than maternal diabetes."
+          }
+        },
+        "educationalObjective": "Maternal diabetes, especially with poor glycemic control, significantly increases the risk of congenital heart disease, particularly transposition of the great arteries, VSD, coarctation, and hypoplastic left heart syndrome.",
+        "keyFacts": [
+          "Maternal diabetes → 3-5× increased CHD risk",
+          "Strongest associations: TGA, VSD, coarctation, HLHS",
+          "Poor glycemic control in first trimester is critical period",
+          "Hyperglycemia disrupts neural crest migration"
+        ],
+        "tags": [
+          "maternal-diabetes",
+          "transposition-great-arteries",
+          "congenital-heart-disease",
+          "risk-factors",
+          "teratology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 39,
+        "title": "Maternal Lupus - Congenital Complete Heart Block",
+        "subject": "Immunology",
+        "system": "Cardiovascular",
+        "topic": "Congenital Heart Block",
+        "subtopic": "Autoimmune",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 100,
+        "vignette": "A 28-year-old woman with systemic lupus erythematosus delivers a full-term infant who is bradycardic with a heart rate of 60 beats per minute. The infant appears well-perfused but lethargic. ECG shows a ventricular rate of 60 bpm with complete atrioventricular dissociation and an atrial rate of 140 bpm. Maternal serologies reveal positive anti-Ro (SSA) and anti-La (SSB) antibodies.",
+        "questionText": "Which of the following best explains the mechanism of this infant's cardiac condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Congenital absence of the sinoatrial node",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Maternal IgG antibodies crossing the placenta and causing inflammation and fibrosis of the fetal atrioventricular node",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Deficiency of cardiac sodium channels leading to prolonged QT interval",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Hypoplasia of the left ventricle requiring ductal-dependent systemic circulation",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Viral myocarditis transmitted during delivery",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Neonatal lupus syndrome with congenital complete heart block (CHB) results from transplacental passage of maternal anti-Ro/SSA and anti-La/SSB autoantibodies, which bind to fetal cardiac tissue. These IgG antibodies cause inflammation, fibrosis, and calcification of the atrioventricular node and surrounding conduction tissue, typically between 18-24 weeks gestation. Complete heart block is permanent and irreversible, often requiring pacemaker placement. The risk of CHB in anti-Ro positive mothers is approximately 2% for first pregnancy and 15-20% for subsequent pregnancies if a previous child was affected. These same antibodies can cause transient neonatal manifestations like rash and hepatitis, but cardiac involvement is permanent.",
+          "incorrect": {
+            "A": "SA node is typically intact; the pathology specifically targets the AV node and bundle of His.",
+            "C": "Long QT syndrome presents with polymorphic ventricular tachycardia (torsades de pointes), not bradycardia or heart block.",
+            "D": "HLHS presents with shock and cyanosis as the ductus closes, not isolated bradycardia.",
+            "E": "Viral myocarditis typically presents with heart failure and arrhythmias in older infants, not congenital complete heart block."
+          }
+        },
+        "educationalObjective": "Maternal anti-Ro (SSA) and anti-La (SSB) antibodies cross the placenta and cause congenital complete heart block through inflammation and fibrosis of the fetal atrioventricular conduction system.",
+        "keyFacts": [
+          "Maternal anti-Ro/SSA and anti-La/SSB → neonatal lupus",
+          "Congenital CHB from AV node fibrosis (18-24 weeks gestation)",
+          "Risk: 2% first pregnancy, 15-20% if prior affected child",
+          "Permanent condition requiring pacemaker"
+        ],
+        "tags": [
+          "neonatal-lupus",
+          "congenital-heart-block",
+          "maternal-autoantibodies",
+          "anti-Ro",
+          "anti-La",
+          "arrhythmia"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 40,
+        "title": "Teratogen Exposure - Phenytoin and Cardiac Defects",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Teratogenicity",
+        "subtopic": "Antiepileptic Drugs",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A newborn infant is evaluated for multiple congenital anomalies including microcephaly, wide-set eyes, a broad nasal bridge, hypoplastic nails and distal phalanges, and a cleft lip. The mother has a history of epilepsy and took phenytoin throughout pregnancy. Cardiac examination reveals a harsh systolic murmur at the left upper sternal border that increases with inspiration.",
+        "questionText": "Which of the following cardiac defects is most commonly associated with fetal phenytoin exposure?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Hypoplastic left heart syndrome",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Pulmonary stenosis",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Tricuspid atresia",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Total anomalous pulmonary venous return",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Ebstein anomaly",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Fetal hydantoin syndrome results from in utero exposure to phenytoin and related anticonvulsants. Cardiac defects occur in approximately 2-3% of exposed fetuses, with pulmonary stenosis, aortic stenosis, coarctation of the aorta, patent ductus arteriosus, and ventricular septal defects being most common. The syndrome includes craniofacial abnormalities (wide-set eyes, broad nasal bridge, cleft lip/palate), limb defects (hypoplastic nails and distal phalanges), microcephaly, and developmental delays. The mechanism involves interference with folic acid metabolism and generation of reactive oxygen species. The murmur described—systolic at LUSB increasing with inspiration—is characteristic of pulmonary stenosis.",
+          "incorrect": {
+            "A": "HLHS is more commonly associated with maternal diabetes and genetic syndromes, not phenytoin.",
+            "C": "Tricuspid atresia is not specifically linked to phenytoin exposure.",
+            "D": "TAPVR is a sporadic malformation without strong teratogenic associations.",
+            "E": "Ebstein anomaly is specifically associated with maternal lithium use, not phenytoin."
+          }
+        },
+        "educationalObjective": "Fetal hydantoin syndrome from phenytoin exposure includes cardiac defects (pulmonary stenosis, aortic stenosis, coarctation, PDA), craniofacial anomalies, limb defects, and microcephaly.",
+        "keyFacts": [
+          "Phenytoin → fetal hydantoin syndrome",
+          "Cardiac defects: PS, AS, coarctation, PDA, VSD (2-3%)",
+          "Craniofacial: wide-set eyes, broad nasal bridge, cleft lip",
+          "Limb: hypoplastic nails and distal phalanges"
+        ],
+        "tags": [
+          "phenytoin",
+          "fetal-hydantoin-syndrome",
+          "teratogen",
+          "pulmonary-stenosis",
+          "anticonvulsants"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 41,
+        "title": "Congenitally Corrected TGA - Ventricular Inversion",
+        "subject": "Anatomy",
+        "system": "Cardiovascular",
+        "topic": "Congenitally Corrected Transposition",
+        "subtopic": "Physiology",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 110,
+        "vignette": "A 25-year-old woman presents with progressive dyspnea on exertion and lower extremity edema. She reports no cyanosis during childhood but has noted decreasing exercise tolerance over the past 5 years. Cardiac examination reveals a loud single S2, a holosystolic murmur at the left lower sternal border that increases with inspiration, and jugular venous distension. ECG shows complete heart block with a ventricular rate of 45 bpm. Echocardiography reveals that the morphologic right ventricle is connected to the aorta, while the morphologic left ventricle is connected to the pulmonary artery. Both great vessels are transposed, but oxygenation is normal.",
+        "questionText": "Which of the following best explains why this patient remained acyanotic despite having transposed great arteries?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "A large patent ductus arteriosus allowed adequate mixing of blood",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "The ventricles are also inverted, maintaining physiologically normal blood flow",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Persistent fetal shunts at the atrial level prevented cyanosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Pulmonary blood flow exceeded systemic blood flow due to shunting",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "The coronary circulation compensated for the abnormal anatomy",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Congenitally corrected transposition of the great arteries (ccTGA or l-TGA) involves both ventricular inversion and transposition of the great arteries, resulting in 'double discordance'—atrioventricular discordance (right atrium connects to morphologic left ventricle) and ventriculoarterial discordance (morphologic RV connects to aorta, morphologic LV to pulmonary artery). Blood flow is physiologically correct: systemic venous return → RA → LV → PA → lungs → LA → RV → aorta → body. Patients remain acyanotic but develop complications because the morphologic RV serves as the systemic ventricle, leading to progressive RV failure, tricuspid regurgitation (systemic AV valve), and complete heart block (30% incidence from abnormal conduction system anatomy). Many patients remain asymptomatic until the third or fourth decade when the RV fails under systemic afterload.",
+          "incorrect": {
+            "A": "A PDA would not explain lifelong absence of cyanosis; ccTGA has physiologically corrected circulation without requiring shunts.",
+            "C": "Atrial shunts cause cyanosis through right-to-left shunting in the setting of pulmonary hypertension; this patient has normal oxygenation.",
+            "D": "Increased pulmonary flow would suggest a left-to-right shunt causing volume overload, not explaining transposition anatomy.",
+            "E": "Coronary circulation does not compensate for great vessel transposition."
+          }
+        },
+        "educationalObjective": "Congenitally corrected transposition (l-TGA) has both ventricular and great artery inversion ('double discordance'), maintaining physiologically normal circulation without cyanosis, but the morphologic RV serving as systemic ventricle leads to progressive failure, tricuspid regurgitation, and heart block.",
+        "keyFacts": [
+          "l-TGA = double discordance (AV + ventriculoarterial)",
+          "Physiologically corrected → acyanotic",
+          "Complications: RV failure, tricuspid regurgitation, CHB (30%)",
+          "Present in adulthood with heart failure"
+        ],
+        "tags": [
+          "congenitally-corrected-transposition",
+          "l-TGA",
+          "ventricular-inversion",
+          "complete-heart-block",
+          "systemic-right-ventricle"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 42,
+        "title": "Heterotaxy Syndrome - Asplenia Complex",
+        "subject": "Pathology",
+        "system": "Cardiovascular",
+        "topic": "Heterotaxy Syndrome",
+        "subtopic": "Right Isomerism",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 105,
+        "vignette": "A 6-month-old infant with severe cyanosis and frequent respiratory infections is evaluated. Echocardiography reveals complex congenital heart disease with total anomalous pulmonary venous return, a common atrium, and a single ventricle. Abdominal ultrasound shows the liver in a midline position and no identifiable spleen. Peripheral blood smear demonstrates Howell-Jolly bodies and target cells.",
+        "questionText": "Which of the following findings would most likely be present on this infant's chest radiograph?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Boot-shaped heart with decreased pulmonary vascularity",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Bilateral morphologic right lungs with bilateral trilobed lungs",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Egg-on-a-string appearance with narrow mediastinum",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Scimitar sign in the right lower lung field",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Figure-of-three sign along the left cardiac border",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "This infant has asplenia syndrome (right isomerism/bilateral right-sidedness), characterized by absent spleen, complex cyanotic congenital heart disease, and bilateral right-sided structures. The syndrome includes: absent spleen (asplenia) with Howell-Jolly bodies on blood smear, bilateral morphologic right lungs (both trilobed), bilateral morphologic right atria, midline liver, malrotation, and severe complex CHD (TAPVR, common atrium, single ventricle, pulmonary atresia/stenosis). The absent splenic function leads to overwhelming post-splenectomy sepsis (OPSI) risk, particularly from encapsulated organisms (Streptococcus pneumoniae, Haemophilus influenzae, Neisseria meningitidis), requiring prophylactic antibiotics and aggressive vaccination. The chest radiograph would show bilateral trilobed lungs (normally only right lung is trilobed) and cardiac abnormalities.",
+          "incorrect": {
+            "A": "Boot-shaped heart is characteristic of Tetralogy of Fallot, not heterotaxy syndrome.",
+            "C": "Egg-on-a-string is seen in d-transposition of the great arteries due to narrow mediastinum from anteroposterior great vessel relationship.",
+            "D": "Scimitar sign indicates Scimitar syndrome (partial anomalous pulmonary venous return), a different entity.",
+            "E": "Figure-of-three sign is pathognomonic for coarctation of the aorta, not heterotaxy."
+          }
+        },
+        "educationalObjective": "Asplenia syndrome (right isomerism) presents with complex cyanotic CHD, absent spleen with Howell-Jolly bodies, bilateral right-sided structures (trilobed lungs, bilateral right atria), and high risk of overwhelming sepsis from encapsulated organisms.",
+        "keyFacts": [
+          "Asplenia = right isomerism = bilateral right-sidedness",
+          "Features: complex cyanotic CHD, no spleen, bilateral trilobed lungs",
+          "Howell-Jolly bodies on blood smear",
+          "High risk of OPSI (pneumococcus, H. flu, meningococcus)"
+        ],
+        "tags": [
+          "heterotaxy",
+          "asplenia-syndrome",
+          "right-isomerism",
+          "TAPVR",
+          "functional-asplenia",
+          "sepsis-risk"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 43,
+        "title": "Brain Abscess - Cyanotic Heart Disease",
+        "subject": "Microbiology",
+        "system": "Cardiovascular",
+        "topic": "Complications of Cyanotic CHD",
+        "subtopic": "Infectious",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 100,
+        "vignette": "A 12-year-old boy with unrepaired Tetralogy of Fallot presents with a 1-week history of persistent headache, low-grade fever, and progressive confusion. His parents report he has been increasingly lethargic and had one episode of right-sided arm weakness. Physical examination reveals central cyanosis, digital clubbing, and focal neurologic deficits. Head CT shows a ring-enhancing lesion in the left frontal lobe with surrounding edema.",
+        "questionText": "Which of the following mechanisms best explains this patient's increased susceptibility to developing this complication?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Decreased cerebral blood flow from chronic hypoxemia",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Right-to-left cardiac shunting allows bacteria to bypass pulmonary capillary filtration",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Immunodeficiency from chronic cyanosis impairs antibody production",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Increased risk of dental caries leads to bacteremia",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Paradoxical embolism through a patent foramen ovale",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Brain abscess is a serious complication of cyanotic congenital heart disease with right-to-left shunting. Normally, bacteria entering the venous system are filtered and destroyed by pulmonary macrophages in the pulmonary capillaries. In cyanotic CHD with R→L shunts (ToF, TGA, single ventricle), bacteria-laden venous blood bypasses the lungs and directly enters systemic arterial circulation, seeding the brain. Additional risk factors include chronic hypoxemia causing cerebral hypoperfusion and microinfarcts (providing nidus for infection), polycythemia with hyperviscosity leading to thrombosis and infarction, and relative immunocompromise. Brain abscesses in CHD patients are typically caused by Streptococcus species (viridans group), Staphylococcus aureus, and anaerobes. The mortality rate is 10-30%, and complications include seizures, neurologic deficits, and herniation.",
+          "incorrect": {
+            "A": "While chronic hypoxemia does occur, the primary mechanism is direct seeding via bypassed pulmonary filtration, not decreased cerebral blood flow.",
+            "C": "Cyanotic CHD patients do not have primary antibody deficiency; the mechanism is anatomic bypass of pulmonary filtration.",
+            "D": "While dental bacteremia can occur, the critical factor is the R→L shunt allowing systemic access, not the source of bacteremia.",
+            "E": "PFO typically allows R→L shunting only with increased RA pressure (paradoxical emboli), but this patient has structural CHD with consistent R→L shunt."
+          }
+        },
+        "educationalObjective": "Brain abscess is a major complication of cyanotic CHD with right-to-left shunting because bacteria-laden blood bypasses the pulmonary capillary filter and directly seeds the cerebral circulation.",
+        "keyFacts": [
+          "Cyanotic CHD with R→L shunt → brain abscess risk",
+          "Mechanism: bacteria bypass pulmonary capillary filtration",
+          "Organisms: Streptococcus, S. aureus, anaerobes",
+          "Risk factors: chronic hypoxemia, polycythemia, microinfarcts"
+        ],
+        "tags": [
+          "brain-abscess",
+          "cyanotic-heart-disease",
+          "right-to-left-shunt",
+          "complications",
+          "tetralogy-of-fallot"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 44,
+        "title": "Polycythemia and Hyperviscosity - Chronic Cyanosis",
+        "subject": "Pathology",
+        "system": "Cardiovascular",
+        "topic": "Complications of Cyanotic CHD",
+        "subtopic": "Hematologic",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 95,
+        "vignette": "A 16-year-old adolescent with unrepaired Tetralogy of Fallot presents to the emergency department with severe headache, dizziness, blurred vision, and paresthesias. He appears markedly cyanotic with pronounced digital clubbing. Laboratory studies show: hemoglobin 22 g/dL (normal 13.5-17.5), hematocrit 68% (normal 41-53%), platelets 95,000/μL (normal 150,000-400,000), MCV 72 fL (normal 80-100), and serum ferritin 8 ng/mL (normal 20-200).",
+        "questionText": "Which of the following interventions is most appropriate for acute management of this patient's symptoms?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Initiate supplemental oxygen therapy",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Perform phlebotomy with isotonic fluid replacement",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Administer iron supplementation",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Transfuse packed red blood cells",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Prescribe hydroxyurea to reduce blood viscosity",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Chronic cyanosis from right-to-left shunting causes compensatory erythrocytosis (secondary polycythemia) through increased erythropoietin production in response to tissue hypoxemia. While moderate polycythemia improves oxygen-carrying capacity, excessive elevation (hematocrit >65%) causes hyperviscosity syndrome with symptoms including headache, dizziness, blurred vision, paresthesias, stroke, and thrombosis. Hyperviscosity increases blood viscosity exponentially, impairing microcirculatory flow. This patient also has iron deficiency (low MCV, low ferritin), which paradoxically worsens hyperviscosity—iron-deficient RBCs are rigid and less deformable. Acute symptomatic hyperviscosity requires phlebotomy (removing 250-500 mL blood) with isotonic fluid replacement to lower hematocrit to 60-65%. Long-term management includes iron repletion (improves RBC deformability) and definitive surgical repair of CHD.",
+          "incorrect": {
+            "A": "Supplemental oxygen provides minimal benefit in cyanotic CHD with anatomic shunting; the problem is excessive RBC mass causing hyperviscosity.",
+            "C": "Iron supplementation is important long-term to improve RBC deformability but does not address acute symptomatic hyperviscosity requiring immediate intervention.",
+            "D": "Transfusion would worsen polycythemia and hyperviscosity; the patient needs blood removal, not addition.",
+            "E": "Hydroxyurea is used in sickle cell disease to increase fetal hemoglobin, not for polycythemia/hyperviscosity in cyanotic CHD."
+          }
+        },
+        "educationalObjective": "Chronic cyanosis from right-to-left shunting causes secondary polycythemia; when hematocrit exceeds 65%, hyperviscosity syndrome develops requiring phlebotomy with fluid replacement for acute management and iron repletion long-term.",
+        "keyFacts": [
+          "Chronic cyanosis → ↑ EPO → secondary polycythemia",
+          "Hematocrit >65% → hyperviscosity syndrome",
+          "Symptoms: headache, dizziness, blurred vision, stroke",
+          "Acute treatment: phlebotomy + isotonic fluid replacement"
+        ],
+        "tags": [
+          "polycythemia",
+          "hyperviscosity-syndrome",
+          "cyanotic-heart-disease",
+          "erythrocytosis",
+          "phlebotomy"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 45,
+        "title": "Differential Diagnosis - Neonatal Cyanosis",
+        "subject": "Physiology",
+        "system": "Cardiovascular",
+        "topic": "Approach to Cyanotic Neonate",
+        "subtopic": "Diagnostic Approach",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 100,
+        "vignette": "A full-term newborn develops central cyanosis 6 hours after birth with oxygen saturation of 75% on room air. The infant is tachypneic but not in respiratory distress. Physical examination reveals a normal S1 with a single loud S2 and no murmurs. Chest radiograph shows a normal-sized heart with increased pulmonary vascular markings and a narrow mediastinum.",
+        "questionText": "To differentiate cardiac from pulmonary causes of cyanosis, the infant is placed on 100% oxygen for 10 minutes (hyperoxia test). Which of the following findings would most strongly suggest a cardiac etiology?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "PaO₂ increases from 40 mmHg to 250 mmHg",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "PaO₂ increases from 40 mmHg to 85 mmHg",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "PaO₂ remains below 50 mmHg despite 100% oxygen",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Oxygen saturation improves from 75% to 98%",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "PCO₂ increases from 40 mmHg to 60 mmHg",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "The hyperoxia test distinguishes cardiac from pulmonary causes of neonatal cyanosis. In pulmonary disease (RDS, pneumonia, meconium aspiration), alveoli can be recruited with 100% oxygen, improving PaO₂ to >100-150 mmHg. In cyanotic congenital heart disease with right-to-left shunting, deoxygenated blood bypasses the lungs entirely, and PaO₂ remains <50 mmHg despite 100% oxygen because the shunted blood never contacts alveolar oxygen. This infant's presentation—cyanosis with single loud S2, egg-on-string CXR, narrow mediastinum—suggests d-transposition of the great arteries (d-TGA), one of the '5 T's' of cyanotic CHD: (1) Tetralogy of Fallot, (2) Transposition, (3) Truncus arteriosus, (4) TAPVR, (5) Tricuspid atresia. d-TGA presents with severe cyanosis in the first hours of life and requires prostaglandin E1 to maintain ductal patency.",
+          "incorrect": {
+            "A": "PaO₂ rising to 250 mmHg indicates responsive alveoli, consistent with pulmonary disease (RDS, pneumonia), not cardiac disease.",
+            "B": "PaO₂ improvement to 85 mmHg suggests significant pulmonary contribution; cardiac shunts typically keep PaO₂ <50 mmHg.",
+            "D": "Saturation improving to 98% rules out significant right-to-left cardiac shunting.",
+            "E": "Rising PCO₂ suggests hypoventilation or severe lung disease but does not distinguish cardiac from pulmonary cyanosis."
+          }
+        },
+        "educationalObjective": "The hyperoxia test distinguishes cardiac from pulmonary causes of neonatal cyanosis: PaO₂ remaining <50 mmHg on 100% oxygen indicates cyanotic congenital heart disease with right-to-left shunting, while PaO₂ >100 mmHg suggests pulmonary disease.",
+        "keyFacts": [
+          "Hyperoxia test: 100% O₂ for 10 minutes",
+          "Cardiac shunt: PaO₂ remains <50 mmHg (unresponsive)",
+          "Pulmonary disease: PaO₂ rises to >100-150 mmHg",
+          "'5 T's': ToF, TGA, Truncus, TAPVR, Tricuspid atresia"
+        ],
+        "tags": [
+          "hyperoxia-test",
+          "neonatal-cyanosis",
+          "differential-diagnosis",
+          "transposition-great-arteries",
+          "cyanotic-heart-disease"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 46,
+        "title": "Scimitar Syndrome - Partial APVR",
+        "subject": "Anatomy",
+        "system": "Cardiovascular",
+        "topic": "Scimitar Syndrome",
+        "subtopic": "Vascular Anomaly",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 105,
+        "vignette": "A 4-year-old girl presents with recurrent respiratory infections and mild exercise intolerance. Chest radiograph shows a curvilinear vascular density along the right heart border resembling a curved Turkish sword. CT angiography reveals anomalous drainage of the right pulmonary veins into the inferior vena cava near the diaphragm, hypoplasia of the right lung, dextroposition of the heart, and an anomalous systemic artery supplying the right lower lobe from the descending aorta.",
+        "questionText": "Which of the following hemodynamic findings would most likely be present in this patient?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Right-to-left shunt causing central cyanosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Left-to-right shunt with increased pulmonary blood flow",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Obstruction to pulmonary venous drainage causing pulmonary edema",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Systemic hypotension from aortic runoff",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Complete absence of pulmonary blood flow to the right lung",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Scimitar syndrome (also called hypogenetic lung syndrome) is a rare form of partial anomalous pulmonary venous return (PAPVR) where some or all right pulmonary veins drain anomalously into the inferior vena cava rather than the left atrium. The pathognomonic finding is the 'scimitar sign'—a curvilinear vascular shadow along the right heart border on chest radiograph, resembling a Turkish scimitar sword. Associated anomalies include: (1) hypoplastic right lung, (2) dextroposition of heart into right hemithorax, (3) anomalous systemic arterial supply to right lower lobe from descending aorta (sequestration-like), and (4) right diaphragmatic eventration. Hemodynamically, oxygenated blood from right lung drains to IVC → RA → RV → lungs, creating a left-to-right shunt with increased pulmonary blood flow and right heart volume overload. Patients are typically acyanotic but may develop pulmonary hypertension. The anomalous systemic arterial supply adds a second L→R shunt.",
+          "incorrect": {
+            "A": "Scimitar syndrome causes L→R shunting (oxygenated pulmonary venous blood returning to right atrium), not R→L shunting; patients are acyanotic.",
+            "C": "Unlike obstructed TAPVR, Scimitar syndrome has unobstructed drainage to IVC, so pulmonary venous obstruction and edema do not occur.",
+            "D": "The anomalous systemic artery is small and does not cause significant aortic runoff or systemic hypotension.",
+            "E": "The right lung receives pulmonary blood flow from the right pulmonary artery, plus additional systemic arterial supply; blood flow is increased, not absent."
+          }
+        },
+        "educationalObjective": "Scimitar syndrome is partial anomalous pulmonary venous return of right lung to IVC, causing left-to-right shunt, characterized by scimitar sign on CXR, hypoplastic right lung, and anomalous systemic arterial supply to right lower lobe.",
+        "keyFacts": [
+          "Scimitar syndrome = right pulmonary veins → IVC",
+          "Scimitar sign: curved vascular shadow on right on CXR",
+          "Associated: hypoplastic right lung, systemic arterial supply",
+          "Hemodynamics: L→R shunt, acyanotic, may develop pulmonary HTN"
+        ],
+        "tags": [
+          "scimitar-syndrome",
+          "partial-anomalous-pulmonary-venous-return",
+          "left-to-right-shunt",
+          "hypoplastic-lung",
+          "pulmonary-sequestration"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 47,
+        "title": "CHARGE Syndrome - Conotruncal Defects",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "CHARGE Syndrome",
+        "subtopic": "Genetic Syndrome",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 95,
+        "vignette": "A newborn infant undergoes evaluation for multiple congenital anomalies including bilateral choanal atresia requiring emergent airway intervention, microphthalmia with coloboma of the iris and retina, low-set ears with sensorineural hearing loss, and hypogonadism with cryptorchidism. Growth parameters show significant intrauterine growth restriction. Echocardiography reveals Tetralogy of Fallot.",
+        "questionText": "Mutation in which of the following genes is most likely responsible for this infant's constellation of findings?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "JAG1 (Jagged-1)",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "CHD7 (Chromodomain helicase DNA-binding protein 7)",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "TBX1 (T-box transcription factor 1)",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "FBN1 (Fibrillin-1)",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "PTPN11 (Protein tyrosine phosphatase non-receptor type 11)",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "CHARGE syndrome is characterized by: Coloboma (iris, retina, optic nerve), Heart defects (conotruncal anomalies: ToF, DORV, truncus, interrupted aortic arch, VSD, ASD, coarctation in 75-80%), Atresia choanae (bilateral or unilateral), Restricted growth and development, Genital abnormalities (hypogonadism, cryptorchidism), and Ear anomalies (low-set, cup-shaped, hearing loss). The syndrome results from heterozygous mutations in CHD7 gene (chromodomain helicase DNA-binding protein 7) in 60-90% of cases. CHD7 regulates chromatin remodeling during embryonic development, particularly affecting neural crest cell migration critical for conotruncal cardiac development, craniofacial structures, and multiple organ systems. The diagnosis requires either 4 major criteria or 3 major plus 3 minor criteria. Neonatal presentation often involves choanal atresia requiring emergent airway management.",
+          "incorrect": {
+            "A": "JAG1 mutations cause Alagille syndrome, characterized by peripheral pulmonary stenosis, bile duct paucity, butterfly vertebrae, and posterior embryotoxon—a different constellation.",
+            "C": "TBX1 deletions/mutations cause 22q11.2 deletion syndrome (DiGeorge/velocardiofacial), which includes conotruncal defects but also thymic aplasia, hypocalcemia, cleft palate—not the CHARGE features.",
+            "D": "FBN1 mutations cause Marfan syndrome with aortic root dilation, lens dislocation, and skeletal abnormalities—not colobomas or choanal atresia.",
+            "E": "PTPN11 mutations cause Noonan syndrome with pulmonary stenosis, short stature, webbed neck, and characteristic facies—different presentation."
+          }
+        },
+        "educationalObjective": "CHARGE syndrome (CHD7 gene mutation) presents with Coloboma, Heart defects (conotruncal: ToF, DORV, truncus), Atresia choanae, Restricted growth, Genital abnormalities, and Ear anomalies, affecting 60-90% with CHD.",
+        "keyFacts": [
+          "CHARGE: Coloboma, Heart, Atresia choanae, Restricted, Genital, Ear",
+          "CHD7 gene mutation (60-90% of cases)",
+          "Cardiac defects (75-80%): ToF, DORV, truncus, IAA, VSD, ASD",
+          "Emergent airway management for choanal atresia"
+        ],
+        "tags": [
+          "CHARGE-syndrome",
+          "CHD7",
+          "conotruncal-defects",
+          "tetralogy-of-fallot",
+          "choanal-atresia",
+          "coloboma"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 48,
+        "title": "Alagille Syndrome - Peripheral Pulmonary Stenosis",
+        "subject": "Genetics",
+        "system": "Cardiovascular",
+        "topic": "Alagille Syndrome",
+        "subtopic": "Genetic Syndrome",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 90,
+        "vignette": "A 3-month-old infant presents with jaundice, pruritus, and poor weight gain. Physical examination reveals a triangular-shaped face with prominent forehead, deep-set eyes, and a pointed chin. Cardiac examination demonstrates a systolic ejection murmur at the left upper sternal border that radiates to the back and axillae bilaterally. Ophthalmologic examination shows posterior embryotoxon. Abdominal imaging reveals a small liver with bile duct paucity on biopsy. Spine radiograph shows butterfly vertebrae at T8 and T10.",
+        "questionText": "Which of the following cardiac lesions is most characteristic of this patient's condition?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Supravalvular aortic stenosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Peripheral pulmonary stenosis",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Coarctation of the aorta",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Atrioventricular septal defect",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Bicuspid aortic valve",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Alagille syndrome (arteriohepatic dysplasia) is an autosomal dominant disorder caused by mutations in JAG1 gene (94%) encoding Jagged-1 or NOTCH2 gene (1-2%), both involved in Notch signaling pathway critical for embryonic development. The syndrome affects multiple systems: (1) Cardiac: peripheral pulmonary stenosis (67% of cases—most common cardiac finding), involving branch pulmonary arteries rather than valve, also Tetralogy of Fallot, VSD, ASD; (2) Hepatic: bile duct paucity causing chronic cholestasis, jaundice, pruritus; (3) Facial: triangular 'elfin' facies with prominent forehead, deep-set eyes, pointed chin; (4) Ocular: posterior embryotoxon (prominent Schwalbe line—75% of cases); (5) Skeletal: butterfly vertebrae (sagittal cleft); (6) Renal: dysplasia, renovascular abnormalities. The murmur radiating to back and axillae reflects multiple stenotic lesions in peripheral pulmonary arterial tree. Clinical diagnosis requires 3 of 5 major criteria.",
+          "incorrect": {
+            "A": "Supravalvular aortic stenosis is characteristic of Williams syndrome (7q11.23 deletion with elastin gene deletion), not Alagille syndrome.",
+            "C": "Coarctation is associated with Turner syndrome and bicuspid aortic valve, not specifically with Alagille syndrome.",
+            "D": "AVSD is most commonly associated with Down syndrome (trisomy 21) and endocardial cushion defects.",
+            "E": "Bicuspid aortic valve is associated with Turner syndrome, coarctation, and Marfan syndrome, not Alagille syndrome."
+          }
+        },
+        "educationalObjective": "Alagille syndrome (JAG1 mutation) presents with peripheral pulmonary stenosis (most common cardiac finding), chronic cholestasis from bile duct paucity, triangular facies, posterior embryotoxon, and butterfly vertebrae.",
+        "keyFacts": [
+          "Alagille syndrome: JAG1 mutation (94%), NOTCH2 (1-2%)",
+          "Cardiac: peripheral pulmonary stenosis (67%), also ToF, VSD",
+          "Other: bile duct paucity, triangular facies, posterior embryotoxon",
+          "Butterfly vertebrae (sagittal cleft)"
+        ],
+        "tags": [
+          "alagille-syndrome",
+          "JAG1",
+          "peripheral-pulmonary-stenosis",
+          "bile-duct-paucity",
+          "posterior-embryotoxon",
+          "butterfly-vertebrae"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 49,
+        "title": "Cor Triatriatum - Obstructed Pulmonary Venous Return",
+        "subject": "Anatomy",
+        "system": "Cardiovascular",
+        "topic": "Cor Triatriatum",
+        "subtopic": "Structural Anomaly",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 110,
+        "vignette": "A 6-month-old infant presents with progressive tachypnea, poor feeding, and failure to thrive. Examination reveals tachycardia, a loud S1, and an opening snap followed by a mid-diastolic rumble at the apex. Chest radiograph shows pulmonary edema with normal heart size. Echocardiography reveals a fibromuscular membrane dividing the left atrium into superior and inferior chambers, with the pulmonary veins draining into the superior chamber and a restrictive opening connecting to the inferior chamber containing the mitral valve.",
+        "questionText": "This patient's presentation most closely mimics which of the following acquired valvular lesions?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Aortic stenosis",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Mitral stenosis",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Tricuspid regurgitation",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Aortic regurgitation",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Pulmonary stenosis",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Cor triatriatum ('three-chambered heart') is a rare congenital malformation where a fibromuscular membrane divides the left atrium into two chambers: a superior (posterosuperior) chamber receiving pulmonary veins and an inferior (anteroinferior) chamber containing the mitral valve and left atrial appendage. The membrane has a fenestration of variable size; when restrictive, it obstructs pulmonary venous return, causing pulmonary venous hypertension, pulmonary edema, and pulmonary arterial hypertension—functionally identical to mitral stenosis. Presentation depends on fenestration size: small openings present in infancy with severe symptoms (CHF, pulmonary edema), while larger openings may be asymptomatic until adulthood. Physical findings mimic mitral stenosis: loud S1, opening snap, mid-diastolic rumble. Echocardiography shows the pathognomonic 'snowstorm' appearance from turbulent flow through the restrictive opening. Treatment is surgical membrane resection.",
+          "incorrect": {
+            "A": "Aortic stenosis presents with systolic murmur, syncope, and decreased cardiac output, not pulmonary edema with diastolic rumble.",
+            "C": "Tricuspid regurgitation causes right heart failure and systemic venous congestion, not pulmonary edema.",
+            "D": "Aortic regurgitation causes volume overload with bounding pulses and early diastolic decrescendo murmur, not pulmonary venous obstruction.",
+            "E": "Pulmonary stenosis presents with cyanosis if severe (right-sided obstruction), not pulmonary edema."
+          }
+        },
+        "educationalObjective": "Cor triatriatum is a fibromuscular membrane dividing the left atrium, causing obstructed pulmonary venous return that mimics mitral stenosis with pulmonary edema, opening snap, and diastolic rumble; echocardiography shows 'snowstorm' appearance.",
+        "keyFacts": [
+          "Cor triatriatum = LA divided by fibromuscular membrane",
+          "Restrictive fenestration → obstructed pulmonary venous return",
+          "Mimics mitral stenosis: loud S1, opening snap, diastolic rumble",
+          "Echo: 'snowstorm' appearance; Treatment: surgical resection"
+        ],
+        "tags": [
+          "cor-triatriatum",
+          "pulmonary-venous-obstruction",
+          "congenital-heart-disease",
+          "mitral-stenosis-mimic",
+          "pulmonary-edema"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 50,
+        "title": "Endocarditis Prophylaxis - Current Guidelines",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Endocarditis Prevention",
+        "subtopic": "Antibiotic Prophylaxis",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 95,
+        "vignette": "A 10-year-old boy with a history of surgical repair of Tetralogy of Fallot 8 years ago is scheduled for routine dental cleaning. His post-operative echocardiogram one year ago showed mild residual pulmonary regurgitation but no residual VSD. The patient's mother asks whether antibiotic prophylaxis is necessary before the dental procedure.",
+        "questionText": "According to current American Heart Association guidelines, which of the following patients with congenital heart disease requires endocarditis prophylaxis before dental procedures causing gingival bleeding?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "A patient with an isolated secundum atrial septal defect, uncorrected",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "A patient with a ventricular septal defect repaired 8 months ago with residual shunt adjacent to the patch",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "A patient with a patent ductus arteriosus that was device-closed 2 years ago without residual shunt",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "A patient with bicuspid aortic valve without stenosis or regurgitation",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "The patient in the vignette with repaired Tetralogy of Fallot without residual defects",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "The 2021 American Heart Association guidelines for endocarditis prophylaxis significantly restricted indications to only the highest-risk cardiac conditions: (1) Prosthetic cardiac valves or material used for valve repair, (2) Previous infective endocarditis, (3) Cardiac transplant with valvulopathy, (4) Unrepaired cyanotic CHD (including palliative shunts), (5) Repaired CHD with residual defects at or adjacent to the site of prosthetic material (for 6 months after procedure, or lifelong if residual defects persist). Prophylaxis is only indicated for dental procedures involving manipulation of gingival tissue or periapical region of teeth, or perforation of oral mucosa. A patient with residual shunt adjacent to patch material after VSD repair requires lifelong prophylaxis. Lesions that do NOT require prophylaxis include: isolated ASD, fully repaired VSD/PDA/ASD without residual shunts (after 6 months), bicuspid aortic valve without dysfunction, MVP, and most other common CHD lesions.",
+          "incorrect": {
+            "A": "Isolated secundum ASD has never been considered high-risk for endocarditis and does not require prophylaxis, even when uncorrected.",
+            "C": "Completely repaired PDA without residual shunt after 6 months does not require prophylaxis; endothelialization is complete.",
+            "D": "Bicuspid aortic valve without stenosis or regurgitation is not high-risk and does not require prophylaxis per current guidelines.",
+            "E": "Repaired Tetralogy of Fallot without residual defects (only mild pulmonary regurgitation, which is common and expected) does not require prophylaxis after the first 6 months post-repair."
+          }
+        },
+        "educationalObjective": "Current AHA guidelines restrict endocarditis prophylaxis to highest-risk conditions: prosthetic valves, prior endocarditis, unrepaired cyanotic CHD, cardiac transplant valvulopathy, and repaired CHD with residual defects adjacent to prosthetic material.",
+        "keyFacts": [
+          "Endocarditis prophylaxis: ONLY highest-risk cardiac conditions",
+          "Required: prosthetic valves, prior IE, unrepaired cyanotic CHD",
+          "Also: residual defects adjacent to prosthetic material",
+          "NOT required: ASD, repaired VSD/PDA (>6 months), bicuspid AoV"
+        ],
+        "tags": [
+          "endocarditis-prophylaxis",
+          "antibiotic-prophylaxis",
+          "congenital-heart-disease",
+          "dental-procedures",
+          "AHA-guidelines"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      },
+      {
+        "id": 51,
+        "title": "Double Outlet Right Ventricle - Taussig-Bing Anomaly",
+        "subject": "Anatomy",
+        "system": "Cardiovascular",
+        "topic": "Double Outlet Right Ventricle",
+        "subtopic": "Conotruncal Malformation",
+        "difficulty": 3,
+        "difficultyLabel": "Hard",
+        "estimatedTimeSeconds": 110,
+        "vignette": "A newborn infant develops severe cyanosis within hours of birth. Echocardiography reveals that both the aorta and pulmonary artery arise predominantly from the right ventricle. A large ventricular septal defect is present in a subpulmonary position, directly beneath the pulmonary valve. The left ventricle ejects blood through the VSD into the pulmonary artery. Oxygen saturation does not improve significantly with supplemental oxygen.",
+        "questionText": "This infant's cardiac anatomy results in which of the following hemodynamic patterns?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Physiology similar to Tetralogy of Fallot with right-to-left shunting and decreased pulmonary blood flow",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Physiology similar to d-transposition of the great arteries with parallel circulations",
+            "isCorrect": true
+          },
+          {
+            "letter": "C",
+            "text": "Physiology similar to truncus arteriosus with complete mixing and increased pulmonary flow",
+            "isCorrect": false
+          },
+          {
+            "letter": "D",
+            "text": "Physiology similar to large ventricular septal defect with left-to-right shunt",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Normal physiology with incidental anatomic variant",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": {
+          "correct": "Double outlet right ventricle (DORV) is a conotruncal malformation where both great arteries arise predominantly (>50%) from the right ventricle, with a VSD always present. The physiology depends critically on VSD location: (1) Subaortic VSD: LV blood preferentially enters aorta → ToF-like physiology with RVOT obstruction; (2) Subpulmonary VSD (Taussig-Bing anomaly): LV blood preferentially enters pulmonary artery while RV blood enters aorta → d-TGA-like physiology with parallel circulations, severe cyanosis at birth, deoxygenated blood to body, oxygenated blood recirculated to lungs—requires PGE1 for ductal mixing and eventual arterial switch operation; (3) Doubly committed VSD: balanced mixing; (4) Remote/noncommitted VSD: complex physiology. Taussig-Bing specifically mimics d-TGA because oxygenated blood from LV preferentially streams to PA (via subpulmonary VSD) while deoxygenated RV blood goes to aorta.",
+          "incorrect": {
+            "A": "ToF physiology occurs with DORV when VSD is subaortic and RVOT obstruction is present; Taussig-Bing with subpulmonary VSD has different physiology.",
+            "C": "Truncus arteriosus has a single arterial trunk, not two separate great vessels; it causes complete mixing with increased pulmonary flow and mild cyanosis.",
+            "D": "Large VSD alone creates L→R shunt with CHF, not cyanosis; this patient has both great vessels arising from RV with subpulmonary VSD.",
+            "E": "DORV is not benign; the abnormal great vessel origins and VSD position determine serious hemodynamic consequences requiring surgical intervention."
+          }
+        },
+        "educationalObjective": "Double outlet right ventricle with subpulmonary VSD (Taussig-Bing anomaly) creates d-TGA-like physiology with parallel circulations and severe cyanosis because LV blood preferentially enters the pulmonary artery while deoxygenated RV blood enters the aorta.",
+        "keyFacts": [
+          "DORV = both great arteries from RV (>50%) + VSD always present",
+          "Taussig-Bing = DORV + subpulmonary VSD",
+          "Physiology mimics d-TGA: parallel circulations, severe cyanosis",
+          "Subaortic VSD DORV mimics ToF physiology"
+        ],
+        "tags": [
+          "double-outlet-right-ventricle",
+          "DORV",
+          "Taussig-Bing",
+          "conotruncal-defects",
+          "transposition-physiology"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Analysis"
+      },
+      {
+        "id": 52,
+        "title": "Ductus-Dependent Lesions - Prostaglandin E1 Indications",
+        "subject": "Pharmacology",
+        "system": "Cardiovascular",
+        "topic": "Ductus-Dependent Circulation",
+        "subtopic": "Management",
+        "difficulty": 2,
+        "difficultyLabel": "Medium",
+        "estimatedTimeSeconds": 100,
+        "vignette": "A 5-day-old infant who was discharged home after an uncomplicated delivery presents to the emergency department with poor feeding, lethargy, and mottled skin. Physical examination reveals weak pulses in all extremities, cool extremities, hepatomegaly, and a gallop rhythm. Lower extremity pulses are barely palpable compared to brachial pulses. Blood pressure in the right arm is 60/40 mmHg. The infant is in shock.",
+        "questionText": "Which of the following cardiac lesions is most likely responsible for this infant's presentation and requires immediate prostaglandin E1 infusion?",
+        "answerChoices": [
+          {
+            "letter": "A",
+            "text": "Large ventricular septal defect with pulmonary overcirculation",
+            "isCorrect": false
+          },
+          {
+            "letter": "B",
+            "text": "Critical aortic stenosis with ductal-dependent systemic circulation",
+            "isCorrect": false
+          },
+          {
+            "letter": "C",
+            "text": "Critical coarctation of the aorta with ductal-dependent lower body perfusion",
+            "isCorrect": true
+          },
+          {
+            "letter": "D",
+            "text": "Tetralogy of Fallot with severe cyanotic spell",
+            "isCorrect": false
+          },
+          {
+            "letter": "E",
+            "text": "Atrial septal defect with left-to-right shunt",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": {
+          "correct": "This infant presents with classic signs of critical coarctation of the aorta presenting after ductal closure (typically days 3-7 of life): shock, poor perfusion, weak/absent femoral pulses, differential pulses (upper > lower extremities), and heart failure. Coarctation is ductal-dependent for lower body perfusion when severe; the PDA supplies blood distal to the coarctation. As the ductus closes physiologically, lower body perfusion fails, causing metabolic acidosis, renal failure, and shock. Ductus-dependent lesions requiring PGE1 include: (1) Ductal-dependent pulmonary circulation: critical pulmonary stenosis, pulmonary atresia, tricuspid atresia, severe ToF; (2) Ductal-dependent systemic circulation: critical aortic stenosis, critical coarctation, interrupted aortic arch, HLHS; (3) Ductal-dependent mixing: d-TGA (requires mixing for oxygenation). PGE1 maintains ductal patency by activating EP receptors on ductus smooth muscle, preventing vasoconstriction. Side effects include apnea (requiring intubation), hypotension, and fever.",
+          "incorrect": {
+            "A": "Large VSD presents with CHF from pulmonary overcirculation at 4-8 weeks when PVR drops, not acute shock in the first week; does not require PGE1.",
+            "B": "Critical AS can cause ductal-dependent systemic circulation but typically presents with more global shock and poor perfusion to all extremities, not differential pulses.",
+            "D": "Severe ToF/tet spells present with cyanosis and hypoxemia, not shock with poor perfusion; tet spells are treated with knee-chest position, oxygen, β-blockers.",
+            "E": "ASD causes asymptomatic L→R shunt, fixed split S2, rarely symptoms in infancy; does not cause shock or require PGE1."
+          }
+        },
+        "educationalObjective": "Ductus-dependent lesions require prostaglandin E1 to maintain ductal patency and include ductal-dependent pulmonary circulation (critical PS, PA), ductal-dependent systemic circulation (critical AS, critical coarctation, IAA, HLHS), and ductal-dependent mixing (d-TGA).",
+        "keyFacts": [
+          "Ductal-dependent systemic: critical AS, critical coarctation, IAA, HLHS",
+          "Ductal-dependent pulmonary: critical PS, PA, severe ToF, tricuspid atresia",
+          "Ductal-dependent mixing: d-TGA",
+          "PGE1 side effects: apnea (need intubation), hypotension, fever"
+        ],
+        "tags": [
+          "ductus-dependent-circulation",
+          "prostaglandin-E1",
+          "critical-coarctation",
+          "shock",
+          "congenital-heart-disease"
+        ],
+        "blueprintCategory": "Cardiovascular System",
+        "bloomsTaxonomy": "Application"
+      }
+    ]
+  }
+}
