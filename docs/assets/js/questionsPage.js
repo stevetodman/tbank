@@ -13,6 +13,7 @@
 
   let activeSetId = null;
   let fullQuestionSet = [];
+  let abortController = null;
 
   function setBusy(isBusy) {
     if (!statusSection) return;
@@ -339,12 +340,19 @@
       return;
     }
 
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
     activeSetId = id;
     setBusy(true);
     summary.textContent = "Loading questions...";
 
     try {
-      const response = await fetch(`../${selected.downloads.json}`);
+      const response = await fetch(`../${selected.downloads.json}`, {
+        signal: abortController.signal
+      });
       if (!response.ok) {
         throw new Error(`Failed to load question set: ${response.status}`);
       }
@@ -360,6 +368,9 @@
       filterQuestions();
       summary.textContent = `${fullQuestionSet.length} questions loaded from ${selected.title}.`;
     } catch (error) {
+      if (error.name === "AbortError") {
+        return;
+      }
       console.error(error);
       summary.textContent = "We couldn't load that question set. Please try again.";
       fullQuestionSet = [];
