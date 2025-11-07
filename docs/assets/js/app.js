@@ -2,7 +2,7 @@
   // State management
   let questions = [];
   let currentQuestionIndex = 0;
-  let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true, timeSpent: 45, flagged: false } }
+  let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true, timeSpent: 45, flagged: false, eliminated: [], highlights: [] } }
   let showWelcome = true; // Show welcome screen on first load
   let keyboardHintShown = false; // Track if keyboard hint was shown
   let currentStreak = 0; // Track consecutive correct answers
@@ -16,6 +16,10 @@
   let timerSeconds = 0;
   let timerPaused = false;
   let questionStartTime = null;
+
+  // Highlighting state
+  let highlightToolbar = null;
+  let currentSelection = null;
 
   // DOM elements
   const questionDisplay = document.getElementById("question-display");
@@ -278,6 +282,133 @@
     updateQuestionGrid();
   }
 
+  // Toggle elimination of an answer choice
+  function toggleElimination(letter) {
+    if (!userAnswers[currentQuestionIndex]) {
+      userAnswers[currentQuestionIndex] = {};
+    }
+    if (!userAnswers[currentQuestionIndex].eliminated) {
+      userAnswers[currentQuestionIndex].eliminated = [];
+    }
+
+    const eliminated = userAnswers[currentQuestionIndex].eliminated;
+    const index = eliminated.indexOf(letter);
+
+    if (index > -1) {
+      // Remove from eliminated
+      eliminated.splice(index, 1);
+    } else {
+      // Add to eliminated
+      eliminated.push(letter);
+    }
+
+    renderQuestion();
+  }
+
+  // Text highlighting functions
+  function initializeHighlighting() {
+    // Create highlight toolbar if it doesn't exist
+    if (!highlightToolbar) {
+      highlightToolbar = document.createElement('div');
+      highlightToolbar.className = 'highlight-toolbar';
+      highlightToolbar.innerHTML = `
+        <button class="highlight-yellow-btn" data-color="yellow" title="Yellow highlight"></button>
+        <button class="highlight-green-btn" data-color="green" title="Green highlight"></button>
+        <button class="highlight-blue-btn" data-color="blue" title="Blue highlight"></button>
+        <button class="highlight-pink-btn" data-color="pink" title="Pink highlight"></button>
+        <button class="clear-btn" data-action="clear" title="Remove highlight">×</button>
+      `;
+      document.body.appendChild(highlightToolbar);
+
+      // Add click handlers to toolbar buttons
+      highlightToolbar.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', handleHighlightAction);
+      });
+    }
+
+    // Listen for text selection
+    document.addEventListener('mouseup', handleTextSelection);
+  }
+
+  function handleTextSelection(e) {
+    // Hide toolbar first
+    if (highlightToolbar) {
+      highlightToolbar.classList.remove('show');
+    }
+
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+
+    if (!selectedText || selectedText.length === 0) {
+      return;
+    }
+
+    // Check if selection is within question content
+    const questionContent = document.querySelector('.question-content');
+    if (!questionContent || !questionContent.contains(selection.anchorNode)) {
+      return;
+    }
+
+    // Don't show toolbar if answer already submitted
+    const answer = userAnswers[currentQuestionIndex];
+    if (answer?.submitted) {
+      return;
+    }
+
+    currentSelection = selection;
+
+    // Position and show toolbar
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    if (highlightToolbar) {
+      highlightToolbar.style.left = `${rect.left + (rect.width / 2) - 75}px`;
+      highlightToolbar.style.top = `${rect.top - 50}px`;
+      highlightToolbar.classList.add('show');
+    }
+  }
+
+  function handleHighlightAction(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const color = e.target.getAttribute('data-color');
+    const action = e.target.getAttribute('data-action');
+
+    if (action === 'clear') {
+      // Remove highlight (not implemented in this version - would need more complex state)
+      if (highlightToolbar) {
+        highlightToolbar.classList.remove('show');
+      }
+      return;
+    }
+
+    if (!currentSelection || !color) return;
+
+    try {
+      const range = currentSelection.getRangeAt(0);
+      const span = document.createElement('span');
+      span.className = `highlight highlight-${color}`;
+      range.surroundContents(span);
+
+      // Save highlight to state (simplified - real implementation would need better serialization)
+      if (!userAnswers[currentQuestionIndex]) {
+        userAnswers[currentQuestionIndex] = {};
+      }
+      if (!userAnswers[currentQuestionIndex].highlights) {
+        userAnswers[currentQuestionIndex].highlights = [];
+      }
+
+      currentSelection.removeAllRanges();
+    } catch (err) {
+      console.warn('Could not apply highlight:', err);
+    }
+
+    if (highlightToolbar) {
+      highlightToolbar.classList.remove('show');
+    }
+  }
+
   // Render current question
   function renderQuestion() {
     const question = questions[currentQuestionIndex];
@@ -354,6 +485,7 @@
       const letter = choice.letter;
       const isSelected = answer?.selected === letter;
       const isCorrect = choice.isCorrect;
+      const isEliminated = answer?.eliminated?.includes(letter) || false;
 
       let choiceClass = 'answer-choice';
       if (isSubmitted) {
@@ -361,6 +493,7 @@
         if (isSelected && !isCorrect) choiceClass += ' answer-incorrect';
       }
       if (isSelected && !isSubmitted) choiceClass += ' answer-selected';
+      if (isEliminated && !isSubmitted) choiceClass += ' eliminated';
 
       const disabled = isSubmitted ? 'disabled' : '';
       const checked = isSelected ? 'checked' : '';
@@ -369,6 +502,14 @@
       html += `<input type="radio" name="answer" value="${letter}" ${checked} ${disabled} />`;
       html += `<span class="choice-letter">${letter}</span>`;
       html += `<span class="choice-text">${choice.text}</span>`;
+
+      // Add eliminate button (only show before submission)
+      if (!isSubmitted) {
+        html += `<button class="eliminate-btn" data-choice="${letter}" type="button">
+          ${isEliminated ? 'Undo' : 'Cross out'}
+        </button>`;
+      }
+
       if (isSubmitted && isCorrect) html += '<span class="choice-icon">✓</span>';
       if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon">✗</span>';
       html += '</label>';
@@ -422,6 +563,21 @@
     if (flagBtn) {
       flagBtn.addEventListener('click', toggleFlag);
     }
+
+    // Add eliminate button event listeners
+    if (!isSubmitted) {
+      document.querySelectorAll('.eliminate-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const choice = e.target.getAttribute('data-choice');
+          toggleElimination(choice);
+        });
+      });
+    }
+
+    // Initialize text highlighting for question content
+    initializeHighlighting();
 
     // Update submit button state
     const hasSelection = answer?.selected;
