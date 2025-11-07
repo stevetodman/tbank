@@ -35,7 +35,7 @@ const QUESTION_SETS = [
     subtitle: "Syndromes, Cardiomyopathy, and Oxygenation Patterns",
     difficulty: "Advanced",
     tags: ["Williams syndrome", "DiGeorge", "Hypertrophic cardiomyopathy", "VSD"],
-    questionCount: 8,
+    questionCount: 16,
     description:
       "Integrates complex syndromic associations, cardiomyopathy workups, and oxygen saturation step-ups for advanced learners.",
     interactivePath: "questions/index.html?set=chd-part3",
