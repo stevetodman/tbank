@@ -1732,7 +1732,7 @@
    ======================================== */
 
 @media (max-width: 768px) {
-  /* Header adjustments */
+  /* Header adjustments - iOS optimized */
   .quiz-header-content {
     padding: 0.75rem 1rem;
     flex-wrap: wrap;
@@ -1748,70 +1748,134 @@
   }
 
   .timer-display {
-    padding: 0.4rem 0.75rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 1.1rem;
   }
 
   #timer-text {
-    font-size: 1rem;
+    font-size: 1.1rem;
     min-width: 3.5rem;
   }
 
   #question-counter {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 
   .settings-btn,
   .menu-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 1rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 1.1rem;
+    min-width: 44px;
+    min-height: 44px;
   }
 
-  /* Question display */
+  /* Question display - improved readability */
   .quiz-container {
-    padding: 1rem;
+    padding: 1rem 0.875rem;
   }
 
   .question-content {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
   }
 
   .vignette {
-    font-size: 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
   }
 
-  /* Flag button mobile */
+  .question-text {
+    font-size: 1.0625rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Question metadata */
+  .question-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .meta-text {
+    font-size: 0.875rem;
+  }
+
+  /* Flag button - larger touch target */
   .flag-btn {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.9rem;
+    min-height: 44px;
   }
 
-  /* Answer choices touch-friendly */
+  /* Answer choices - iOS optimized */
   .answer-choice {
-    padding: 1rem;
-    min-height: 60px;
+    padding: 1.125rem 1rem;
+    min-height: 64px;
+    margin-bottom: 0.75rem;
   }
 
   .choice-letter {
-    min-width: 28px;
-    width: 28px;
-    height: 28px;
-    font-size: 0.9rem;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    border-width: 2px;
   }
 
   .choice-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
-  /* Navigation buttons */
+  /* Eliminate button - always visible on mobile */
+  .eliminate-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    min-height: 36px;
+    opacity: 1;
+    position: static;
+    margin-left: auto;
+    transform: none;
+  }
+
+  .answer-choice .eliminate-btn {
+    opacity: 1;
+  }
+
+  /* Explanation section */
+  .explanation-section {
+    padding: 1.25rem 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .explanation-section h3 {
+    font-size: 0.9rem;
+  }
+
+  .explanation-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Navigation buttons - larger and more prominent */
   .quiz-navigation {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.875rem;
+    padding: 1rem 0.875rem 1.5rem;
   }
 
   .nav-btn,
   .submit-btn {
     width: 100%;
-    padding: 0.875rem 1.25rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    min-height: 52px;
+  }
+
+  .submit-btn {
+    min-height: 56px;
+    font-size: 1.125rem;
   }
 
   /* Modals mobile */
@@ -1823,40 +1887,54 @@
   .modal-header,
   .modal-body,
   .modal-footer {
-    padding: 1rem;
+    padding: 1.125rem;
   }
 
   .modal-header h2 {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
+  }
+
+  .close-btn {
+    font-size: 2.25rem;
+    padding: 0.25rem 0.5rem;
   }
 
   .summary-stats {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.875rem;
   }
 
   .summary-stat-card {
-    padding: 1rem;
+    padding: 1.125rem 1rem;
   }
 
   .stat-number {
-    font-size: 2rem;
+    font-size: 2.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
   }
 
   .modal-footer {
     flex-direction: column-reverse;
+    gap: 0.75rem;
   }
 
   .modal-footer button {
     width: 100%;
+    min-height: 52px;
+    font-size: 1.0625rem;
   }
 
   /* Toast mobile */
   .toast {
-    bottom: 1rem;
+    bottom: 1.25rem;
     right: 1rem;
     left: 1rem;
     max-width: none;
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
   }
 
   /* Question menu mobile */
@@ -1865,17 +1943,98 @@
     max-width: 100%;
   }
 
+  .question-menu-stats {
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+
   .menu-filters {
     grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    padding: 1rem 1.25rem;
   }
 
   .filter-btn {
-    font-size: 0.8rem;
-    padding: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.625rem 0.75rem;
+    min-height: 44px;
   }
 
   .menu-actions {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .menu-action-btn {
+    min-height: 48px;
+    font-size: 0.9375rem;
+  }
+
+  /* Question grid */
+  .question-grid {
+    padding: 1rem 1.25rem;
+    gap: 0.625rem;
+  }
+
+  .grid-question-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  /* Topic mastery */
+  .topic-mastery {
+    padding: 1rem 1.25rem;
+  }
+
+  .topic-item {
+    padding: 0.875rem;
+  }
+
+  .topic-name {
+    font-size: 0.9375rem;
+  }
+
+  /* Feedback banner */
+  .feedback-banner {
+    font-size: 1rem;
+    padding: 1rem 1.125rem;
+  }
+
+  /* Settings modal */
+  .setting-label {
+    font-size: 1rem;
+  }
+
+  .setting-label input[type="checkbox"] {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .setting-description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  #timer-duration {
+    font-size: 1.0625rem;
+    padding: 0.75rem;
+    min-height: 48px;
+  }
+
+  /* Highlight toolbar - bottom positioned for mobile */
+  .highlight-toolbar {
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto !important;
+    padding: 0.625rem;
+    gap: 0.5rem;
+  }
+
+  .highlight-toolbar button {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
   }
 }
 
@@ -1994,24 +2153,35 @@ input:focus-visible {
   border-radius: 2px;
   cursor: pointer;
   position: relative;
+  transition: opacity 0.15s ease;
 }
 
-.highlight:hover::after {
-  content: '×';
-  position: absolute;
-  right: -12px;
-  top: -8px;
-  background: var(--color-error-500);
-  color: white;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
+.highlight:hover {
+  opacity: 0.85;
+}
+
+.highlight:active {
+  opacity: 0.7;
+}
+
+/* Show remove hint on hover (desktop only) */
+@media (hover: hover) {
+  .highlight:hover::after {
+    content: 'Click to remove';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-neutral-800);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    margin-bottom: 4px;
+    pointer-events: none;
+    z-index: 10;
+  }
 }
 
 /* Highlight colors */

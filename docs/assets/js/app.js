@@ -377,10 +377,29 @@
     const action = e.target.getAttribute('data-action');
 
     if (action === 'clear') {
-      // Remove highlight (not implemented in this version - would need more complex state)
+      // Remove all highlights from current selection
+      if (currentSelection) {
+        try {
+          const range = currentSelection.getRangeAt(0);
+          const container = range.commonAncestorContainer;
+
+          // Find and remove highlight spans within the selection
+          const parent = container.nodeType === 3 ? container.parentElement : container;
+          if (parent && parent.classList && parent.classList.contains('highlight')) {
+            // If the selection itself is a highlight, unwrap it
+            const text = parent.textContent;
+            const textNode = document.createTextNode(text);
+            parent.parentNode.replaceChild(textNode, parent);
+          }
+        } catch (err) {
+          console.warn('Could not remove highlight:', err);
+        }
+      }
+
       if (highlightToolbar) {
         highlightToolbar.classList.remove('show');
       }
+      currentSelection.removeAllRanges();
       return;
     }
 
@@ -390,6 +409,15 @@
       const range = currentSelection.getRangeAt(0);
       const span = document.createElement('span');
       span.className = `highlight highlight-${color}`;
+
+      // Add click handler to remove highlight
+      span.onclick = function(e) {
+        e.preventDefault();
+        const text = this.textContent;
+        const textNode = document.createTextNode(text);
+        this.parentNode.replaceChild(textNode, this);
+      };
+
       range.surroundContents(span);
 
       // Save highlight to state (simplified - real implementation would need better serialization)
@@ -415,6 +443,9 @@
     const question = questions[currentQuestionIndex];
     const answer = userAnswers[currentQuestionIndex];
     const isSubmitted = answer?.submitted || false;
+
+    // Save scroll position to restore after render (iOS fix)
+    const scrollY = window.scrollY || window.pageYOffset;
 
     // Update header
     questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
@@ -596,6 +627,12 @@
         questionStartTime = Date.now();
       }
     }
+
+    // Restore scroll position for iOS (prevent scroll to top)
+    // Use requestAnimationFrame to ensure DOM has updated
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY);
+    });
   }
 
   // Handle answer selection
