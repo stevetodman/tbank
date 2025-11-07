@@ -7,108 +7,36 @@
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <title>TBank | Congenital Heart Disease Question Bank</title>
+    <title>TBank - Congenital Heart Disease Questions</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/questions.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="logo" href="#top">TBank</a>
-        <nav aria-label="Primary navigation">
-          <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
-          <ul id="primary-nav" class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#question-sets">Question Sets</a></li>
-            <li><a href="#downloads">Downloads</a></li>
-            <li><a href="questions/index.html">Interactive Practice</a></li>
-          </ul>
-        </nav>
+        <h1 class="logo">TBank</h1>
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="container">
-          <h1 id="hero-title">Master congenital heart disease with focused practice</h1>
-          <p>
-            TBank curates high-yield USMLE Step 1 questions on congenital heart disease,
-            combining detailed explanations, structured metadata, and downloadable study packs.
-          </p>
-          <div class="hero-actions">
-            <a class="button" href="#question-sets">Browse question sets</a>
-            <a class="button button-secondary" href="questions/index.html">Launch interactive practice</a>
-          </div>
-        </div>
-      </section>
+    <main class="section">
+      <div class="container">
+        <form class="filters interactive-filters" aria-label="Filter questions">
+          <label class="visually-hidden" for="question-search">Search questions</label>
+          <input id="question-search" type="search" placeholder="Search questions..." />
 
-      <section id="about" class="section" aria-labelledby="about-heading">
-        <div class="container">
-          <h2 id="about-heading">About the bank</h2>
-          <div class="grid">
-            <article class="card">
-              <h3>Curriculum-aligned</h3>
-              <p>
-                Each part targets a focused slice of congenital heart disease content, mapped to
-                USMLE Step 1 objectives and tagged by system, topic, and difficulty.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Multiple formats</h3>
-              <p>
-                Download questions as Markdown or JSON to integrate with your own flashcards,
-                spaced-repetition tools, or offline study guides.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Interactive study</h3>
-              <p>
-                Use the built-in browser experience to drill questions, reveal explanations, and
-                filter by topic without needing additional software.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
+          <label class="visually-hidden" for="system-filter">Filter by system</label>
+          <select id="system-filter">
+            <option value="">All systems</option>
+          </select>
+        </form>
 
-      <section id="question-sets" class="section" aria-labelledby="question-sets-heading">
-        <div class="container">
-          <div class="section-header">
-            <h2 id="question-sets-heading">Question sets</h2>
-            <p>Search and filter to find the most relevant part for your next study session.</p>
-          </div>
-          <form class="filters" role="search" aria-label="Question set search">
-            <label class="visually-hidden" for="search-input">Search question sets</label>
-            <input id="search-input" type="search" placeholder="Search by title, topic, or tag" />
-            <label class="visually-hidden" for="difficulty-filter">Filter by difficulty</label>
-            <select id="difficulty-filter">
-              <option value="">All difficulty levels</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-            </select>
-          </form>
-          <div id="question-set-grid" class="grid" role="list"></div>
-        </div>
-      </section>
-
-      <section id="downloads" class="section" aria-labelledby="downloads-heading">
-        <div class="container">
-          <div class="section-header">
-            <h2 id="downloads-heading">Downloads</h2>
-            <p>Grab the source files to remix the content or import into other tools.</p>
-          </div>
-          <div id="download-list" class="grid" role="list"></div>
-        </div>
-      </section>
+        <section aria-live="polite" aria-busy="false">
+          <div id="question-summary" class="interactive-summary"></div>
+          <div id="question-list" class="question-list" role="list"></div>
+        </section>
+      </div>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <p>&copy; <span id="current-year"></span> TBank. Built for collaborative medical education.</p>
-      </div>
-    </footer>
-
-    <script src="assets/js/questionData.js"></script>
     <script src="assets/js/app.js"></script>
   </body>
 </html>
