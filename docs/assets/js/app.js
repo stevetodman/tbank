@@ -932,6 +932,7 @@
   // Settings modal functions
   function openSettings() {
     settingsModal.hidden = false;
+    settingsModal.style.display = 'flex';
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -939,6 +940,7 @@
 
   function closeSettings() {
     settingsModal.hidden = true;
+    settingsModal.style.display = 'none';
   }
 
   function saveSettings() {
@@ -1074,15 +1076,21 @@
 
     summaryContent.innerHTML = html;
     sessionSummaryModal.hidden = false;
+    sessionSummaryModal.style.display = 'flex';
     closeMenu();
   }
 
   function closeSessionSummary() {
     sessionSummaryModal.hidden = true;
+    sessionSummaryModal.style.display = 'none';
   }
 
   // Reset progress function
   function resetProgress() {
+    // Close any open modals first
+    closeSessionSummary();
+    closeSettings();
+
     if (!confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
       return;
     }
@@ -1092,12 +1100,14 @@
     bestStreak = 0;
     milestonesShown = [];
     currentQuestionIndex = 0;
+    showWelcome = true; // Reset to show welcome screen
 
     stopTimer();
-    renderQuestion();
-    updateStats();
     closeMenu();
-    closeSessionSummary();
+
+    // Re-initialize to show welcome screen
+    initializeQuiz();
+    updateStats();
 
     showToast('Progress reset. Starting fresh!', 'success');
   }
@@ -1133,10 +1143,7 @@
   resetProgressBtn.addEventListener('click', resetProgress);
   summaryClose.addEventListener('click', closeSessionSummary);
   summaryContinue.addEventListener('click', closeSessionSummary);
-  summaryReset.addEventListener('click', () => {
-    closeSessionSummary();
-    resetProgress();
-  });
+  summaryReset.addEventListener('click', resetProgress);
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
