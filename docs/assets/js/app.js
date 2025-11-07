@@ -23,6 +23,11 @@
   const answeredCount = document.getElementById("answered-count");
   const correctCount = document.getElementById("correct-count");
   const percentageDisplay = document.getElementById("percentage");
+  const showAllBtn = document.getElementById("show-all-btn");
+  const showIncorrectBtn = document.getElementById("show-incorrect-btn");
+  const showUnansweredBtn = document.getElementById("show-unanswered-btn");
+  const topicMasterySection = document.getElementById("topic-mastery");
+  const topicList = document.getElementById("topic-list");
 
   // Load questions from JSON
   async function loadQuestions() {
@@ -483,10 +488,112 @@
     }
   }
 
+  // Filter question grid by type
+  function filterQuestionGrid(filterType) {
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach((btn, index) => {
+      const answer = userAnswers[index];
+      let show = true;
+
+      if (filterType === 'incorrect') {
+        show = answer?.submitted && !answer.correct;
+      } else if (filterType === 'unanswered') {
+        show = !answer?.submitted;
+      }
+      // 'all' shows everything (show = true)
+
+      btn.style.display = show ? '' : 'none';
+    });
+
+    // Update active button styling
+    showAllBtn.classList.toggle('active', filterType === 'all');
+    showIncorrectBtn.classList.toggle('active', filterType === 'incorrect');
+    showUnansweredBtn.classList.toggle('active', filterType === 'unanswered');
+  }
+
+  // Update topic mastery display
+  function updateTopicMastery() {
+    const topicStats = {};
+
+    // Collect statistics by topic
+    questions.forEach((q, index) => {
+      const topic = q.topic || 'General';
+      if (!topicStats[topic]) {
+        topicStats[topic] = { correct: 0, total: 0, answered: 0 };
+      }
+
+      const answer = userAnswers[index];
+      if (answer?.submitted) {
+        topicStats[topic].answered++;
+        topicStats[topic].total++;
+        if (answer.correct) {
+          topicStats[topic].correct++;
+        }
+      }
+    });
+
+    // Only show if at least one question has been answered
+    const hasAnswered = Object.values(userAnswers).some(a => a.submitted);
+    if (!hasAnswered) {
+      topicMasterySection.hidden = true;
+      return;
+    }
+
+    topicMasterySection.hidden = false;
+
+    // Build topic list HTML
+    let html = '';
+    const sortedTopics = Object.entries(topicStats)
+      .filter(([_, stats]) => stats.answered > 0)
+      .sort(([a], [b]) => a.localeCompare(b));
+
+    sortedTopics.forEach(([topic, stats]) => {
+      const percentage = Math.round((stats.correct / stats.total) * 100);
+      let statusEmoji = '📚';
+      let statusClass = '';
+
+      if (percentage >= 90) {
+        statusEmoji = '🏆';
+        statusClass = 'mastery-excellent';
+      } else if (percentage >= 80) {
+        statusEmoji = '⭐';
+        statusClass = 'mastery-great';
+      } else if (percentage >= 70) {
+        statusEmoji = '✓';
+        statusClass = 'mastery-good';
+      } else if (percentage >= 60) {
+        statusEmoji = '💪';
+        statusClass = 'mastery-fair';
+      } else {
+        statusEmoji = '📖';
+        statusClass = 'mastery-review';
+      }
+
+      html += `
+        <div class="topic-item ${statusClass}">
+          <div class="topic-header">
+            <span class="topic-emoji">${statusEmoji}</span>
+            <span class="topic-name">${topic}</span>
+          </div>
+          <div class="topic-stats">
+            <span class="topic-score">${stats.correct}/${stats.total}</span>
+            <span class="topic-percentage">${percentage}%</span>
+          </div>
+          <div class="topic-bar">
+            <div class="topic-bar-fill" style="width: ${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    });
+
+    topicList.innerHTML = html;
+  }
+
   // Menu controls
   function openMenu() {
     questionMenu.hidden = false;
     updateStats();
+    updateTopicMastery();
   }
 
   function closeMenu() {
@@ -499,6 +606,11 @@
   submitBtn.addEventListener('click', handleSubmit);
   menuToggle.addEventListener('click', openMenu);
   menuClose.addEventListener('click', closeMenu);
+
+  // Filter button event listeners
+  showAllBtn.addEventListener('click', () => filterQuestionGrid('all'));
+  showIncorrectBtn.addEventListener('click', () => filterQuestionGrid('incorrect'));
+  showUnansweredBtn.addEventListener('click', () => filterQuestionGrid('unanswered'));
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {

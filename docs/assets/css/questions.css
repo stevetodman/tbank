@@ -855,3 +855,186 @@
     font-size: 1rem;
   }
 }
+
+/* Phase 3: Teaching Intelligence - Filter Buttons */
+.menu-filters {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
+}
+
+/* Topic Mastery Section */
+.topic-mastery {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+}
+
+.topic-mastery h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.topic-item {
+  background: white;
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.topic-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(2px);
+}
+
+.topic-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.topic-emoji {
+  font-size: 1.2rem;
+}
+
+.topic-name {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.topic-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.topic-score {
+  color: #666;
+}
+
+.topic-percentage {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.topic-bar {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.topic-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.4s ease;
+  border-radius: 3px;
+}
+
+/* Topic Mastery Performance Levels */
+.mastery-excellent .topic-percentage {
+  color: #2e7d32;
+}
+
+.mastery-excellent .topic-bar-fill {
+  background: linear-gradient(90deg, #4caf50 0%, #2e7d32 100%);
+}
+
+.mastery-great .topic-percentage {
+  color: #0d47a1;
+}
+
+.mastery-great .topic-bar-fill {
+  background: linear-gradient(90deg, #2196f3 0%, #0d47a1 100%);
+}
+
+.mastery-good .topic-percentage {
+  color: #1976d2;
+}
+
+.mastery-good .topic-bar-fill {
+  background: linear-gradient(90deg, #64b5f6 0%, #1976d2 100%);
+}
+
+.mastery-fair .topic-percentage {
+  color: #f57c00;
+}
+
+.mastery-fair .topic-bar-fill {
+  background: linear-gradient(90deg, #ffb74d 0%, #f57c00 100%);
+}
+
+.mastery-review .topic-percentage {
+  color: #d32f2f;
+}
+
+.mastery-review .topic-bar-fill {
+  background: linear-gradient(90deg, #e57373 0%, #d32f2f 100%);
+}
+
+/* Mobile Responsiveness for Phase 3 */
+@media (max-width: 768px) {
+  .menu-filters {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    width: 100%;
+  }
+
+  .topic-mastery {
+    padding: 1rem;
+  }
+
+  .topic-item {
+    padding: 0.6rem;
+  }
+
+  .topic-name {
+    font-size: 0.85rem;
+  }
+}
