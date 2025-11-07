@@ -1,9 +1,9 @@
 # USMLE Step 1 Learning Objectives: Structural Congenital Heart Disease Coverage Analysis
 
 ## Summary Statistics
-- **Total Questions:** 37 (Q1-Q37)
-- **CHD Topics Covered:** 26 distinct conditions
-- **Question Distribution:** Part 1 (8), Part 2 (8), Part 3 (16), Part 4 (5)
+- **Total Questions:** 52 (Q1-Q52)
+- **CHD Topics Covered:** 38 distinct conditions
+- **Question Distribution:** Part 1 (8), Part 2 (8), Part 3 (16), Part 4 (5), Part 5 (15)
 
 ---
 
@@ -756,3 +756,65 @@ However, there are **significant gaps** in coverage of:
 - Device-based and catheter-based interventions
 
 **Recommendation:** Consider adding 10-15 additional questions to address Priority 1 gaps to achieve comprehensive USMLE Step 1 coverage for structural congenital heart disease.
+
+---
+
+## X. PART 5 ADDITIONS - HIGH-PRIORITY GAPS ADDRESSED (Q38-Q52)
+
+### Overview
+Part 5 addresses 15 of the highest-priority gaps identified in the comprehensive analysis, focusing on maternal/prenatal risk factors, rare but testable structural defects, complications of cyanotic CHD, and additional genetic syndromes.
+
+### Questions Added:
+
+**Maternal/Prenatal Risk Factors (Q38-Q40):**
+- **Q38:** Maternal Diabetes → CHD (TGA, VSD, coarctation, HLHS) ✅ **NOW COVERED**
+- **Q39:** Maternal Lupus (anti-Ro/La) → Congenital Complete Heart Block ✅ **NOW COVERED**
+- **Q40:** Teratogen: Phenytoin → Fetal Hydantoin Syndrome (PS, AS, coarctation, PDA) ✅ **NOW COVERED**
+
+**Rare Structural Defects (Q41, Q46, Q49, Q51):**
+- **Q41:** Congenitally Corrected TGA (l-TGA) - Double Discordance ✅ **NOW COVERED**
+- **Q46:** Scimitar Syndrome - Partial APVR to IVC ✅ **NOW COVERED**
+- **Q49:** Cor Triatriatum - Mimics Mitral Stenosis ✅ **NOW COVERED**
+- **Q51:** Double Outlet Right Ventricle - Taussig-Bing Anomaly ✅ **NOW COVERED**
+
+**Complications of Cyanotic CHD (Q43-Q44):**
+- **Q43:** Brain Abscess - R→L Shunt Bypasses Pulmonary Filtration ✅ **NOW COVERED**
+- **Q44:** Polycythemia/Hyperviscosity - Secondary to Chronic Cyanosis ✅ **NOW COVERED**
+
+**Diagnostic Approaches (Q45, Q52):**
+- **Q45:** Hyperoxia Test - Differentiate Cardiac vs. Pulmonary Cyanosis ✅ **NOW COVERED**
+- **Q52:** Ductus-Dependent Lesions - Systemic, Pulmonary, and Mixing Types ✅ **NOW COVERED**
+
+**Genetic Syndromes (Q42, Q47-Q48):**
+- **Q42:** Heterotaxy Syndrome - Asplenia (Right Isomerism) ✅ **NOW COVERED**
+- **Q47:** CHARGE Syndrome (CHD7 gene) - Conotruncal Defects ✅ **NOW COVERED**
+- **Q48:** Alagille Syndrome (JAG1 gene) - Peripheral Pulmonary Stenosis ✅ **NOW COVERED**
+
+**Management/Pharmacology (Q50):**
+- **Q50:** Endocarditis Prophylaxis - Current AHA Guidelines (Restricted Indications) ✅ **NOW COVERED**
+
+### Remaining High-Priority Gaps for Future Expansion:
+
+**Still Missing - Tier 1:**
+1. **Retinoic acid (isotretinoin) teratogenicity** - Conotruncal defects
+2. **Valproic acid teratogenicity** - VSD, coarctation, HLHS
+3. **Polysplenia syndrome** (left isomerism)
+4. **Critical aortic stenosis** - Neonatal presentation with ductal-dependent systemic circulation
+5. **Valvular pulmonary stenosis** - Association with Noonan syndrome
+6. **Pulmonary atresia with intact ventricular septum** - RV-dependent coronary circulation
+7. **Interrupted aortic arch** - Association with 22q11 deletion
+8. **Lutembacher syndrome** - ASD + mitral stenosis
+9. **Shone complex** - Four left-sided obstructive lesions
+10. **Qp:Qs ratio calculation and interpretation**
+
+**Still Missing - Tier 2:**
+1. **Noonan syndrome** - PS and HCM associations
+2. **Marfan syndrome** - Aortic root complications
+3. **ASD types** (secundum, primum, sinus venosus with partial APVR)
+4. **Double aortic arch** - Most common symptomatic vascular ring
+5. **Unobstructed TAPVR** - Snowman sign, presentation differences
+6. **Fontan physiology and complications** (protein-losing enteropathy, arrhythmias)
+7. **Blalock-Taussig shunt** physiology
+8. **Arterial switch operation** timing and complications
+9. **Balloon atrial septostomy** (Rashkind procedure)
+10. **VSD types and natural history** (perimembranous, muscular, spontaneous closure rates)
