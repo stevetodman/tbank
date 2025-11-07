@@ -12,28 +12,41 @@
     <link rel="stylesheet" href="assets/css/questions.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container">
+    <header class="quiz-header">
+      <div class="quiz-header-content">
         <h1 class="logo">TBank</h1>
+        <div class="progress-info">
+          <span id="question-counter">Question 1 of 52</span>
+          <button id="menu-toggle" class="menu-btn" aria-label="Question menu">☰</button>
+        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
       </div>
     </header>
 
-    <main class="section">
-      <div class="container">
-        <form class="filters interactive-filters" aria-label="Filter questions">
-          <label class="visually-hidden" for="question-search">Search questions</label>
-          <input id="question-search" type="search" placeholder="Search questions..." />
+    <div id="question-menu" class="question-menu" hidden>
+      <div class="question-menu-header">
+        <h2>Questions</h2>
+        <button id="menu-close" class="close-btn" aria-label="Close menu">&times;</button>
+      </div>
+      <div class="question-menu-stats">
+        <span id="answered-count">Answered: 0/52</span>
+        <span id="correct-count">Correct: 0</span>
+        <span id="percentage">0%</span>
+      </div>
+      <div id="question-grid" class="question-grid"></div>
+    </div>
 
-          <label class="visually-hidden" for="system-filter">Filter by system</label>
-          <select id="system-filter">
-            <option value="">All systems</option>
-          </select>
-        </form>
+    <main class="quiz-container">
+      <div id="question-display" class="question-display">
+        <!-- Question content will be injected here -->
+      </div>
 
-        <section aria-live="polite" aria-busy="false">
-          <div id="question-summary" class="interactive-summary"></div>
-          <div id="question-list" class="question-list" role="list"></div>
-        </section>
+      <div class="quiz-navigation">
+        <button id="prev-btn" class="nav-btn" disabled>← Previous</button>
+        <button id="submit-btn" class="submit-btn" disabled>Submit Answer</button>
+        <button id="next-btn" class="nav-btn">Next →</button>
       </div>
     </main>
 
