@@ -1,0 +1,142 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # Validate all JSON question bank files
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate question bank JSON syntax
+        run: |
+          echo "🔍 Validating JSON files..."
+          for f in question_banks/*.json; do
+            echo "  Checking $f"
+            python3 -m json.tool "$f" > /dev/null || exit 1
+          done
+          echo "✅ All JSON files are valid!"
+
+  # Verify question banks are synced to docs/assets/
+  check-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run sync script
+        run: python3 scripts/sync_question_banks.py
+
+      - name: Check for uncommitted changes
+        run: |
+          if ! git diff --exit-code docs/assets/question_banks/; then
+            echo "❌ Error: Question banks are not synced!"
+            echo ""
+            echo "Please run: python3 scripts/sync_question_banks.py"
+            echo "Then commit the changes in docs/assets/question_banks/"
+            exit 1
+          fi
+          echo "✅ Question banks are properly synced!"
+
+  # Lint Python scripts
+  lint-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install linters
+        run: |
+          pip install black flake8
+
+      - name: Check Python formatting with black
+        run: |
+          echo "🔍 Checking Python code formatting..."
+          black --check scripts/ || (echo "❌ Run 'black scripts/' to fix formatting" && exit 1)
+          echo "✅ Python formatting is correct!"
+
+      - name: Lint Python with flake8
+        run: |
+          echo "🔍 Linting Python code..."
+          flake8 scripts/ --max-line-length=100 || exit 1
+          echo "✅ Python linting passed!"
+
+  # Lint JavaScript (if package.json exists)
+  lint-js:
+    runs-on: ubuntu-latest
+    if: hashFiles('package.json') != ''
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint JavaScript
+        run: npm run lint
+
+  # Run JavaScript tests (if package.json exists)
+  test-js:
+    runs-on: ubuntu-latest
+    if: hashFiles('package.json') != ''
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Upload coverage
+        if: success()
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: false
+
+  # Summary job - all checks passed
+  all-checks-passed:
+    runs-on: ubuntu-latest
+    needs: [validate-json, check-sync, lint-python]
+    if: always()
+    steps:
+      - name: Check all jobs succeeded
+        run: |
+          if [ "${{ needs.validate-json.result }}" != "success" ] || \
+             [ "${{ needs.check-sync.result }}" != "success" ] || \
+             [ "${{ needs.lint-python.result }}" != "success" ]; then
+            echo "❌ Some checks failed"
+            exit 1
+          fi
+          echo "✅ All checks passed successfully!"
