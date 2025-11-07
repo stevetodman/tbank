@@ -83,8 +83,17 @@
 
     // Question stem
     html += '<div class="question-stem">';
-    html += `<h2>${question.title}</h2>`;
-    html += `<p>${question.questionText || question.vignette || ''}</p>`;
+
+    // Show vignette (clinical case) if present
+    if (question.vignette) {
+      html += `<p class="vignette">${question.vignette}</p>`;
+    }
+
+    // Show question text (the actual question being asked)
+    if (question.questionText) {
+      html += `<p class="question-text"><strong>${question.questionText}</strong></p>`;
+    }
+
     html += '</div>';
 
     // Answer choices
