@@ -3,6 +3,8 @@
   let questions = [];
   let currentQuestionIndex = 0;
   let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true } }
+  let showWelcome = true; // Show welcome screen on first load
+  let keyboardHintShown = false; // Track if keyboard hint was shown
 
   // DOM elements
   const questionDisplay = document.getElementById("question-display");
@@ -37,7 +39,92 @@
   function initializeQuiz() {
     if (questions.length === 0) return;
     buildQuestionGrid();
+
+    // Show welcome screen or go straight to questions
+    if (showWelcome) {
+      renderWelcomeScreen();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  // Render welcome screen
+  function renderWelcomeScreen() {
+    const html = `
+      <div class="welcome-screen">
+        <div class="welcome-content">
+          <h1>Welcome to TBank</h1>
+          <p class="welcome-subtitle">Congenital Heart Disease Question Bank</p>
+
+          <div class="welcome-stats">
+            <div class="stat-item">
+              <span class="stat-number">${questions.length}</span>
+              <span class="stat-label">Questions</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">USMLE</span>
+              <span class="stat-label">Step 1 Level</span>
+            </div>
+          </div>
+
+          <p class="welcome-description">
+            Test your knowledge with high-yield clinical vignettes.
+            Each question includes detailed explanations to help you learn.
+          </p>
+
+          <button class="welcome-start-btn" id="start-test-btn">
+            Start Test
+          </button>
+
+          <div class="keyboard-shortcuts">
+            <p><strong>Keyboard shortcuts:</strong></p>
+            <p>← → Navigate questions  •  Enter Submit answer</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    questionDisplay.innerHTML = html;
+
+    // Hide navigation buttons on welcome screen
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'none';
+
+    // Add event listener for start button
+    document.getElementById('start-test-btn').addEventListener('click', startTest);
+  }
+
+  // Start the test
+  function startTest() {
+    showWelcome = false;
+    prevBtn.style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    submitBtn.style.display = 'inline-block';
     renderQuestion();
+
+    // Show keyboard hint after a moment
+    setTimeout(showKeyboardHint, 2000);
+  }
+
+  // Show keyboard hint toast
+  function showKeyboardHint() {
+    if (keyboardHintShown) return;
+    keyboardHintShown = true;
+
+    const toast = document.createElement('div');
+    toast.className = 'keyboard-hint-toast';
+    toast.innerHTML = '💡 Tip: Use ← → arrow keys to navigate';
+    document.body.appendChild(toast);
+
+    // Fade in
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    // Fade out after 4 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
   }
 
   // Build question grid for menu
@@ -70,8 +157,28 @@
     // Feedback banner (shown after submission)
     if (isSubmitted) {
       const isCorrect = answer.correct;
-      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'}">`;
-      html += isCorrect ? '✓ Correct!' : '✗ Incorrect';
+      const encouragingMessages = {
+        correct: [
+          '✓ Excellent! You nailed it!',
+          '✓ Perfect! Great clinical reasoning!',
+          '✓ Correct! You\'re mastering this!',
+          '✓ Outstanding! Keep it up!',
+          '✓ Brilliant! Well done!'
+        ],
+        incorrect: [
+          '✗ Not quite, but let\'s learn why',
+          '✗ Good try! Here\'s the key insight',
+          '✗ Close! Let\'s break this down',
+          '✗ Learning opportunity ahead',
+          '✗ Let\'s explore the correct answer'
+        ]
+      };
+
+      const messages = isCorrect ? encouragingMessages.correct : encouragingMessages.incorrect;
+      const message = messages[Math.floor(Math.random() * messages.length)];
+
+      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'} feedback-animate">`;
+      html += message;
       html += '</div>';
     }
 
