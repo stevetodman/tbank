@@ -3,6 +3,11 @@
   let questions = [];
   let currentQuestionIndex = 0;
   let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true } }
+  let showWelcome = true; // Show welcome screen on first load
+  let keyboardHintShown = false; // Track if keyboard hint was shown
+  let currentStreak = 0; // Track consecutive correct answers
+  let bestStreak = 0; // Track best streak
+  let milestonesShown = []; // Track which milestones have been shown
 
   // DOM elements
   const questionDisplay = document.getElementById("question-display");
@@ -18,6 +23,11 @@
   const answeredCount = document.getElementById("answered-count");
   const correctCount = document.getElementById("correct-count");
   const percentageDisplay = document.getElementById("percentage");
+  const showAllBtn = document.getElementById("show-all-btn");
+  const showIncorrectBtn = document.getElementById("show-incorrect-btn");
+  const showUnansweredBtn = document.getElementById("show-unanswered-btn");
+  const topicMasterySection = document.getElementById("topic-mastery");
+  const topicList = document.getElementById("topic-list");
 
   // Load questions from JSON
   async function loadQuestions() {
@@ -37,7 +47,92 @@
   function initializeQuiz() {
     if (questions.length === 0) return;
     buildQuestionGrid();
+
+    // Show welcome screen or go straight to questions
+    if (showWelcome) {
+      renderWelcomeScreen();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  // Render welcome screen
+  function renderWelcomeScreen() {
+    const html = `
+      <div class="welcome-screen">
+        <div class="welcome-content">
+          <h1>Welcome to TBank</h1>
+          <p class="welcome-subtitle">Congenital Heart Disease Question Bank</p>
+
+          <div class="welcome-stats">
+            <div class="stat-item">
+              <span class="stat-number">${questions.length}</span>
+              <span class="stat-label">Questions</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">USMLE</span>
+              <span class="stat-label">Step 1 Level</span>
+            </div>
+          </div>
+
+          <p class="welcome-description">
+            Test your knowledge with high-yield clinical vignettes.
+            Each question includes detailed explanations to help you learn.
+          </p>
+
+          <button class="welcome-start-btn" id="start-test-btn">
+            Start Test
+          </button>
+
+          <div class="keyboard-shortcuts">
+            <p><strong>Keyboard shortcuts:</strong></p>
+            <p>← → Navigate questions  •  Enter Submit answer</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    questionDisplay.innerHTML = html;
+
+    // Hide navigation buttons on welcome screen
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'none';
+
+    // Add event listener for start button
+    document.getElementById('start-test-btn').addEventListener('click', startTest);
+  }
+
+  // Start the test
+  function startTest() {
+    showWelcome = false;
+    prevBtn.style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    submitBtn.style.display = 'inline-block';
     renderQuestion();
+
+    // Show keyboard hint after a moment
+    setTimeout(showKeyboardHint, 2000);
+  }
+
+  // Show keyboard hint toast
+  function showKeyboardHint() {
+    if (keyboardHintShown) return;
+    keyboardHintShown = true;
+
+    const toast = document.createElement('div');
+    toast.className = 'keyboard-hint-toast';
+    toast.innerHTML = '💡 Tip: Use ← → arrow keys to navigate';
+    document.body.appendChild(toast);
+
+    // Fade in
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    // Fade out after 4 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
   }
 
   // Build question grid for menu
@@ -70,8 +165,28 @@
     // Feedback banner (shown after submission)
     if (isSubmitted) {
       const isCorrect = answer.correct;
-      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'}">`;
-      html += isCorrect ? '✓ Correct!' : '✗ Incorrect';
+      const encouragingMessages = {
+        correct: [
+          '✓ Excellent! You nailed it!',
+          '✓ Perfect! Great clinical reasoning!',
+          '✓ Correct! You\'re mastering this!',
+          '✓ Outstanding! Keep it up!',
+          '✓ Brilliant! Well done!'
+        ],
+        incorrect: [
+          '✗ Not quite, but let\'s learn why',
+          '✗ Good try! Here\'s the key insight',
+          '✗ Close! Let\'s break this down',
+          '✗ Learning opportunity ahead',
+          '✗ Let\'s explore the correct answer'
+        ]
+      };
+
+      const messages = isCorrect ? encouragingMessages.correct : encouragingMessages.incorrect;
+      const message = messages[Math.floor(Math.random() * messages.length)];
+
+      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'} feedback-animate">`;
+      html += message;
       html += '</div>';
     }
 
@@ -198,8 +313,93 @@
     userAnswers[currentQuestionIndex].submitted = true;
     userAnswers[currentQuestionIndex].correct = isCorrect;
 
+    // Update streak tracking
+    if (isCorrect) {
+      currentStreak++;
+      if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+      }
+
+      // Show streak notification for 3, 5, 10 in a row
+      if (currentStreak === 3 || currentStreak === 5 || currentStreak === 10) {
+        setTimeout(() => showStreakNotification(currentStreak), 600);
+      }
+    } else {
+      currentStreak = 0;
+    }
+
     renderQuestion();
     updateStats();
+
+    // Check for milestone celebrations
+    checkMilestones();
+  }
+
+  // Show streak notification
+  function showStreakNotification(streak) {
+    const messages = {
+      3: '🔥 3 in a row! You\'re on fire!',
+      5: '🌟 5 correct in a row! Amazing streak!',
+      10: '🎯 10 in a row! Incredible mastery!'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = 'streak-toast';
+    toast.innerHTML = messages[streak] || `🔥 ${streak} in a row!`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // Check and show milestone celebrations
+  function checkMilestones() {
+    const answered = Object.values(userAnswers).filter(a => a.submitted).length;
+    const milestones = [10, 25, 40, 52];
+
+    milestones.forEach(milestone => {
+      if (answered === milestone && !milestonesShown.includes(milestone)) {
+        milestonesShown.push(milestone);
+        setTimeout(() => showMilestoneCelebration(milestone), 800);
+      }
+    });
+  }
+
+  // Show milestone celebration
+  function showMilestoneCelebration(milestone) {
+    const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
+    const percentage = Math.round((correct / milestone) * 100);
+
+    const messages = {
+      10: '🎉 10 Questions Down!',
+      25: '🚀 Halfway There! 25 Questions!',
+      40: '⭐ Almost There! 40 Questions!',
+      52: '🏆 Test Complete! Congratulations!'
+    };
+
+    const overlay = document.createElement('div');
+    overlay.className = 'milestone-overlay';
+    overlay.innerHTML = `
+      <div class="milestone-card">
+        <h2>${messages[milestone]}</h2>
+        <p class="milestone-stats">${correct} correct • ${percentage}% accuracy</p>
+        <p class="milestone-encouragement">
+          ${percentage >= 80 ? 'Outstanding performance! Keep it up!' :
+            percentage >= 70 ? 'Great work! You\'re doing well!' :
+            'Every question is a learning opportunity!'}
+        </p>
+        <button class="milestone-continue-btn" onclick="this.parentElement.parentElement.remove()">
+          ${milestone === 52 ? 'Review Results' : 'Continue'}
+        </button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    setTimeout(() => overlay.classList.add('show'), 100);
   }
 
   // Navigation
@@ -264,15 +464,136 @@
     const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
 
-    answeredCount.textContent = `Answered: ${answered}/${questions.length}`;
-    correctCount.textContent = `Correct: ${correct}`;
-    percentageDisplay.textContent = `${percentage}%`;
+    // Add emoji based on performance
+    let emoji = '📊';
+    if (percentage >= 90) emoji = '🏆';
+    else if (percentage >= 80) emoji = '🌟';
+    else if (percentage >= 70) emoji = '✨';
+    else if (percentage >= 60) emoji = '💪';
+
+    answeredCount.textContent = `${answered}/${questions.length} answered`;
+    correctCount.textContent = `${correct} correct ${emoji}`;
+
+    // Show percentage with encouragement
+    let encouragement = '';
+    if (percentage >= 80) encouragement = ' Outstanding!';
+    else if (percentage >= 70) encouragement = ' Great!';
+    else if (percentage >= 60) encouragement = ' Good!';
+
+    percentageDisplay.textContent = `${percentage}%${encouragement}`;
+
+    // Add streak display if active
+    if (currentStreak >= 2) {
+      percentageDisplay.textContent += ` 🔥 ${currentStreak} streak`;
+    }
+  }
+
+  // Filter question grid by type
+  function filterQuestionGrid(filterType) {
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach((btn, index) => {
+      const answer = userAnswers[index];
+      let show = true;
+
+      if (filterType === 'incorrect') {
+        show = answer?.submitted && !answer.correct;
+      } else if (filterType === 'unanswered') {
+        show = !answer?.submitted;
+      }
+      // 'all' shows everything (show = true)
+
+      btn.style.display = show ? '' : 'none';
+    });
+
+    // Update active button styling
+    showAllBtn.classList.toggle('active', filterType === 'all');
+    showIncorrectBtn.classList.toggle('active', filterType === 'incorrect');
+    showUnansweredBtn.classList.toggle('active', filterType === 'unanswered');
+  }
+
+  // Update topic mastery display
+  function updateTopicMastery() {
+    const topicStats = {};
+
+    // Collect statistics by topic
+    questions.forEach((q, index) => {
+      const topic = q.topic || 'General';
+      if (!topicStats[topic]) {
+        topicStats[topic] = { correct: 0, total: 0, answered: 0 };
+      }
+
+      const answer = userAnswers[index];
+      if (answer?.submitted) {
+        topicStats[topic].answered++;
+        topicStats[topic].total++;
+        if (answer.correct) {
+          topicStats[topic].correct++;
+        }
+      }
+    });
+
+    // Only show if at least one question has been answered
+    const hasAnswered = Object.values(userAnswers).some(a => a.submitted);
+    if (!hasAnswered) {
+      topicMasterySection.hidden = true;
+      return;
+    }
+
+    topicMasterySection.hidden = false;
+
+    // Build topic list HTML
+    let html = '';
+    const sortedTopics = Object.entries(topicStats)
+      .filter(([_, stats]) => stats.answered > 0)
+      .sort(([a], [b]) => a.localeCompare(b));
+
+    sortedTopics.forEach(([topic, stats]) => {
+      const percentage = Math.round((stats.correct / stats.total) * 100);
+      let statusEmoji = '📚';
+      let statusClass = '';
+
+      if (percentage >= 90) {
+        statusEmoji = '🏆';
+        statusClass = 'mastery-excellent';
+      } else if (percentage >= 80) {
+        statusEmoji = '⭐';
+        statusClass = 'mastery-great';
+      } else if (percentage >= 70) {
+        statusEmoji = '✓';
+        statusClass = 'mastery-good';
+      } else if (percentage >= 60) {
+        statusEmoji = '💪';
+        statusClass = 'mastery-fair';
+      } else {
+        statusEmoji = '📖';
+        statusClass = 'mastery-review';
+      }
+
+      html += `
+        <div class="topic-item ${statusClass}">
+          <div class="topic-header">
+            <span class="topic-emoji">${statusEmoji}</span>
+            <span class="topic-name">${topic}</span>
+          </div>
+          <div class="topic-stats">
+            <span class="topic-score">${stats.correct}/${stats.total}</span>
+            <span class="topic-percentage">${percentage}%</span>
+          </div>
+          <div class="topic-bar">
+            <div class="topic-bar-fill" style="width: ${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    });
+
+    topicList.innerHTML = html;
   }
 
   // Menu controls
   function openMenu() {
     questionMenu.hidden = false;
     updateStats();
+    updateTopicMastery();
   }
 
   function closeMenu() {
@@ -285,6 +606,11 @@
   submitBtn.addEventListener('click', handleSubmit);
   menuToggle.addEventListener('click', openMenu);
   menuClose.addEventListener('click', closeMenu);
+
+  // Filter button event listeners
+  showAllBtn.addEventListener('click', () => filterQuestionGrid('all'));
+  showIncorrectBtn.addEventListener('click', () => filterQuestionGrid('incorrect'));
+  showUnansweredBtn.addEventListener('click', () => filterQuestionGrid('unanswered'));
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
