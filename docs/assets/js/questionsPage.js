@@ -262,6 +262,45 @@
     return text.toLowerCase().trim();
   }
 
+  function validateQuestionBank(data) {
+    if (!data || typeof data !== "object") {
+      return { valid: false, error: "Invalid data format: expected object" };
+    }
+
+    if (!data.questionBank || typeof data.questionBank !== "object") {
+      return { valid: false, error: "Missing or invalid questionBank property" };
+    }
+
+    if (!Array.isArray(data.questionBank.questions)) {
+      return { valid: false, error: "Missing or invalid questions array" };
+    }
+
+    const questions = data.questionBank.questions;
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      if (!q || typeof q !== "object") {
+        return { valid: false, error: `Question ${i} is not an object` };
+      }
+
+      const requiredFields = ["id", "title"];
+      for (const field of requiredFields) {
+        if (!q[field]) {
+          return { valid: false, error: `Question ${i} missing required field: ${field}` };
+        }
+      }
+
+      if (!q.vignette && !q.questionText) {
+        return { valid: false, error: `Question ${i} missing both vignette and questionText` };
+      }
+
+      if (q.answerChoices && !Array.isArray(q.answerChoices)) {
+        return { valid: false, error: `Question ${i} answerChoices is not an array` };
+      }
+    }
+
+    return { valid: true };
+  }
+
   function filterQuestions() {
     const term = normalise(searchInput?.value || "");
     const system = systemFilter?.value || "";
@@ -310,7 +349,13 @@
         throw new Error(`Failed to load question set: ${response.status}`);
       }
       const data = await response.json();
-      fullQuestionSet = data.questionBank?.questions || [];
+
+      const validation = validateQuestionBank(data);
+      if (!validation.valid) {
+        throw new Error(`Invalid question bank format: ${validation.error}`);
+      }
+
+      fullQuestionSet = data.questionBank.questions;
       populateSystems(fullQuestionSet);
       filterQuestions();
       summary.textContent = `${fullQuestionSet.length} questions loaded from ${selected.title}.`;
