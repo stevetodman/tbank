@@ -479,7 +479,8 @@
       const messages = isCorrect ? encouragingMessages.correct : encouragingMessages.incorrect;
       const message = messages[Math.floor(Math.random() * messages.length)];
 
-      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'} feedback-animate">`;
+      // Add role="status" for screen reader announcements
+      html += `<div class="feedback-banner ${isCorrect ? 'correct' : 'incorrect'} feedback-animate" role="status" aria-live="polite">`;
       html += message;
       html += '</div>';
     }
@@ -506,13 +507,14 @@
 
     // Show question text (the actual question being asked)
     if (question.questionText) {
-      html += `<p class="question-text"><strong>${question.questionText}</strong></p>`;
+      html += `<p class="question-text" id="question-text-${currentQuestionIndex}"><strong>${question.questionText}</strong></p>`;
     }
 
     html += '</div>';
 
-    // Answer choices
-    html += '<div class="answer-choices">';
+    // Answer choices - wrapped in fieldset for proper accessibility
+    html += '<fieldset class="answer-choices" aria-labelledby="question-text-' + currentQuestionIndex + '">';
+    html += '<legend class="sr-only">Select the best answer from the choices below</legend>';
     question.answerChoices.forEach((choice) => {
       const letter = choice.letter;
       const isSelected = answer?.selected === letter;
@@ -546,7 +548,7 @@
       if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon">✗</span>';
       html += '</label>';
     });
-    html += '</div>';
+    html += '</fieldset>';
 
     // Explanation (shown after submission)
     if (isSubmitted) {

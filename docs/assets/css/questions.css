@@ -292,6 +292,10 @@
   flex-direction: column;
   gap: 0.75rem;
   margin: 1.5rem 0;
+  /* Reset fieldset default styles */
+  border: none;
+  padding: 0;
+  min-width: 0;
 }
 
 .answer-choice {

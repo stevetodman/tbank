@@ -120,5 +120,45 @@
     </div>
 
     <script src="assets/js/app.js"></script>
+
+    <!-- Performance Monitoring (Production Only - Native APIs) -->
+    <script>
+      // Only run performance monitoring in production (not localhost)
+      if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        // Monitor Largest Contentful Paint (LCP)
+        if ('PerformanceObserver' in window) {
+          try {
+            const lcpObserver = new PerformanceObserver((list) => {
+              const entries = list.getEntries();
+              const lastEntry = entries[entries.length - 1];
+              console.info('[Performance] LCP:', Math.round(lastEntry.startTime), 'ms');
+            });
+            lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+
+            // Monitor First Input Delay (FID) / Interaction to Next Paint (INP)
+            const fidObserver = new PerformanceObserver((list) => {
+              list.getEntries().forEach((entry) => {
+                console.info('[Performance] FID:', Math.round(entry.processingStart - entry.startTime), 'ms');
+              });
+            });
+            fidObserver.observe({ type: 'first-input', buffered: true });
+
+            // Monitor Cumulative Layout Shift (CLS)
+            let clsValue = 0;
+            const clsObserver = new PerformanceObserver((list) => {
+              list.getEntries().forEach((entry) => {
+                if (!entry.hadRecentInput) {
+                  clsValue += entry.value;
+                }
+              });
+              console.info('[Performance] CLS:', clsValue.toFixed(4));
+            });
+            clsObserver.observe({ type: 'layout-shift', buffered: true });
+          } catch (e) {
+            // Silently fail if PerformanceObserver not supported
+          }
+        }
+      }
+    </script>
   </body>
 </html>
