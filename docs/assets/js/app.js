@@ -307,26 +307,27 @@
 
   // Text highlighting functions
   function initializeHighlighting() {
-    // Create highlight toolbar if it doesn't exist
-    if (!highlightToolbar) {
-      highlightToolbar = document.createElement('div');
-      highlightToolbar.className = 'highlight-toolbar';
-      highlightToolbar.innerHTML = `
-        <button class="highlight-yellow-btn" data-color="yellow" title="Yellow highlight"></button>
-        <button class="highlight-green-btn" data-color="green" title="Green highlight"></button>
-        <button class="highlight-blue-btn" data-color="blue" title="Blue highlight"></button>
-        <button class="highlight-pink-btn" data-color="pink" title="Pink highlight"></button>
-        <button class="clear-btn" data-action="clear" title="Remove highlight">×</button>
-      `;
-      document.body.appendChild(highlightToolbar);
+    // Only initialize once
+    if (highlightToolbar) return;
 
-      // Add click handlers to toolbar buttons
-      highlightToolbar.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', handleHighlightAction);
-      });
-    }
+    // Create highlight toolbar
+    highlightToolbar = document.createElement('div');
+    highlightToolbar.className = 'highlight-toolbar';
+    highlightToolbar.innerHTML = `
+      <button class="highlight-yellow-btn" data-color="yellow" title="Yellow highlight"></button>
+      <button class="highlight-green-btn" data-color="green" title="Green highlight"></button>
+      <button class="highlight-blue-btn" data-color="blue" title="Blue highlight"></button>
+      <button class="highlight-pink-btn" data-color="pink" title="Pink highlight"></button>
+      <button class="clear-btn" data-action="clear" title="Remove highlight">×</button>
+    `;
+    document.body.appendChild(highlightToolbar);
 
-    // Listen for text selection
+    // Add click handlers to toolbar buttons
+    highlightToolbar.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', handleHighlightAction);
+    });
+
+    // Listen for text selection (only add listener once)
     document.addEventListener('mouseup', handleTextSelection);
   }
 
@@ -575,9 +576,6 @@
         });
       });
     }
-
-    // Initialize text highlighting for question content
-    initializeHighlighting();
 
     // Update submit button state
     const hasSelection = answer?.selected;
@@ -1149,6 +1147,9 @@
     }
   });
 
-  // Initialize
+  // Initialize highlighting (only once)
+  initializeHighlighting();
+
+  // Initialize app
   loadQuestions();
 })();
