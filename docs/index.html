@@ -16,7 +16,12 @@
       <div class="quiz-header-content">
         <h1 class="logo">TBank</h1>
         <div class="progress-info">
+          <div id="timer-display" class="timer-display" hidden>
+            <span id="timer-text">--:--</span>
+            <button id="timer-toggle" class="timer-toggle-btn" aria-label="Pause timer">⏸</button>
+          </div>
           <span id="question-counter">Question 1 of 52</span>
+          <button id="settings-btn" class="settings-btn" aria-label="Settings">⚙️</button>
           <button id="menu-toggle" class="menu-btn" aria-label="Question menu">☰</button>
         </div>
       </div>
@@ -40,6 +45,12 @@
         <button id="show-all-btn" class="filter-btn active">All</button>
         <button id="show-incorrect-btn" class="filter-btn">Review Incorrect</button>
         <button id="show-unanswered-btn" class="filter-btn">Unanswered</button>
+        <button id="show-flagged-btn" class="filter-btn">Flagged 🚩</button>
+      </div>
+
+      <div class="menu-actions">
+        <button id="end-session-btn" class="menu-action-btn">End Session & Review</button>
+        <button id="reset-progress-btn" class="menu-action-btn menu-action-btn-secondary">Reset All Progress</button>
       </div>
 
       <div id="topic-mastery" class="topic-mastery" hidden>
@@ -61,6 +72,52 @@
         <button id="next-btn" class="nav-btn">Next →</button>
       </div>
     </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" hidden>
+      <div class="modal-content settings-modal">
+        <div class="modal-header">
+          <h2>Session Settings</h2>
+          <button id="settings-close" class="close-btn" aria-label="Close settings">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-group">
+            <label class="setting-label">
+              <input type="checkbox" id="timed-mode-toggle" />
+              <span>Timed Mode</span>
+            </label>
+            <p class="setting-description">Enable countdown timer for each question</p>
+          </div>
+          <div class="setting-group" id="timer-duration-group" hidden>
+            <label class="setting-label">
+              <span>Time per question (seconds)</span>
+            </label>
+            <input type="number" id="timer-duration" value="90" min="30" max="600" step="15" />
+            <p class="setting-description">Default: 90 seconds (UWorld standard)</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="settings-save" class="button-primary">Save Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Summary Modal -->
+    <div id="session-summary-modal" class="modal" hidden>
+      <div class="modal-content summary-modal">
+        <div class="modal-header">
+          <h2>Session Complete</h2>
+          <button id="summary-close" class="close-btn" aria-label="Close summary">&times;</button>
+        </div>
+        <div class="modal-body" id="summary-content">
+          <!-- Summary content will be injected here -->
+        </div>
+        <div class="modal-footer">
+          <button id="summary-continue" class="button-primary">Continue Studying</button>
+          <button id="summary-reset" class="button-secondary">Start Over</button>
+        </div>
+      </div>
+    </div>
 
     <script src="assets/js/app.js"></script>
   </body>

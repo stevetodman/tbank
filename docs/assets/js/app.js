@@ -2,12 +2,20 @@
   // State management
   let questions = [];
   let currentQuestionIndex = 0;
-  let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true } }
+  let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true, timeSpent: 45, flagged: false } }
   let showWelcome = true; // Show welcome screen on first load
   let keyboardHintShown = false; // Track if keyboard hint was shown
   let currentStreak = 0; // Track consecutive correct answers
   let bestStreak = 0; // Track best streak
   let milestonesShown = []; // Track which milestones have been shown
+
+  // Timer state
+  let timedMode = false;
+  let timerDuration = 90; // seconds per question
+  let currentTimer = null;
+  let timerSeconds = 0;
+  let timerPaused = false;
+  let questionStartTime = null;
 
   // DOM elements
   const questionDisplay = document.getElementById("question-display");
@@ -26,8 +34,28 @@
   const showAllBtn = document.getElementById("show-all-btn");
   const showIncorrectBtn = document.getElementById("show-incorrect-btn");
   const showUnansweredBtn = document.getElementById("show-unanswered-btn");
+  const showFlaggedBtn = document.getElementById("show-flagged-btn");
   const topicMasterySection = document.getElementById("topic-mastery");
   const topicList = document.getElementById("topic-list");
+
+  // New feature elements
+  const timerDisplay = document.getElementById("timer-display");
+  const timerText = document.getElementById("timer-text");
+  const timerToggleBtn = document.getElementById("timer-toggle");
+  const settingsBtn = document.getElementById("settings-btn");
+  const settingsModal = document.getElementById("settings-modal");
+  const settingsClose = document.getElementById("settings-close");
+  const timedModeToggle = document.getElementById("timed-mode-toggle");
+  const timerDurationInput = document.getElementById("timer-duration");
+  const timerDurationGroup = document.getElementById("timer-duration-group");
+  const settingsSaveBtn = document.getElementById("settings-save");
+  const endSessionBtn = document.getElementById("end-session-btn");
+  const resetProgressBtn = document.getElementById("reset-progress-btn");
+  const sessionSummaryModal = document.getElementById("session-summary-modal");
+  const summaryContent = document.getElementById("summary-content");
+  const summaryClose = document.getElementById("summary-close");
+  const summaryContinue = document.getElementById("summary-continue");
+  const summaryReset = document.getElementById("summary-reset");
 
   // Load questions from JSON
   async function loadQuestions() {
@@ -79,6 +107,12 @@
             Test your knowledge with high-yield clinical vignettes.
             Each question includes detailed explanations to help you learn.
           </p>
+
+          <div class="welcome-features">
+            <div class="welcome-feature">⏱️ Optional timed mode</div>
+            <div class="welcome-feature">🚩 Flag questions for review</div>
+            <div class="welcome-feature">📊 Detailed performance analytics</div>
+          </div>
 
           <button class="welcome-start-btn" id="start-test-btn">
             Start Test
@@ -142,9 +176,106 @@
       const btn = document.createElement("button");
       btn.className = "grid-question-btn";
       btn.textContent = index + 1;
+
+      // Add flag indicator if question is flagged
+      if (userAnswers[index]?.flagged) {
+        const flagIcon = document.createElement("span");
+        flagIcon.className = "grid-flag-icon";
+        flagIcon.textContent = "🚩";
+        btn.appendChild(flagIcon);
+      }
+
       btn.onclick = () => jumpToQuestion(index);
       questionGrid.appendChild(btn);
     });
+  }
+
+  // Timer functions
+  function startTimer() {
+    if (!timedMode || currentTimer) return;
+
+    timerSeconds = timerDuration;
+    questionStartTime = Date.now();
+    updateTimerDisplay();
+
+    currentTimer = setInterval(() => {
+      if (!timerPaused) {
+        timerSeconds--;
+        updateTimerDisplay();
+
+        // Warning at 10 seconds
+        if (timerSeconds === 10) {
+          timerDisplay.classList.add('timer-warning');
+        }
+
+        // Time's up
+        if (timerSeconds <= 0) {
+          stopTimer();
+          handleTimeExpired();
+        }
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (currentTimer) {
+      clearInterval(currentTimer);
+      currentTimer = null;
+    }
+    timerDisplay.classList.remove('timer-warning');
+
+    // Record time spent if question is being submitted
+    if (questionStartTime) {
+      const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+      if (!userAnswers[currentQuestionIndex]) {
+        userAnswers[currentQuestionIndex] = {};
+      }
+      userAnswers[currentQuestionIndex].timeSpent = timeSpent;
+      questionStartTime = null;
+    }
+  }
+
+  function pauseTimer() {
+    timerPaused = true;
+    timerToggleBtn.textContent = '▶';
+    timerToggleBtn.setAttribute('aria-label', 'Resume timer');
+  }
+
+  function resumeTimer() {
+    timerPaused = false;
+    timerToggleBtn.textContent = '⏸';
+    timerToggleBtn.setAttribute('aria-label', 'Pause timer');
+  }
+
+  function updateTimerDisplay() {
+    const minutes = Math.floor(timerSeconds / 60);
+    const seconds = timerSeconds % 60;
+    timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  function handleTimeExpired() {
+    // Auto-submit if an answer is selected, otherwise just mark as skipped
+    const answer = userAnswers[currentQuestionIndex];
+    if (answer?.selected && !answer.submitted) {
+      handleSubmit();
+    } else {
+      showToast('⏰ Time expired! Moving to next question', 'warning');
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+          goToNext();
+        }
+      }, 1500);
+    }
+  }
+
+  // Toggle flag on current question
+  function toggleFlag() {
+    if (!userAnswers[currentQuestionIndex]) {
+      userAnswers[currentQuestionIndex] = {};
+    }
+    userAnswers[currentQuestionIndex].flagged = !userAnswers[currentQuestionIndex].flagged;
+    renderQuestion();
+    updateQuestionGrid();
   }
 
   // Render current question
@@ -190,10 +321,16 @@
       html += '</div>';
     }
 
-    // Question metadata
+    // Question metadata with flag button
     html += '<div class="question-meta">';
     const meta = [question.subject, question.system, question.topic].filter(Boolean).join(' • ');
     if (meta) html += `<p class="meta-text">${meta}</p>`;
+
+    // Flag button
+    const isFlagged = answer?.flagged || false;
+    html += `<button id="flag-btn" class="flag-btn ${isFlagged ? 'flagged' : ''}" aria-label="${isFlagged ? 'Unflag question' : 'Flag question for review'}">
+      ${isFlagged ? '🚩 Flagged' : '🏳️ Flag'}
+    </button>`;
     html += '</div>';
 
     // Question stem
@@ -280,6 +417,12 @@
       });
     }
 
+    // Add flag button event listener
+    const flagBtn = document.getElementById('flag-btn');
+    if (flagBtn) {
+      flagBtn.addEventListener('click', toggleFlag);
+    }
+
     // Update submit button state
     const hasSelection = answer?.selected;
     submitBtn.disabled = !hasSelection || isSubmitted;
@@ -287,6 +430,17 @@
       submitBtn.style.display = 'none';
     } else {
       submitBtn.style.display = 'inline-block';
+    }
+
+    // Start timer for this question if in timed mode and not already submitted
+    if (!isSubmitted) {
+      stopTimer(); // Stop any existing timer
+      if (timedMode) {
+        startTimer();
+      } else if (!questionStartTime) {
+        // Track time even without timer visible
+        questionStartTime = Date.now();
+      }
     }
   }
 
@@ -305,6 +459,9 @@
   function handleSubmit() {
     const answer = userAnswers[currentQuestionIndex];
     if (!answer || !answer.selected) return;
+
+    // Stop timer and record time spent
+    stopTimer();
 
     const question = questions[currentQuestionIndex];
     const correctAnswer = question.correctAnswer;
@@ -499,6 +656,8 @@
         show = answer?.submitted && !answer.correct;
       } else if (filterType === 'unanswered') {
         show = !answer?.submitted;
+      } else if (filterType === 'flagged') {
+        show = answer?.flagged === true;
       }
       // 'all' shows everything (show = true)
 
@@ -509,6 +668,7 @@
     showAllBtn.classList.toggle('active', filterType === 'all');
     showIncorrectBtn.classList.toggle('active', filterType === 'incorrect');
     showUnansweredBtn.classList.toggle('active', filterType === 'unanswered');
+    showFlaggedBtn.classList.toggle('active', filterType === 'flagged');
   }
 
   // Update topic mastery display
@@ -600,6 +760,194 @@
     questionMenu.hidden = true;
   }
 
+  // Generic toast notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // Settings modal functions
+  function openSettings() {
+    settingsModal.hidden = false;
+    timedModeToggle.checked = timedMode;
+    timerDurationInput.value = timerDuration;
+    timerDurationGroup.hidden = !timedMode;
+  }
+
+  function closeSettings() {
+    settingsModal.hidden = true;
+  }
+
+  function saveSettings() {
+    const wasTimedMode = timedMode;
+    timedMode = timedModeToggle.checked;
+    timerDuration = parseInt(timerDurationInput.value);
+
+    // Show/hide timer display
+    timerDisplay.hidden = !timedMode;
+
+    // If switching from untimed to timed mode on current question
+    if (!wasTimedMode && timedMode && !userAnswers[currentQuestionIndex]?.submitted) {
+      startTimer();
+    }
+
+    // If switching from timed to untimed, stop timer
+    if (wasTimedMode && !timedMode) {
+      stopTimer();
+    }
+
+    closeSettings();
+    showToast(timedMode ? `Timed mode enabled (${timerDuration}s per question)` : 'Timed mode disabled', 'success');
+  }
+
+  // Session summary functions
+  function showSessionSummary() {
+    const answered = Object.values(userAnswers).filter(a => a.submitted).length;
+    const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
+    const incorrect = answered - correct;
+    const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+    const flagged = Object.values(userAnswers).filter(a => a.flagged).length;
+
+    // Calculate time statistics
+    const timesSpent = Object.values(userAnswers).filter(a => a.timeSpent).map(a => a.timeSpent);
+    const totalTime = timesSpent.reduce((sum, time) => sum + time, 0);
+    const avgTime = timesSpent.length > 0 ? Math.round(totalTime / timesSpent.length) : 0;
+
+    // Calculate topic performance
+    const topicStats = {};
+    questions.forEach((q, index) => {
+      const topic = q.topic || 'General';
+      if (!topicStats[topic]) {
+        topicStats[topic] = { correct: 0, total: 0 };
+      }
+
+      const answer = userAnswers[index];
+      if (answer?.submitted) {
+        topicStats[topic].total++;
+        if (answer.correct) {
+          topicStats[topic].correct++;
+        }
+      }
+    });
+
+    // Sort topics by performance (worst first)
+    const sortedTopics = Object.entries(topicStats)
+      .filter(([_, stats]) => stats.total > 0)
+      .map(([topic, stats]) => ({
+        topic,
+        ...stats,
+        percentage: Math.round((stats.correct / stats.total) * 100)
+      }))
+      .sort((a, b) => a.percentage - b.percentage);
+
+    let html = `
+      <div class="summary-stats">
+        <div class="summary-stat-card">
+          <div class="stat-number">${answered}</div>
+          <div class="stat-label">Questions Answered</div>
+        </div>
+        <div class="summary-stat-card ${percentage >= 70 ? 'stat-success' : ''}">
+          <div class="stat-number">${percentage}%</div>
+          <div class="stat-label">Overall Accuracy</div>
+        </div>
+        <div class="summary-stat-card stat-success">
+          <div class="stat-number">${correct}</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="summary-stat-card stat-error">
+          <div class="stat-number">${incorrect}</div>
+          <div class="stat-label">Incorrect</div>
+        </div>
+      </div>
+
+      ${timesSpent.length > 0 ? `
+        <div class="summary-time">
+          <h3>Time Analysis</h3>
+          <div class="time-stats">
+            <div><strong>Total time:</strong> ${Math.floor(totalTime / 60)}m ${totalTime % 60}s</div>
+            <div><strong>Average per question:</strong> ${avgTime}s</div>
+            ${avgTime > timerDuration ? `<div class="time-warning">⚠️ Consider practicing under timed conditions (${timerDuration}s target)</div>` : ''}
+          </div>
+        </div>
+      ` : ''}
+
+      ${sortedTopics.length > 0 ? `
+        <div class="summary-topics">
+          <h3>Topic Performance</h3>
+          <div class="summary-topic-list">
+            ${sortedTopics.map(t => `
+              <div class="summary-topic-item">
+                <div class="summary-topic-header">
+                  <span class="summary-topic-name">${t.topic}</span>
+                  <span class="summary-topic-score">${t.correct}/${t.total} (${t.percentage}%)</span>
+                </div>
+                <div class="summary-topic-bar">
+                  <div class="summary-topic-bar-fill ${t.percentage >= 70 ? 'fill-success' : t.percentage >= 50 ? 'fill-warning' : 'fill-error'}" style="width: ${t.percentage}%"></div>
+                </div>
+                ${t.percentage < 70 ? '<div class="summary-topic-suggestion">📚 Review this topic</div>' : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      ${flagged > 0 ? `
+        <div class="summary-flagged">
+          <p>🚩 You have <strong>${flagged} flagged question${flagged > 1 ? 's' : ''}</strong> to review</p>
+        </div>
+      ` : ''}
+
+      ${answered < questions.length ? `
+        <div class="summary-incomplete">
+          <p>📝 ${questions.length - answered} questions remaining</p>
+        </div>
+      ` : `
+        <div class="summary-complete">
+          <p>🎉 Congratulations! You've completed all ${questions.length} questions!</p>
+          ${percentage >= 80 ? '<p>Outstanding performance! 🏆</p>' : percentage >= 70 ? '<p>Great work! Keep it up! ⭐</p>' : '<p>Review the topics above and try again! 💪</p>'}
+        </div>
+      `}
+    `;
+
+    summaryContent.innerHTML = html;
+    sessionSummaryModal.hidden = false;
+    closeMenu();
+  }
+
+  function closeSessionSummary() {
+    sessionSummaryModal.hidden = true;
+  }
+
+  // Reset progress function
+  function resetProgress() {
+    if (!confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+      return;
+    }
+
+    userAnswers = {};
+    currentStreak = 0;
+    bestStreak = 0;
+    milestonesShown = [];
+    currentQuestionIndex = 0;
+
+    stopTimer();
+    renderQuestion();
+    updateStats();
+    closeMenu();
+    closeSessionSummary();
+
+    showToast('Progress reset. Starting fresh!', 'success');
+  }
+
   // Event listeners
   prevBtn.addEventListener('click', goToPrevious);
   nextBtn.addEventListener('click', goToNext);
@@ -611,6 +959,30 @@
   showAllBtn.addEventListener('click', () => filterQuestionGrid('all'));
   showIncorrectBtn.addEventListener('click', () => filterQuestionGrid('incorrect'));
   showUnansweredBtn.addEventListener('click', () => filterQuestionGrid('unanswered'));
+  showFlaggedBtn.addEventListener('click', () => filterQuestionGrid('flagged'));
+
+  // New feature event listeners
+  settingsBtn.addEventListener('click', openSettings);
+  settingsClose.addEventListener('click', closeSettings);
+  settingsSaveBtn.addEventListener('click', saveSettings);
+  timedModeToggle.addEventListener('change', (e) => {
+    timerDurationGroup.hidden = !e.target.checked;
+  });
+  timerToggleBtn.addEventListener('click', () => {
+    if (timerPaused) {
+      resumeTimer();
+    } else {
+      pauseTimer();
+    }
+  });
+  endSessionBtn.addEventListener('click', showSessionSummary);
+  resetProgressBtn.addEventListener('click', resetProgress);
+  summaryClose.addEventListener('click', closeSessionSummary);
+  summaryContinue.addEventListener('click', closeSessionSummary);
+  summaryReset.addEventListener('click', () => {
+    closeSessionSummary();
+    resetProgress();
+  });
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
