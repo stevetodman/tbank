@@ -23,14 +23,25 @@ def sync_question_banks() -> None:
   DEST_DIR.mkdir(parents=True, exist_ok=True)
 
   # Remove previous files to prevent stale assets
-  for existing in DEST_DIR.glob("*"):
-    if existing.is_file():
+  for existing in DEST_DIR.iterdir():
+    if existing.is_file() or existing.is_symlink():
       existing.unlink()
+    elif existing.is_dir():
+      shutil.rmtree(existing)
 
-  for path in SOURCE_DIR.glob("*.*"):
-    if path.suffix.lower() not in {".json", ".md"}:
+  for source_path in SOURCE_DIR.rglob("*"):
+    relative_path = source_path.relative_to(SOURCE_DIR)
+    destination_path = DEST_DIR / relative_path
+
+    if source_path.is_dir():
+      destination_path.mkdir(parents=True, exist_ok=True)
       continue
-    shutil.copy2(path, DEST_DIR / path.name)
+
+    if source_path.suffix.lower() not in {".json", ".md"}:
+      continue
+
+    destination_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_path, destination_path)
 
 
 if __name__ == "__main__":
