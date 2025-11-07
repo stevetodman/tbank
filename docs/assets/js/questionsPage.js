@@ -75,7 +75,10 @@
     list.className = "answer-choices";
     question.answerChoices.forEach((choice) => {
       const item = document.createElement("li");
-      item.innerHTML = `<strong>${choice.letter}.</strong> ${choice.text}`;
+      const strong = document.createElement("strong");
+      strong.textContent = `${choice.letter}.`;
+      item.appendChild(strong);
+      item.appendChild(document.createTextNode(` ${choice.text}`));
       if (choice.isCorrect) {
         item.classList.add("answer-correct");
       }
@@ -184,7 +187,10 @@
     answer.className = "question-answer";
 
     const correct = document.createElement("p");
-    correct.innerHTML = `<strong>Correct answer:</strong> ${question.correctAnswer || "See explanation"}`;
+    const correctStrong = document.createElement("strong");
+    correctStrong.textContent = "Correct answer:";
+    correct.appendChild(correctStrong);
+    correct.appendChild(document.createTextNode(` ${question.correctAnswer || "See explanation"}`));
     answer.appendChild(correct);
 
     if (question.explanation?.correct) {
@@ -195,13 +201,18 @@
 
     if (question.educationalObjective) {
       const objective = document.createElement("p");
-      objective.innerHTML = `<strong>Objective:</strong> ${question.educationalObjective}`;
+      const objectiveStrong = document.createElement("strong");
+      objectiveStrong.textContent = "Objective:";
+      objective.appendChild(objectiveStrong);
+      objective.appendChild(document.createTextNode(` ${question.educationalObjective}`));
       answer.appendChild(objective);
     }
 
     if (question.keyFacts && question.keyFacts.length > 0) {
       const keyFactTitle = document.createElement("p");
-      keyFactTitle.innerHTML = "<strong>Key facts:</strong>";
+      const keyFactStrong = document.createElement("strong");
+      keyFactStrong.textContent = "Key facts:";
+      keyFactTitle.appendChild(keyFactStrong);
       answer.appendChild(keyFactTitle);
       const factList = document.createElement("ul");
       question.keyFacts.forEach((fact) => {
