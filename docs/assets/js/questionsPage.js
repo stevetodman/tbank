@@ -13,6 +13,7 @@
 
   let activeSetId = null;
   let fullQuestionSet = [];
+  let abortController = null;
 
   function setBusy(isBusy) {
     if (!statusSection) return;
@@ -75,7 +76,10 @@
     list.className = "answer-choices";
     question.answerChoices.forEach((choice) => {
       const item = document.createElement("li");
-      item.innerHTML = `<strong>${choice.letter}.</strong> ${choice.text}`;
+      const strong = document.createElement("strong");
+      strong.textContent = `${choice.letter}.`;
+      item.appendChild(strong);
+      item.appendChild(document.createTextNode(` ${choice.text}`));
       if (choice.isCorrect) {
         item.classList.add("answer-correct");
       }
@@ -184,7 +188,10 @@
     answer.className = "question-answer";
 
     const correct = document.createElement("p");
-    correct.innerHTML = `<strong>Correct answer:</strong> ${question.correctAnswer || "See explanation"}`;
+    const correctStrong = document.createElement("strong");
+    correctStrong.textContent = "Correct answer:";
+    correct.appendChild(correctStrong);
+    correct.appendChild(document.createTextNode(` ${question.correctAnswer || "See explanation"}`));
     answer.appendChild(correct);
 
     if (question.explanation?.correct) {
@@ -195,13 +202,18 @@
 
     if (question.educationalObjective) {
       const objective = document.createElement("p");
-      objective.innerHTML = `<strong>Objective:</strong> ${question.educationalObjective}`;
+      const objectiveStrong = document.createElement("strong");
+      objectiveStrong.textContent = "Objective:";
+      objective.appendChild(objectiveStrong);
+      objective.appendChild(document.createTextNode(` ${question.educationalObjective}`));
       answer.appendChild(objective);
     }
 
     if (question.keyFacts && question.keyFacts.length > 0) {
       const keyFactTitle = document.createElement("p");
-      keyFactTitle.innerHTML = "<strong>Key facts:</strong>";
+      const keyFactStrong = document.createElement("strong");
+      keyFactStrong.textContent = "Key facts:";
+      keyFactTitle.appendChild(keyFactStrong);
       answer.appendChild(keyFactTitle);
       const factList = document.createElement("ul");
       question.keyFacts.forEach((fact) => {
@@ -251,6 +263,45 @@
     return text.toLowerCase().trim();
   }
 
+  function validateQuestionBank(data) {
+    if (!data || typeof data !== "object") {
+      return { valid: false, error: "Invalid data format: expected object" };
+    }
+
+    if (!data.questionBank || typeof data.questionBank !== "object") {
+      return { valid: false, error: "Missing or invalid questionBank property" };
+    }
+
+    if (!Array.isArray(data.questionBank.questions)) {
+      return { valid: false, error: "Missing or invalid questions array" };
+    }
+
+    const questions = data.questionBank.questions;
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      if (!q || typeof q !== "object") {
+        return { valid: false, error: `Question ${i} is not an object` };
+      }
+
+      const requiredFields = ["id", "title"];
+      for (const field of requiredFields) {
+        if (!q[field]) {
+          return { valid: false, error: `Question ${i} missing required field: ${field}` };
+        }
+      }
+
+      if (!q.vignette && !q.questionText) {
+        return { valid: false, error: `Question ${i} missing both vignette and questionText` };
+      }
+
+      if (q.answerChoices && !Array.isArray(q.answerChoices)) {
+        return { valid: false, error: `Question ${i} answerChoices is not an array` };
+      }
+    }
+
+    return { valid: true };
+  }
+
   function filterQuestions() {
     const term = normalise(searchInput?.value || "");
     const system = systemFilter?.value || "";
@@ -289,21 +340,37 @@
       return;
     }
 
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
     activeSetId = id;
     setBusy(true);
     summary.textContent = "Loading questions...";
 
     try {
-      const response = await fetch(`../${selected.downloads.json}`);
+      const response = await fetch(`../${selected.downloads.json}`, {
+        signal: abortController.signal
+      });
       if (!response.ok) {
         throw new Error(`Failed to load question set: ${response.status}`);
       }
       const data = await response.json();
-      fullQuestionSet = data.questionBank?.questions || [];
+
+      const validation = validateQuestionBank(data);
+      if (!validation.valid) {
+        throw new Error(`Invalid question bank format: ${validation.error}`);
+      }
+
+      fullQuestionSet = data.questionBank.questions;
       populateSystems(fullQuestionSet);
       filterQuestions();
       summary.textContent = `${fullQuestionSet.length} questions loaded from ${selected.title}.`;
     } catch (error) {
+      if (error.name === "AbortError") {
+        return;
+      }
       console.error(error);
       summary.textContent = "We couldn't load that question set. Please try again.";
       fullQuestionSet = [];
