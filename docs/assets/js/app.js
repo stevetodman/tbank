@@ -90,6 +90,14 @@
 
   // Load questions from JSON
   async function loadQuestions() {
+    // Show loading indicator
+    questionDisplay.innerHTML = `
+      <div style="text-align: center; padding: 4rem 1rem;">
+        <div class="loading-spinner"></div>
+        <p>Loading questions...</p>
+      </div>
+    `;
+
     try {
       const response = await fetch("assets/question_banks/all_questions.json");
       if (!response.ok) throw new Error("Failed to load questions");
@@ -647,10 +655,22 @@
       }
     }
 
-    // Restore scroll position for iOS (prevent scroll to top)
+    // Scroll to top of question display on mobile for better UX
     // Use requestAnimationFrame to ensure DOM has updated
     requestAnimationFrame(() => {
-      window.scrollTo(0, scrollY);
+      if (window.innerWidth <= 768) {
+        // On mobile, scroll to question display smoothly
+        const questionDisplay = document.getElementById('question-display');
+        if (questionDisplay) {
+          questionDisplay.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      } else {
+        // On desktop, restore scroll position (iOS fix)
+        window.scrollTo(0, scrollY);
+      }
     });
   }
 
@@ -950,12 +970,14 @@
   // Menu controls
   function openMenu() {
     questionMenu.hidden = false;
+    document.body.style.overflow = 'hidden';
     updateStats();
     updateTopicMastery();
   }
 
   function closeMenu() {
     questionMenu.hidden = true;
+    document.body.style.overflow = '';
   }
 
   // Generic toast notification
@@ -977,6 +999,7 @@
   function openSettings() {
     settingsModal.hidden = false;
     settingsModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -985,6 +1008,7 @@
   function closeSettings() {
     settingsModal.hidden = true;
     settingsModal.style.display = 'none';
+    document.body.style.overflow = '';
   }
 
   function saveSettings() {
@@ -1121,12 +1145,14 @@
     summaryContent.innerHTML = html;
     sessionSummaryModal.hidden = false;
     sessionSummaryModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     closeMenu();
   }
 
   function closeSessionSummary() {
     sessionSummaryModal.hidden = true;
     sessionSummaryModal.style.display = 'none';
+    document.body.style.overflow = '';
   }
 
   // Reset progress function
@@ -1201,6 +1227,28 @@
   // Initialize highlighting (only once)
   initializeHighlighting();
 
+  // iOS Keyboard Detection and Modal Adjustment
+  function initKeyboardHandling() {
+    if (!window.visualViewport) return;
+
+    window.visualViewport.addEventListener('resize', () => {
+      const modal = document.querySelector('.modal:not([hidden])');
+      if (modal && window.visualViewport.height < window.innerHeight) {
+        // Keyboard is open
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+          modalContent.style.maxHeight = `${window.visualViewport.height * 0.9}px`;
+        }
+      } else {
+        // Keyboard is closed, reset
+        const modalContent = modal?.querySelector('.modal-content');
+        if (modalContent) {
+          modalContent.style.maxHeight = '';
+        }
+      }
+    });
+  }
+
   // Performance monitoring (production only)
   function initPerformanceMonitoring() {
     // Only run performance monitoring in production (not localhost)
@@ -1241,7 +1289,27 @@
     }
   }
 
+  // Offline/Online detection
+  function initOfflineSupport() {
+    window.addEventListener('offline', () => {
+      showToast('You are offline. Your progress is still saved locally.', 'warning');
+    });
+
+    window.addEventListener('online', () => {
+      showToast('Back online!', 'success');
+    });
+
+    // Show initial offline status if offline
+    if (!navigator.onLine) {
+      setTimeout(() => {
+        showToast('You are currently offline. The app will still work!', 'info');
+      }, 1000);
+    }
+  }
+
   // Initialize app
   loadQuestions();
   initPerformanceMonitoring();
+  initKeyboardHandling();
+  initOfflineSupport();
 })();
