@@ -612,7 +612,7 @@
 
 .welcome-subtitle {
   font-size: 1.25rem;
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-800); /* Darker for better contrast on Mac */
   margin: 0 0 2rem 0;
 }
 
@@ -638,7 +638,7 @@
 
 .stat-label {
   font-size: 0.9rem;
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-700); /* Darker for better contrast on Mac */
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -646,7 +646,7 @@
 .welcome-description {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: var(--color-text);
+  color: var(--color-neutral-800); /* Darker for better contrast on Mac */
   margin: 0 0 2.5rem 0;
 }
 
