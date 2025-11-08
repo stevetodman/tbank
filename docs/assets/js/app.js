@@ -260,6 +260,7 @@
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
   const submitBtn = document.getElementById('submit-btn');
+  const skipBtn = document.getElementById('skip-btn');
   const menuToggle = document.getElementById('menu-toggle');
   const menuClose = document.getElementById('menu-close');
   const questionMenu = document.getElementById('question-menu');
@@ -1724,13 +1725,16 @@
       });
     }
 
-    // Update submit button state
+    // Update submit and skip button state (Issue #23)
     const hasSelection = answer?.selected;
     submitBtn.disabled = !hasSelection || isSubmitted;
     if (isSubmitted) {
       submitBtn.style.display = 'none';
+      skipBtn.hidden = true;
     } else {
       submitBtn.style.display = 'inline-block';
+      // Show skip button only if question is not yet answered
+      skipBtn.hidden = false;
     }
 
     // Start timer for this question if in timed mode and not already submitted
@@ -2546,10 +2550,39 @@
     showToast('Progress reset. Starting fresh!', 'success');
   }
 
+  // Handle skip question (Issue #23)
+  function handleSkip() {
+    const answer = userAnswers[currentQuestionIndex];
+
+    // Mark as skipped
+    if (!userAnswers[currentQuestionIndex]) {
+      userAnswers[currentQuestionIndex] = {};
+    }
+    userAnswers[currentQuestionIndex].skipped = true;
+
+    // Save state
+    saveState();
+
+    // Update grid
+    updateQuestionGrid();
+
+    // Haptic feedback
+    HapticEngine.subtle();
+
+    // Move to next question if available
+    if (currentQuestionIndex < questions.length - 1) {
+      goToNext();
+      showToast('Question skipped', 'info');
+    } else {
+      showToast('No more questions. Review skipped questions from the menu.', 'info');
+    }
+  }
+
   // Event listeners
   prevBtn.addEventListener('click', goToPrevious);
   nextBtn.addEventListener('click', goToNext);
   submitBtn.addEventListener('click', handleSubmit);
+  skipBtn.addEventListener('click', handleSkip);
   menuToggle.addEventListener('click', openMenu);
   menuClose.addEventListener('click', closeMenu);
 

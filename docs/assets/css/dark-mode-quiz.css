@@ -106,6 +106,19 @@ body.dark-mode .submit-btn:disabled {
   border-color: #4b5563;
 }
 
+/* Dark mode for Skip Button (Issue #23) */
+body.dark-mode .skip-btn {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .skip-btn:hover {
+  background: #4b5563;
+  border-color: #6b7280;
+  color: #f9fafb;
+}
+
 body.dark-mode .flag-btn {
   background-color: #1f2937;
   border-color: #374151;

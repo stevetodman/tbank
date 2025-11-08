@@ -721,6 +721,29 @@
   box-shadow: none;
 }
 
+/* Skip Button (Issue #23) */
+.skip-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.skip-btn:hover {
+  background: var(--color-neutral-200);
+  border-color: var(--color-neutral-400);
+  color: var(--color-neutral-900);
+}
+
+.skip-btn:active {
+  transform: translateY(1px);
+}
+
 /* Error State */
 .error {
   color: var(--color-error-600);
