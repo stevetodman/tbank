@@ -1912,9 +1912,10 @@
   }
 
   // Create confetti animation
+  // Issue #35: Less intrusive confetti
   function createConfetti() {
     const colors = ['#3182ce', '#38a169', '#e53e3e', '#d69e2e', '#805ad5', '#dd6b20'];
-    const confettiCount = 50;
+    const confettiCount = 25; // Reduced from 50 to 25
 
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div');
@@ -1922,33 +1923,33 @@
       confetti.style.left = Math.random() * 100 + '%';
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.animationDelay = Math.random() * 0.3 + 's';
-      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      confetti.style.animationDuration = (Math.random() * 1.5 + 2) + 's'; // Faster: 2-3.5s instead of 2-4s
 
-      // Randomize size and shape
-      const size = Math.random() * 8 + 4;
+      // Randomize size and shape (slightly smaller)
+      const size = Math.random() * 6 + 3; // 3-9px instead of 4-12px
       confetti.style.width = size + 'px';
       confetti.style.height = size + 'px';
 
       document.body.appendChild(confetti);
 
-      // Remove confetti after animation
-      setTimeout(() => confetti.remove(), 4000);
+      // Remove confetti after animation (faster cleanup)
+      setTimeout(() => confetti.remove(), 3000); // 3s instead of 4s
     }
   }
 
-  // Show streak notification
+  // Show streak notification - Issue #35: Less intrusive
   function showStreakNotification(streak) {
     const messages = {
-      3: '🔥 3 in a row! You\'re on fire!',
-      5: '🌟 5 correct in a row! Amazing streak!',
-      10: '🎯 10 in a row! Incredible mastery!'
+      3: '🔥 3 in a row!',
+      5: '🌟 5 correct in a row!',
+      10: '🎯 10 in a row! Incredible!'
     };
 
-    // Celebration haptic for streak milestones
-    HapticEngine.celebration();
+    // Medium haptic instead of celebration (less intense)
+    HapticEngine.medium();
 
-    // Confetti for bigger milestones
-    if (streak >= 5) {
+    // Confetti only for 10+ streak (Issue #35: less intrusive)
+    if (streak >= 10) {
       createConfetti();
     }
 
