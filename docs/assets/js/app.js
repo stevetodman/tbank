@@ -176,6 +176,9 @@
   // Dark mode state
   let darkModeEnabled = false;
 
+  // Pull-to-refresh state
+  let pullToRefreshEnabled = false;
+
   // Highlighting state
   let highlightToolbar = null;
   let currentSelection = null;
@@ -209,6 +212,7 @@
   const settingsModal = document.getElementById("settings-modal");
   const settingsClose = document.getElementById("settings-close");
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const pullToRefreshToggle = document.getElementById("pull-to-refresh-toggle");
   const timedModeToggle = document.getElementById("timed-mode-toggle");
   const timerDurationInput = document.getElementById("timer-duration");
   const timerDurationGroup = document.getElementById("timer-duration-group");
@@ -290,9 +294,14 @@
             <div class="welcome-feature">📊 Detailed performance analytics</div>
           </div>
 
-          <button class="welcome-start-btn" id="start-test-btn">
-            Start Test
-          </button>
+          <div class="welcome-actions">
+            <button class="welcome-start-btn" id="start-test-btn">
+              Start Test
+            </button>
+            <button class="welcome-tour-btn" id="start-tour-btn">
+              📱 Take a Tour
+            </button>
+          </div>
 
           <div class="keyboard-shortcuts">
             <p><strong>Keyboard shortcuts:</strong></p>
@@ -309,8 +318,9 @@
     nextBtn.style.display = 'none';
     submitBtn.style.display = 'none';
 
-    // Add event listener for start button
+    // Add event listeners
     document.getElementById('start-test-btn').addEventListener('click', startTest);
+    document.getElementById('start-tour-btn').addEventListener('click', startTour);
   }
 
   // Start the test
@@ -323,6 +333,208 @@
 
     // Show keyboard hint after a moment
     setTimeout(showKeyboardHint, CONSTANTS.KEYBOARD_HINT_DELAY);
+  }
+
+  // Interactive tutorial system
+  function startTour() {
+    const tourSteps = [
+      {
+        title: 'Welcome to TBank! 👋',
+        content: `TBank is optimized for mobile learning with advanced features designed to enhance your study experience. Let's explore what makes it special!`,
+        highlight: null,
+        screenshot: null
+      },
+      {
+        title: 'Dark Mode 🌙',
+        content: `Study comfortably day or night with automatic dark mode.<br><br>
+                  <strong>Features:</strong><br>
+                  • Automatic system theme detection<br>
+                  • Manual toggle in ⚙️ Settings<br>
+                  • Easy on the eyes for long study sessions`,
+        highlight: '#settings-btn',
+        screenshot: '⚙️'
+      },
+      {
+        title: 'Haptic Feedback 📳',
+        content: `Feel the difference with intelligent haptic feedback:<br><br>
+                  <strong>Vibrations for:</strong><br>
+                  • Answer selection (light tap)<br>
+                  • Correct answers (success pattern)<br>
+                  • Incorrect answers (error pattern)<br>
+                  • Streaks & milestones (celebration)<br>
+                  • Timer warnings (alert vibration)`,
+        highlight: null,
+        screenshot: '📳'
+      },
+      {
+        title: 'Advanced Gestures 👆',
+        content: `Navigate effortlessly with touch gestures:<br><br>
+                  <strong>Swipe left/right on question:</strong> Navigate<br>
+                  <strong>Swipe left on answer:</strong> Cross out (eliminate)<br>
+                  <strong>Swipe right:</strong> Undo elimination<br>
+                  <strong>Double-tap answer:</strong> Select & submit<br>
+                  <strong>Long-press flag button:</strong> Quick navigation menu`,
+        highlight: null,
+        screenshot: '👆'
+      },
+      {
+        title: 'Pull-to-Refresh 🔄',
+        content: `Want to practice in random order?<br><br>
+                  <strong>How to use:</strong><br>
+                  1. Enable in ⚙️ Settings<br>
+                  2. Pull down at top of question<br>
+                  3. Release to randomize all questions<br><br>
+                  Your progress is preserved!`,
+        highlight: '#settings-btn',
+        screenshot: '🔄'
+      },
+      {
+        title: 'Share Your Progress 📤',
+        content: `Celebrate your achievements!<br><br>
+                  After completing questions, use the share button to:<br>
+                  • Share results with study partners<br>
+                  • Track your improvement<br>
+                  • Motivate yourself and others<br><br>
+                  Uses native mobile sharing (or clipboard on desktop)`,
+        highlight: null,
+        screenshot: '📤'
+      },
+      {
+        title: 'Question Menu ☰',
+        content: `Quick access to all features:<br><br>
+                  • View all questions at a glance<br>
+                  • Filter by answered/unanswered/flagged<br>
+                  • See your progress and accuracy<br>
+                  • End session to review results<br>
+                  • Reset progress anytime`,
+        highlight: '#menu-toggle',
+        screenshot: '☰'
+      },
+      {
+        title: 'Install as App 📱',
+        content: `For the best experience, install TBank:<br><br>
+                  <strong>On iPhone:</strong><br>
+                  Safari → Share → Add to Home Screen<br><br>
+                  <strong>On Android:</strong><br>
+                  Chrome → Menu → Install App<br><br>
+                  Works offline after installation!`,
+        highlight: null,
+        screenshot: '📱'
+      },
+      {
+        title: 'Ready to Begin! 🚀',
+        content: `You're all set to start learning!<br><br>
+                  <strong>Quick Tips:</strong><br>
+                  • Use timed mode for exam practice<br>
+                  • Flag difficult questions for review<br>
+                  • Check explanations for every answer<br>
+                  • Track your progress in the menu<br><br>
+                  Good luck with your studies!`,
+        highlight: null,
+        screenshot: '🎓'
+      }
+    ];
+
+    let currentStep = 0;
+
+    function showTourStep(stepIndex) {
+      const step = tourSteps[stepIndex];
+
+      // Remove any existing highlights
+      document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+
+      // Create tour overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'tour-overlay';
+      overlay.innerHTML = `
+        <div class="tour-modal">
+          <div class="tour-header">
+            <span class="tour-step-indicator">Step ${stepIndex + 1} of ${tourSteps.length}</span>
+            <button class="tour-close" aria-label="Close tour">&times;</button>
+          </div>
+          <div class="tour-content">
+            ${step.screenshot ? `<div class="tour-icon">${step.screenshot}</div>` : ''}
+            <h2>${step.title}</h2>
+            <div class="tour-description">${step.content}</div>
+          </div>
+          <div class="tour-footer">
+            <button class="tour-btn tour-btn-secondary" id="tour-skip">Skip Tour</button>
+            <div class="tour-nav-buttons">
+              ${stepIndex > 0 ? '<button class="tour-btn tour-btn-secondary" id="tour-prev">← Previous</button>' : ''}
+              <button class="tour-btn tour-btn-primary" id="tour-next">
+                ${stepIndex < tourSteps.length - 1 ? 'Next →' : 'Start Test!'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      // Highlight element if specified
+      if (step.highlight) {
+        const element = document.querySelector(step.highlight);
+        if (element) {
+          element.classList.add('tour-highlight');
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      // Add event listeners
+      overlay.querySelector('.tour-close').addEventListener('click', () => {
+        HapticEngine.light();
+        closeTour(overlay);
+      });
+
+      overlay.querySelector('#tour-skip').addEventListener('click', () => {
+        HapticEngine.light();
+        closeTour(overlay);
+      });
+
+      const prevBtn = overlay.querySelector('#tour-prev');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          HapticEngine.light();
+          currentStep--;
+          overlay.remove();
+          showTourStep(currentStep);
+        });
+      }
+
+      overlay.querySelector('#tour-next').addEventListener('click', () => {
+        HapticEngine.medium();
+        currentStep++;
+        overlay.remove();
+
+        if (currentStep >= tourSteps.length) {
+          // Tour complete, start the test
+          localStorage.setItem('tourCompleted', 'true');
+          closeTour();
+          startTest();
+        } else {
+          showTourStep(currentStep);
+        }
+      });
+
+      // Show with animation
+      setTimeout(() => overlay.classList.add('show'), 10);
+    }
+
+    function closeTour(overlay) {
+      document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+      if (overlay) {
+        overlay.classList.remove('show');
+        setTimeout(() => overlay.remove(), 300);
+      } else {
+        document.querySelectorAll('.tour-overlay').forEach(el => {
+          el.classList.remove('show');
+          setTimeout(() => el.remove(), 300);
+        });
+      }
+    }
+
+    // Start the tour
+    showTourStep(0);
   }
 
   // Show keyboard hint toast
@@ -447,6 +659,7 @@
   function initPullToRefresh() {
     const questionDisplay = document.getElementById('question-display');
     let pullStartY = 0;
+    let pullStartTime = 0;
     let pulling = false;
     let pullIndicator = null;
 
@@ -464,7 +677,7 @@
     // Update pull indicator based on distance
     function updatePullIndicator(distance) {
       const indicator = createPullIndicator();
-      const threshold = 80;
+      const threshold = 120; // Increased from 80px to 120px
       const percentage = Math.min((distance / threshold) * 100, 100);
 
       indicator.style.height = `${Math.min(distance, threshold)}px`;
@@ -484,23 +697,28 @@
 
     // Handle touch start
     questionDisplay.addEventListener('touchstart', (e) => {
-      // Only activate at top of scroll
-      if (questionDisplay.scrollTop === 0 && !pulling) {
+      // Only activate if feature is enabled, at top of scroll, and not already pulling
+      if (pullToRefreshEnabled && questionDisplay.scrollTop === 0 && !pulling) {
         pullStartY = e.touches[0].clientY;
+        pullStartTime = Date.now();
       }
     }, { passive: true });
 
     // Handle touch move
     questionDisplay.addEventListener('touchmove', (e) => {
-      if (pullStartY > 0 && questionDisplay.scrollTop === 0) {
+      // Only proceed if enabled and started from top
+      if (!pullToRefreshEnabled || pullStartY === 0) return;
+
+      if (questionDisplay.scrollTop === 0) {
         const pullDistance = e.touches[0].clientY - pullStartY;
 
-        if (pullDistance > 0) {
+        // Only start showing indicator after 40px pull (prevents accidental triggers)
+        if (pullDistance > 40) {
           pulling = true;
-          updatePullIndicator(pullDistance);
+          updatePullIndicator(pullDistance - 40); // Offset by 40px
 
-          // Prevent default scrolling when pulling
-          if (pullDistance > 10) {
+          // Prevent default scrolling when pulling significantly
+          if (pullDistance > 50) {
             e.preventDefault();
           }
         }
@@ -510,10 +728,12 @@
     // Handle touch end
     questionDisplay.addEventListener('touchend', (e) => {
       if (pulling && pullIndicator) {
-        const threshold = 80;
+        const threshold = 120;
         const currentHeight = parseInt(pullIndicator.style.height) || 0;
+        const pullDuration = Date.now() - pullStartTime;
 
-        if (currentHeight >= threshold) {
+        // Require threshold AND minimum duration (300ms prevents quick accidental swipes)
+        if (currentHeight >= threshold && pullDuration >= 300) {
           // Trigger randomize
           HapticEngine.success();
           pullIndicator.classList.add('triggered');
@@ -529,6 +749,7 @@
       }
 
       pullStartY = 0;
+      pullStartTime = 0;
       pulling = false;
     });
 
@@ -1553,12 +1774,21 @@
     localStorage.setItem('darkMode', enabled.toString());
   }
 
+  // Initialize pull-to-refresh setting
+  function initPullToRefreshSetting() {
+    const savedSetting = localStorage.getItem('pullToRefresh');
+    if (savedSetting !== null) {
+      pullToRefreshEnabled = savedSetting === 'true';
+    }
+  }
+
   // Settings modal functions
   function openSettings() {
     settingsModal.hidden = false;
     settingsModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     darkModeToggle.checked = darkModeEnabled;
+    pullToRefreshToggle.checked = pullToRefreshEnabled;
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -1573,6 +1803,10 @@
   function saveSettings() {
     // Save dark mode setting
     toggleDarkMode(darkModeToggle.checked);
+
+    // Save pull-to-refresh setting
+    pullToRefreshEnabled = pullToRefreshToggle.checked;
+    localStorage.setItem('pullToRefresh', pullToRefreshEnabled.toString());
 
     // Save timer settings
     const wasTimedMode = timedMode;
@@ -2059,6 +2293,7 @@
 
   // Initialize app
   initDarkMode();
+  initPullToRefreshSetting();
   loadQuestions();
   initPerformanceMonitoring();
   initKeyboardHandling();
