@@ -2748,6 +2748,66 @@
     HapticEngine.light();
   }
 
+  // Issue #9: Session history management
+  function saveSessionHistory(sessionData) {
+    try {
+      let history = JSON.parse(localStorage.getItem('sessionHistory') || '[]');
+
+      // Add current session with timestamp
+      history.push({
+        ...sessionData,
+        timestamp: Date.now(),
+        date: new Date().toLocaleDateString()
+      });
+
+      // Keep only last 20 sessions to avoid localStorage limits
+      if (history.length > 20) {
+        history = history.slice(-20);
+      }
+
+      localStorage.setItem('sessionHistory', JSON.stringify(history));
+    } catch (error) {
+      console.warn('[Session History] Failed to save:', error);
+    }
+  }
+
+  function getSessionHistory() {
+    try {
+      return JSON.parse(localStorage.getItem('sessionHistory') || '[]');
+    } catch (error) {
+      console.warn('[Session History] Failed to retrieve:', error);
+      return [];
+    }
+  }
+
+  function getHistoricalComparison(currentPercentage, currentAnswered) {
+    const history = getSessionHistory();
+    if (history.length === 0) return null;
+
+    // Get previous sessions with similar question counts (±5 questions)
+    const comparableSessions = history.filter(s =>
+      Math.abs(s.answered - currentAnswered) <= 5
+    );
+
+    if (comparableSessions.length === 0) return { isFirstSession: true };
+
+    const lastSession = comparableSessions[comparableSessions.length - 1];
+    const avgPercentage = Math.round(
+      comparableSessions.reduce((sum, s) => sum + s.percentage, 0) / comparableSessions.length
+    );
+
+    const improvement = currentPercentage - lastSession.percentage;
+    const vsAverage = currentPercentage - avgPercentage;
+
+    return {
+      lastSession,
+      improvement,
+      vsAverage,
+      avgPercentage,
+      sessionCount: history.length
+    };
+  }
+
   // Session summary functions
   function showSessionSummary() {
     setSwipesEnabled(false); // Disable swipes when summary modal is open
@@ -2789,6 +2849,50 @@
       }))
       .sort((a, b) => a.percentage - b.percentage);
 
+    // Issue #9: Get historical comparison
+    const comparison = getHistoricalComparison(percentage, answered);
+
+    // Issue #9: Identify questions where too slow
+    const slowQuestions = Object.entries(userAnswers)
+      .filter(([_, answer]) => answer.submitted && answer.timeSpent && answer.timeSpent > timerDuration * 1.5)
+      .map(([index, answer]) => ({
+        index: parseInt(index),
+        timeSpent: answer.timeSpent,
+        topic: questions[index]?.topic || 'General'
+      }));
+
+    // Issue #9: Get weakest topic
+    const weakestTopic = sortedTopics.length > 0 ? sortedTopics[0] : null;
+
+    // Issue #9: Generate recommendations
+    const recommendations = [];
+    if (weakestTopic && weakestTopic.percentage < 70) {
+      recommendations.push(`Focus on ${weakestTopic.topic} (${weakestTopic.percentage}% accuracy)`);
+    }
+    if (slowQuestions.length > 3) {
+      recommendations.push(`Practice time management - ${slowQuestions.length} questions took too long`);
+    }
+    if (flagged > 0) {
+      recommendations.push(`Review ${flagged} flagged question${flagged > 1 ? 's' : ''}`);
+    }
+    if (incorrect > correct && answered > 5) {
+      recommendations.push('Review fundamental concepts before continuing');
+    }
+    if (avgTime > timerDuration && timedMode) {
+      recommendations.push(`Aim for ${timerDuration}s per question (current avg: ${avgTime}s)`);
+    }
+
+    // Issue #9: Save this session to history
+    saveSessionHistory({
+      answered,
+      correct,
+      incorrect,
+      percentage,
+      avgTime,
+      totalTime,
+      topicStats: sortedTopics
+    });
+
     const html = `
       <div class="summary-stats">
         <div class="summary-stat-card">
@@ -2808,6 +2912,68 @@
           <div class="stat-label">Incorrect</div>
         </div>
       </div>
+
+      ${comparison && !comparison.isFirstSession ? `
+        <div class="summary-comparison">
+          <h3>📊 Performance Trend</h3>
+          <div class="comparison-stats">
+            ${comparison.improvement !== 0 ? `
+              <div class="comparison-item ${comparison.improvement > 0 ? 'comparison-positive' : 'comparison-negative'}">
+                <span class="comparison-icon">${comparison.improvement > 0 ? '📈' : '📉'}</span>
+                <span class="comparison-text">
+                  ${comparison.improvement > 0 ? '+' : ''}${comparison.improvement}% vs last session
+                  <span class="comparison-detail">(${comparison.lastSession.percentage}% → ${percentage}%)</span>
+                </span>
+              </div>
+            ` : ''}
+            ${comparison.vsAverage !== 0 ? `
+              <div class="comparison-item ${comparison.vsAverage > 0 ? 'comparison-positive' : 'comparison-neutral'}">
+                <span class="comparison-icon">${comparison.vsAverage > 0 ? '⭐' : '📊'}</span>
+                <span class="comparison-text">
+                  ${comparison.vsAverage > 0 ? '+' : ''}${comparison.vsAverage}% vs your average
+                  <span class="comparison-detail">(avg: ${comparison.avgPercentage}% over ${comparison.sessionCount} session${comparison.sessionCount > 1 ? 's' : ''})</span>
+                </span>
+              </div>
+            ` : ''}
+            ${comparison.improvement === 0 && comparison.vsAverage === 0 ? `
+              <div class="comparison-item comparison-neutral">
+                <span class="comparison-icon">📊</span>
+                <span class="comparison-text">
+                  Consistent with your average (${comparison.avgPercentage}% over ${comparison.sessionCount} session${comparison.sessionCount > 1 ? 's' : ''})
+                </span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      ` : ''}
+
+      ${recommendations.length > 0 ? `
+        <div class="summary-recommendations">
+          <h3>💡 Personalized Recommendations</h3>
+          <ul class="recommendations-list">
+            ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      ${slowQuestions.length > 0 && timedMode ? `
+        <div class="summary-slow-questions">
+          <h3>⏱️ Time Management</h3>
+          <p class="slow-questions-intro">
+            <strong>${slowQuestions.length} question${slowQuestions.length > 1 ? 's' : ''}</strong> took longer than expected (>${Math.round(timerDuration * 1.5)}s):
+          </p>
+          <div class="slow-questions-list">
+            ${slowQuestions.slice(0, 5).map(sq => `
+              <div class="slow-question-item">
+                <span class="slow-question-number">Q${sq.index + 1}</span>
+                <span class="slow-question-topic">${sq.topic}</span>
+                <span class="slow-question-time">${sq.timeSpent}s</span>
+              </div>
+            `).join('')}
+            ${slowQuestions.length > 5 ? `<div class="slow-questions-more">... and ${slowQuestions.length - 5} more</div>` : ''}
+          </div>
+        </div>
+      ` : ''}
 
       ${timesSpent.length > 0 ? `
         <div class="summary-time">

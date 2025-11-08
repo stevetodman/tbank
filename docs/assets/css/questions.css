@@ -3776,3 +3776,184 @@ input[type="radio"]:focus-visible {
   border-radius: 0.125rem;
   font-weight: 600;
 }
+
+/* Issue #9: Enhanced session summary sections */
+
+/* Performance comparison section */
+.summary-comparison {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-left: 4px solid var(--color-primary-500);
+  border-radius: var(--radius-md);
+}
+
+.summary-comparison h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.comparison-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: white;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.comparison-item.comparison-positive {
+  border-left: 3px solid var(--color-success-500);
+}
+
+.comparison-item.comparison-negative {
+  border-left: 3px solid var(--color-error-500);
+}
+
+.comparison-item.comparison-neutral {
+  border-left: 3px solid var(--color-neutral-400);
+}
+
+.comparison-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.comparison-text {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+.comparison-detail {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--color-neutral-600);
+  font-weight: 400;
+}
+
+/* Recommendations section */
+.summary-recommendations {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+  border-left: 4px solid #eab308;
+  border-radius: var(--radius-md);
+}
+
+.summary-recommendations h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #854d0e;
+}
+
+.recommendations-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+.recommendations-list li {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--color-neutral-800);
+  line-height: 1.6;
+}
+
+.recommendations-list li:last-child {
+  margin-bottom: 0;
+}
+
+.recommendations-list li::before {
+  content: '▸';
+  position: absolute;
+  left: -1rem;
+  color: #eab308;
+  font-weight: 700;
+}
+
+/* Slow questions section */
+.summary-slow-questions {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-left: 4px solid var(--color-error-500);
+  border-radius: var(--radius-md);
+}
+
+.summary-slow-questions h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-error-700);
+}
+
+.slow-questions-intro {
+  margin: 0 0 1rem 0;
+  font-size: 0.9375rem;
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+}
+
+.slow-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slow-question-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  background: white;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+}
+
+.slow-question-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-error-100);
+  color: var(--color-error-700);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+.slow-question-topic {
+  flex: 1;
+  color: var(--color-neutral-700);
+  font-weight: 500;
+}
+
+.slow-question-time {
+  color: var(--color-error-600);
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+.slow-questions-more {
+  padding: 0.5rem 0.875rem;
+  text-align: center;
+  color: var(--color-neutral-600);
+  font-size: 0.8125rem;
+  font-style: italic;
+}

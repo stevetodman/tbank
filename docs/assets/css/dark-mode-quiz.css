@@ -753,3 +753,93 @@ body.dark-mode .search-highlight {
   background: #78350f;
   color: #fde68a;
 }
+
+/* Issue #9: Enhanced session summary - dark mode */
+
+/* Performance comparison */
+body.dark-mode .summary-comparison {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e3354 100%);
+  border-left-color: var(--color-primary-400);
+}
+
+body.dark-mode .summary-comparison h3 {
+  color: var(--color-primary-300);
+}
+
+body.dark-mode .comparison-item {
+  background: #1f2937;
+  border-left-width: 3px;
+}
+
+body.dark-mode .comparison-item.comparison-positive {
+  border-left-color: var(--color-success-400);
+}
+
+body.dark-mode .comparison-item.comparison-negative {
+  border-left-color: var(--color-error-400);
+}
+
+body.dark-mode .comparison-item.comparison-neutral {
+  border-left-color: #6b7280;
+}
+
+body.dark-mode .comparison-text {
+  color: #e5e7eb;
+}
+
+body.dark-mode .comparison-detail {
+  color: #9ca3af;
+}
+
+/* Recommendations */
+body.dark-mode .summary-recommendations {
+  background: linear-gradient(135deg, #78350f 0%, #713f12 100%);
+  border-left-color: #fbbf24;
+}
+
+body.dark-mode .summary-recommendations h3 {
+  color: #fde68a;
+}
+
+body.dark-mode .recommendations-list li {
+  color: #e5e7eb;
+}
+
+body.dark-mode .recommendations-list li::before {
+  color: #fbbf24;
+}
+
+/* Slow questions */
+body.dark-mode .summary-slow-questions {
+  background: linear-gradient(135deg, #7f1d1d 0%, #771d1d 100%);
+  border-left-color: var(--color-error-400);
+}
+
+body.dark-mode .summary-slow-questions h3 {
+  color: #fca5a5;
+}
+
+body.dark-mode .slow-questions-intro {
+  color: #d1d5db;
+}
+
+body.dark-mode .slow-question-item {
+  background: #1f2937;
+}
+
+body.dark-mode .slow-question-number {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+body.dark-mode .slow-question-topic {
+  color: #d1d5db;
+}
+
+body.dark-mode .slow-question-time {
+  color: #f87171;
+}
+
+body.dark-mode .slow-questions-more {
+  color: #9ca3af;
+}
