@@ -1869,10 +1869,15 @@
   }
 
   function applyDarkMode() {
+    const root = document.documentElement;
     if (darkModeEnabled) {
+      root.classList.add('dark-mode');
       document.body.classList.add('dark-mode');
+      root.style.colorScheme = 'dark';
     } else {
+      root.classList.remove('dark-mode');
       document.body.classList.remove('dark-mode');
+      root.style.colorScheme = 'light';
     }
   }
 
