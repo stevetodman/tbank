@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+coverage
+dist
+
+# Question banks (data files)
+docs/assets/question_banks/**
+question_banks/**/*.json
+question_banks/**/*.md
+
+# Generated files
+*.min.js
+*.min.css
+
+# Version control
+.git
+
+# Documentation
+EVALUATION_REPORT.md
+EXHAUSTIVE_EVALUATION_REPORT.md
+UPDATED_COMPREHENSIVE_EVALUATION_REPORT.md
+USMLE_CHD_Coverage_Map.md
