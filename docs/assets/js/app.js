@@ -85,20 +85,35 @@
     const minSwipeDistance = options.minDistance || 60;
     const maxVerticalDistance = options.maxVerticalDistance || 80;
     const threshold = options.threshold || 30;
+    const excludeSelectors = options.excludeSelectors || []; // Elements to ignore
 
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
     let isSwiping = false;
+    let touchStartTarget = null;
 
     element.addEventListener('touchstart', (e) => {
+      // Check if touch started on an excluded element
+      touchStartTarget = e.target;
+      if (excludeSelectors.length > 0) {
+        for (const selector of excludeSelectors) {
+          if (touchStartTarget.closest(selector)) {
+            touchStartTarget = null; // Ignore this swipe
+            return;
+          }
+        }
+      }
+
       touchStartX = e.changedTouches[0].screenX;
       touchStartY = e.changedTouches[0].screenY;
       isSwiping = false;
     }, { passive: true });
 
     element.addEventListener('touchmove', (e) => {
+      if (!touchStartTarget) return; // Skip if started on excluded element
+
       touchEndX = e.changedTouches[0].screenX;
       touchEndY = e.changedTouches[0].screenY;
 
@@ -125,6 +140,8 @@
     }, { passive: true });
 
     element.addEventListener('touchend', (e) => {
+      if (!touchStartTarget) return; // Skip if started on excluded element
+
       touchEndX = e.changedTouches[0].screenX;
       touchEndY = e.changedTouches[0].screenY;
 
@@ -137,6 +154,7 @@
 
       // Only trigger if it's a valid swipe
       if (!isSwiping || deltaY > maxVerticalDistance) {
+        touchStartTarget = null;
         return;
       }
 
@@ -152,6 +170,8 @@
           options.onSwipeRight(element);
         }
       }
+
+      touchStartTarget = null;
     }, { passive: true });
   }
 
@@ -1363,12 +1383,14 @@
     }
 
     // Add swipe gesture to question display for navigation (mobile only)
+    // Exclude answer choices so their swipe gestures don't conflict
     if (window.innerWidth <= 768 && !isSubmitted) {
       const questionContent = document.querySelector('.question-content');
       if (questionContent) {
         initSwipeGesture(questionContent, {
           minDistance: 80, // Longer swipe required for question navigation
           maxVerticalDistance: 100,
+          excludeSelectors: ['.answer-choice', '.answer-choices'], // Don't trigger on answer choices
           onSwipeLeft: () => {
             // Swipe left = Next question
             if (currentQuestionIndex < questions.length - 1) {
