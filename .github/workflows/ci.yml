@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
 
@@ -9,6 +10,7 @@ jobs:
   # Validate all JSON question bank files
   validate-json:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -30,6 +32,7 @@ jobs:
   # Verify question banks are synced to docs/assets/
   check-sync:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -56,6 +59,7 @@ jobs:
   # Lint Python scripts
   lint-python:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -84,7 +88,7 @@ jobs:
   # Lint JavaScript (if package.json exists)
   lint-js:
     runs-on: ubuntu-latest
-    if: hashFiles('package.json') != ''
+    if: hashFiles('package.json') != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false))
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -104,7 +108,7 @@ jobs:
   # Run JavaScript tests (if package.json exists)
   test-js:
     runs-on: ubuntu-latest
-    if: hashFiles('package.json') != ''
+    if: hashFiles('package.json') != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false))
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -130,7 +134,7 @@ jobs:
   all-checks-passed:
     runs-on: ubuntu-latest
     needs: [validate-json, check-sync, lint-python, lint-js, test-js]
-    if: always()
+    if: always() && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false))
     steps:
       - name: Check all jobs succeeded
         run: |
