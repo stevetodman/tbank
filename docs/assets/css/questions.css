@@ -685,6 +685,25 @@
   margin: 0.25rem 0;
 }
 
+/* Mobile Gestures Hint */
+.mobile-gestures {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-neutral-600);
+  font-size: var(--text-sm);
+  text-align: left;
+}
+
+.mobile-gestures p {
+  margin: 0.35rem 0;
+  line-height: 1.6;
+}
+
+.mobile-gestures p:first-child {
+  margin-bottom: 0.75rem;
+}
+
 /* Keyboard Hint Toast */
 .keyboard-hint-toast {
   position: fixed;
@@ -1797,6 +1816,35 @@ input[type="checkbox"] {
    ======================================== */
 
 @media (max-width: 768px) {
+  /* iOS-specific smooth interactions */
+  * {
+    -webkit-tap-highlight-color: rgba(43, 108, 176, 0.15);
+    -webkit-touch-callout: none;
+  }
+
+  /* Enhanced momentum scrolling for iOS */
+  .question-display,
+  .question-menu,
+  .quick-nav-menu {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Smooth scroll snapping for iOS */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Disable text selection on interactive elements for better iOS UX */
+  button,
+  .answer-choice,
+  .nav-btn,
+  .submit-btn {
+    -webkit-user-select: none;
+    user-select: none;
+    /* Prevent iOS zoom on double-tap */
+    touch-action: manipulation;
+  }
+
   /* Header adjustments - iOS optimized */
   .quiz-header-content {
     padding: 0.75rem 1rem;
@@ -2015,7 +2063,9 @@ input[type="checkbox"] {
   .quiz-navigation {
     flex-direction: column;
     gap: 0.875rem;
-    padding: 1rem 0.875rem 1.5rem;
+    padding: 1rem 0.875rem calc(1.5rem + env(safe-area-inset-bottom));
+    /* Ensure navigation is above iOS home indicator */
+    padding-bottom: max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom)));
   }
 
   .nav-btn,

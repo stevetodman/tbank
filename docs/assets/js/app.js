@@ -286,6 +286,23 @@
 
   // Render welcome screen
   function renderWelcomeScreen() {
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+
+    const controlsHint = isMobile ? `
+      <div class="mobile-gestures">
+        <p><strong>Mobile Gestures:</strong></p>
+        <p>👆 Swipe questions left/right to navigate</p>
+        <p>👆 Swipe answers left to eliminate, right to restore</p>
+        <p>👆 Double-tap an answer to select & submit</p>
+        <p>👆 Long-press flag button for quick navigation</p>
+      </div>
+    ` : `
+      <div class="keyboard-shortcuts">
+        <p><strong>Keyboard shortcuts:</strong></p>
+        <p>← → Navigate questions  •  Enter Submit answer</p>
+      </div>
+    `;
+
     const html = `
       <div class="welcome-screen">
         <div class="welcome-content">
@@ -323,10 +340,7 @@
             </button>
           </div>
 
-          <div class="keyboard-shortcuts">
-            <p><strong>Keyboard shortcuts:</strong></p>
-            <p>← → Navigate questions  •  Enter Submit answer</p>
-          </div>
+          ${controlsHint}
         </div>
       </div>
     `;
@@ -557,9 +571,14 @@
     showTourStep(0);
   }
 
-  // Show keyboard hint toast
+  // Show keyboard hint toast (desktop only)
   function showKeyboardHint() {
     if (keyboardHintShown) return;
+
+    // Don't show keyboard hints on mobile/touch devices
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+    if (isMobile) return;
+
     keyboardHintShown = true;
     showToast('💡 Tip: Use ← → arrow keys to navigate', 'info');
   }

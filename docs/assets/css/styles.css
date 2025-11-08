@@ -105,6 +105,19 @@ body {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
+
+  /* iOS-specific smooth scrolling and momentum */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  /* Enhanced tap highlighting for iOS */
+  -webkit-tap-highlight-color: rgba(43, 108, 176, 0.1);
+
+  /* Disable callout on iOS for better UX */
+  -webkit-touch-callout: none;
+
+  /* Prevent font size changes on orientation change */
+  -webkit-text-size-adjust: 100%;
 }
 
 a {
