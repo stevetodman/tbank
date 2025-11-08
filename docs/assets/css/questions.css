@@ -685,6 +685,13 @@
   margin: 0.25rem 0;
 }
 
+/* Hide keyboard shortcuts on mobile devices */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .keyboard-shortcuts {
+    display: none !important;
+  }
+}
+
 /* Mobile Gestures Hint */
 .mobile-gestures {
   margin-top: 2.5rem;
@@ -724,6 +731,13 @@
 .keyboard-hint-toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Hide keyboard hint toast on mobile devices */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .keyboard-hint-toast {
+    display: none !important;
+  }
 }
 
 /* Feedback Animation */
