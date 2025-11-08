@@ -126,10 +126,67 @@ jobs:
         with:
           fail_ci_if_error: false
 
+  # Monitor bundle size
+  bundle-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Analyze bundle sizes
+        run: |
+          echo "📦 Bundle Size Report"
+          echo "===================="
+          echo ""
+          echo "JavaScript Files:"
+          du -h docs/assets/js/*.js | sort -h
+          echo ""
+          echo "CSS Files:"
+          du -h docs/assets/css/*.css | sort -h
+          echo ""
+          echo "Total Assets:"
+          du -sh docs/assets/
+          echo ""
+
+          # Check if app.js exceeds threshold
+          APP_SIZE=$(stat -f%z docs/assets/js/app.js 2>/dev/null || stat -c%s docs/assets/js/app.js 2>/dev/null)
+          MAX_SIZE=153600  # 150KB
+
+          if [ "$APP_SIZE" -gt "$MAX_SIZE" ]; then
+            echo "⚠️ Warning: app.js (${APP_SIZE} bytes) exceeds ${MAX_SIZE} bytes"
+            echo "Consider refactoring into smaller modules"
+          else
+            echo "✅ Bundle sizes are within acceptable limits"
+          fi
+
+      - name: Comment bundle size on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const appSize = fs.statSync('docs/assets/js/app.js').size;
+            const utilsSize = fs.statSync('docs/assets/js/utils.js').size;
+
+            const comment = `📦 **Bundle Size Report**
+
+            | File | Size |
+            |------|------|
+            | app.js | ${(appSize / 1024).toFixed(2)} KB |
+            | utils.js | ${(utilsSize / 1024).toFixed(2)} KB |
+            | **Total JS** | **${((appSize + utilsSize) / 1024).toFixed(2)} KB** |`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
   # Summary job - all checks passed
   all-checks-passed:
     runs-on: ubuntu-latest
-    needs: [validate-json, check-sync, lint-python, lint-js, test-js]
+    needs: [validate-json, check-sync, lint-python, lint-js, test-js, bundle-size]
     if: always()
     steps:
       - name: Check all jobs succeeded
