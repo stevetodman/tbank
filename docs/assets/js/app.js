@@ -1857,13 +1857,8 @@
     // Check localStorage for saved preference
     const savedDarkMode = localStorage.getItem('darkMode');
 
-    if (savedDarkMode !== null) {
-      // User has manually set a preference
-      darkModeEnabled = savedDarkMode === 'true';
-    } else {
-      // No saved preference, check system preference
-      darkModeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
+    // Default to light mode - only apply dark mode if user explicitly toggled it
+    darkModeEnabled = savedDarkMode === 'true';
 
     applyDarkMode();
   }
