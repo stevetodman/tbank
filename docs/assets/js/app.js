@@ -193,7 +193,7 @@
   }
 
   // Cleanup swipe gestures for an element
-  function cleanupSwipeGesture(element) {
+  function _cleanupSwipeGesture(element) {
     if (element._swipeCleanup) {
       element._swipeCleanup();
     }
