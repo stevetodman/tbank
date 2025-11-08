@@ -2454,6 +2454,107 @@
     showToast('Settings saved!', 'success');
   }
 
+  // Issue #11: Keyboard shortcuts help modal
+  function showKeyboardShortcutsHelp() {
+    // Check if modal already exists
+    let helpModal = document.getElementById('keyboard-shortcuts-modal');
+
+    if (!helpModal) {
+      // Create modal dynamically
+      helpModal = document.createElement('div');
+      helpModal.id = 'keyboard-shortcuts-modal';
+      helpModal.className = 'modal';
+      helpModal.hidden = false;
+      helpModal.innerHTML = `
+        <div class="modal-content keyboard-shortcuts-modal">
+          <div class="modal-header">
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <button id="keyboard-shortcuts-close" class="close-btn" aria-label="Close keyboard shortcuts">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="shortcuts-section">
+              <h3>Navigation</h3>
+              <div class="shortcut-item">
+                <kbd>←</kbd> <kbd>→</kbd>
+                <span>Previous / Next question</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>M</kbd>
+                <span>Open question menu</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>Esc</kbd>
+                <span>Close menu or modal</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>Answering Questions</h3>
+              <div class="shortcut-item">
+                <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd>
+                <span>Select answer choice</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>Enter</kbd> or <kbd>S</kbd>
+                <span>Submit answer</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>F</kbd>
+                <span>Flag question for review</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>After Submitting</h3>
+              <div class="shortcut-item">
+                <kbd>Space</kbd>
+                <span>Toggle detailed explanation</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>Help</h3>
+              <div class="shortcut-item">
+                <kbd>?</kbd>
+                <span>Show this help menu</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="keyboard-shortcuts-ok" class="button-primary">Got it!</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(helpModal);
+
+      // Add event listeners
+      const closeBtn = document.getElementById('keyboard-shortcuts-close');
+      const okBtn = document.getElementById('keyboard-shortcuts-ok');
+
+      const closeModal = () => {
+        helpModal.hidden = true;
+        document.body.style.overflow = '';
+        HapticEngine.light();
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      okBtn.addEventListener('click', closeModal);
+
+      // Close on background click
+      helpModal.addEventListener('click', (e) => {
+        if (e.target === helpModal) {
+          closeModal();
+        }
+      });
+    } else {
+      helpModal.hidden = false;
+    }
+
+    document.body.style.overflow = 'hidden';
+    HapticEngine.light();
+  }
+
   // Session summary functions
   function showSessionSummary() {
     setSwipesEnabled(false); // Disable swipes when summary modal is open
@@ -2751,12 +2852,117 @@
   summaryContinue.addEventListener('click', closeSessionSummary);
   summaryReset.addEventListener('click', resetProgress);
 
-  // Keyboard navigation
+  // Issue #11: Enhanced keyboard navigation
   document.addEventListener('keydown', (e) => {
+    // Don't trigger shortcuts if user is typing in an input/textarea
+    const target = e.target;
+    const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+
+    // Don't trigger shortcuts if any modal is open (except menu close with Escape)
+    const modalOpen = !settingsModal.hidden || !sessionSummaryModal.hidden;
+
+    // Help modal shortcut (always available)
+    if (e.key === '?' && !isTyping) {
+      e.preventDefault();
+      showKeyboardShortcutsHelp();
+      return;
+    }
+
+    // Close modals with Escape
+    if (e.key === 'Escape') {
+      if (!questionMenu.hidden) {
+        closeMenu();
+        return;
+      }
+      if (!settingsModal.hidden) {
+        closeSettings();
+        return;
+      }
+      if (!sessionSummaryModal.hidden) {
+        closeSessionSummary();
+        return;
+      }
+      // Close keyboard shortcuts help if open
+      const helpModal = document.getElementById('keyboard-shortcuts-modal');
+      if (helpModal && !helpModal.hidden) {
+        helpModal.hidden = true;
+        document.body.style.overflow = '';
+        return;
+      }
+    }
+
+    // Don't trigger other shortcuts if modal is open or user is typing
+    if (modalOpen || isTyping) return;
+
+    // Menu toggle
+    if (e.key.toLowerCase() === 'm' && questionMenu.hidden) {
+      e.preventDefault();
+      openMenu();
+      return;
+    }
+
+    // Navigation shortcuts (when menu is closed)
     if (questionMenu.hidden) {
-      if (e.key === 'ArrowLeft' && !prevBtn.disabled) goToPrevious();
-      if (e.key === 'ArrowRight' && !nextBtn.disabled) goToNext();
-      if (e.key === 'Enter' && !submitBtn.disabled && submitBtn.style.display !== 'none') handleSubmit();
+      // Arrow key navigation
+      if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+        e.preventDefault();
+        goToPrevious();
+        return;
+      }
+      if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+        e.preventDefault();
+        goToNext();
+        return;
+      }
+
+      // Submit shortcuts
+      if ((e.key === 'Enter' || e.key.toLowerCase() === 's') && !submitBtn.disabled && submitBtn.style.display !== 'none') {
+        e.preventDefault();
+        handleSubmit();
+        return;
+      }
+
+      // Flag question
+      if (e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        toggleFlag();
+        return;
+      }
+
+      // Answer selection shortcuts (A-E)
+      const answer = userAnswers[currentQuestionIndex];
+      const isSubmitted = answer?.submitted;
+
+      if (!isSubmitted) {
+        const key = e.key.toLowerCase();
+        if (key >= 'a' && key <= 'e') {
+          e.preventDefault();
+          const answerLetter = key.toUpperCase();
+          const question = questions[currentQuestionIndex];
+
+          // Check if this answer choice exists
+          const choice = question.answerChoices.find(c => c.letter === answerLetter);
+          if (choice) {
+            const radio = document.querySelector(`input[name="answer"][value="${answerLetter}"]`);
+            if (radio) {
+              radio.checked = true;
+              // Trigger the change event to update state
+              radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+          return;
+        }
+      }
+
+      // Toggle explanation details (Space key)
+      if (e.key === ' ' && isSubmitted) {
+        const toggleBtn = document.querySelector('.toggle-details-btn');
+        if (toggleBtn) {
+          e.preventDefault();
+          toggleBtn.click();
+          return;
+        }
+      }
     }
   });
 

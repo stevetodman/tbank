@@ -3548,3 +3548,126 @@ button {
   color: #78350f;
   font-weight: 500;
 }
+
+/* ============================================================================
+   Issue #11: Keyboard Shortcuts Modal
+   ============================================================================ */
+
+.keyboard-shortcuts-modal {
+  max-width: 600px;
+}
+
+.shortcuts-section {
+  margin-bottom: 1.5rem;
+}
+
+.shortcuts-section:last-child {
+  margin-bottom: 0;
+}
+
+.shortcuts-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary-700);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease;
+}
+
+.shortcut-item:hover {
+  background: var(--color-neutral-100);
+}
+
+.shortcut-item kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+  border: 1px solid #d1d5db;
+  border-bottom-width: 2px;
+  border-radius: 0.25rem;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-neutral-800);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1;
+}
+
+.shortcut-item span {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+/* ============================================================================
+   Issue #11: Improved Focus Indicators
+   ============================================================================ */
+
+/* Focus styles for all interactive elements */
+button:focus-visible,
+.nav-btn:focus-visible,
+.submit-btn:focus-visible,
+.skip-btn:focus-visible,
+.flag-btn:focus-visible,
+.settings-btn:focus-visible,
+.menu-btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Focus styles for radio buttons and answer choices */
+.answer-choice:focus-within {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.1);
+}
+
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Focus styles for filter buttons */
+.filter-btn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Focus styles for grid question buttons */
+.grid-question-btn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15);
+}
+
+/* Focus styles for modal close buttons */
+.close-btn:focus-visible {
+  outline: 3px solid var(--color-error-500);
+  outline-offset: 2px;
+}
+
+/* Ensure Tab navigation is visible */
+*:focus {
+  outline-width: 0;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}

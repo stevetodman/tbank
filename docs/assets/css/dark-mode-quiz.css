@@ -637,3 +637,65 @@ body.dark-mode .answer-choice.answer-peek .choice-letter {
   background: var(--color-primary-500);
   border-color: var(--color-primary-400);
 }
+
+/* ===========================================================================
+   Dark mode for Issue #11: Keyboard Shortcuts Modal
+   =========================================================================== */
+
+body.dark-mode .shortcuts-section h3 {
+  color: var(--color-primary-300);
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .shortcut-item {
+  background: #1f2937;
+}
+
+body.dark-mode .shortcut-item:hover {
+  background: #374151;
+}
+
+body.dark-mode .shortcut-item kbd {
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-color: #4b5563;
+  color: #e5e7eb;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .shortcut-item span {
+  color: #d1d5db;
+}
+
+/* Dark mode focus indicators */
+body.dark-mode button:focus-visible,
+body.dark-mode .nav-btn:focus-visible,
+body.dark-mode .submit-btn:focus-visible,
+body.dark-mode .skip-btn:focus-visible,
+body.dark-mode .flag-btn:focus-visible,
+body.dark-mode .settings-btn:focus-visible,
+body.dark-mode .menu-btn:focus-visible,
+body.dark-mode a:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .answer-choice:focus-within {
+  outline-color: var(--color-primary-400);
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+}
+
+body.dark-mode input[type="radio"]:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .filter-btn:focus-visible,
+body.dark-mode .grid-question-btn:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .grid-question-btn:focus-visible {
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+}
+
+body.dark-mode *:focus-visible {
+  outline-color: var(--color-primary-400);
+}
