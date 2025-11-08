@@ -765,7 +765,7 @@
         pullStartY = e.touches[0].clientY;
         pullStartTime = Date.now();
       }
-    }, { passive: true });
+    }, { passive: false });
 
     // Handle touch move
     questionDisplay.addEventListener('touchmove', (e) => {
@@ -828,6 +828,32 @@
         }, 300);
       }
     }
+
+    // Additional prevention: block browser pull-to-refresh on document level
+    // This prevents browser refresh when user is at the top of the page
+    let docTouchStartY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      if (pullToRefreshEnabled && (window.scrollY === 0 || document.body.scrollTop === 0 || questionDisplay.scrollTop === 0)) {
+        docTouchStartY = e.touches[0].clientY;
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      if (pullToRefreshEnabled && docTouchStartY > 0) {
+        const touchY = e.touches[0].clientY;
+        const pullDistance = touchY - docTouchStartY;
+
+        // Prevent browser pull-to-refresh when pulling down while at page top
+        if (pullDistance > 0 && (window.scrollY === 0 || document.body.scrollTop === 0 || questionDisplay.scrollTop === 0)) {
+          e.preventDefault();
+        }
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+      docTouchStartY = 0;
+    }, { passive: true });
   }
 
   // Randomize question order
@@ -844,10 +870,12 @@
     shuffledIndices.forEach((oldIndex, newIndex) => {
       if (userAnswers[oldIndex]) {
         // Deep copy to avoid shared array references
+        const oldAnswer = userAnswers[oldIndex];
         newUserAnswers[newIndex] = {
-          ...userAnswers[oldIndex],
-          eliminated: userAnswers[oldIndex].eliminated ? [...userAnswers[oldIndex].eliminated] : [],
-          highlights: userAnswers[oldIndex].highlights ? [...userAnswers[oldIndex].highlights] : []
+          ...oldAnswer,
+          // Deep copy arrays only if they exist, preserving undefined if not
+          eliminated: oldAnswer.eliminated ? [...oldAnswer.eliminated] : oldAnswer.eliminated,
+          highlights: oldAnswer.highlights ? [...oldAnswer.highlights] : oldAnswer.highlights
         };
       }
     });
