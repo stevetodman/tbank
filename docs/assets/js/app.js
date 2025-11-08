@@ -295,6 +295,7 @@
   const timerDurationGroup = document.getElementById('timer-duration-group');
   const settingsSaveBtn = document.getElementById('settings-save');
   const endSessionBtn = document.getElementById('end-session-btn');
+  const exportNotesBtn = document.getElementById('export-notes-btn');
   const resetProgressBtn = document.getElementById('reset-progress-btn');
   const sessionSummaryModal = document.getElementById('session-summary-modal');
   const summaryContent = document.getElementById('summary-content');
@@ -876,6 +877,15 @@
         flagIcon.className = 'grid-flag-icon';
         flagIcon.textContent = '🚩';
         btn.appendChild(flagIcon);
+      }
+
+      // Issue #6: Add note indicator if question has a note
+      if (loadNote(index)) {
+        const noteIcon = document.createElement('span');
+        noteIcon.className = 'grid-note-icon';
+        noteIcon.textContent = '📝';
+        noteIcon.setAttribute('aria-label', 'Has note');
+        btn.appendChild(noteIcon);
       }
 
       btn.onclick = () => jumpToQuestion(index);
@@ -1604,6 +1614,40 @@
         <a href="${githubIssueUrl}" target="_blank" class="report-error-btn">🐛 Report Error</a>
       </div>`;
 
+      // Issue #6: Notes section
+      const existingNote = loadNote(currentQuestionIndex);
+      const noteText = existingNote ? existingNote.text : '';
+      const noteDate = existingNote ? existingNote.date : '';
+      const maxChars = 1000;
+
+      html += `<div class="notes-section">
+        <div class="notes-header">
+          <h4>📝 Personal Notes</h4>
+          ${existingNote ? `<span class="note-date">Last edited: ${noteDate}</span>` : ''}
+        </div>
+        <div class="notes-editor">
+          <textarea
+            id="note-textarea"
+            class="note-textarea"
+            placeholder="Add your personal notes, insights, or mnemonics for this question..."
+            maxlength="${maxChars}"
+            aria-label="Personal notes for this question"
+          >${escapeHtml(noteText)}</textarea>
+          <div class="notes-footer">
+            <div class="notes-char-count">
+              <span id="char-count">${noteText.length}</span>/${maxChars}
+            </div>
+            <div class="notes-actions">
+              ${existingNote ? `<button id="delete-note-btn" class="note-action-btn note-delete-btn" aria-label="Delete note">🗑️ Delete</button>` : ''}
+              <button id="save-note-btn" class="note-action-btn note-save-btn" aria-label="Save note">💾 Save Note</button>
+            </div>
+          </div>
+        </div>
+        <div class="notes-formatting-hint">
+          <strong>Tip:</strong> Use ** for <strong>bold</strong>, * for <em>italic</em>, - for bullet points
+        </div>
+      </div>`;
+
       html += '</div>';
     }
 
@@ -1906,6 +1950,54 @@
 
           HapticEngine.light();
           showToast(`The correct answer is ${correctChoice.letter}`, 'info');
+        }
+      });
+    }
+
+    // Event listeners for Notes feature (Issue #6)
+    const noteTextarea = document.getElementById('note-textarea');
+    const charCount = document.getElementById('char-count');
+    const saveNoteBtn = document.getElementById('save-note-btn');
+    const deleteNoteBtn = document.getElementById('delete-note-btn');
+
+    if (noteTextarea && charCount) {
+      // Update character count as user types
+      noteTextarea.addEventListener('input', () => {
+        charCount.textContent = noteTextarea.value.length;
+      });
+    }
+
+    if (saveNoteBtn) {
+      saveNoteBtn.addEventListener('click', () => {
+        const noteText = noteTextarea.value.trim();
+        const success = saveNote(currentQuestionIndex, noteText);
+
+        if (success) {
+          HapticEngine.medium();
+          showToast('Note saved successfully!', 'success');
+          // Re-render to update the note date and delete button
+          renderQuestion();
+          updateQuestionGrid(); // Update grid to show note indicator
+        } else {
+          showToast('Failed to save note. Please try again.', 'error');
+        }
+      });
+    }
+
+    if (deleteNoteBtn) {
+      deleteNoteBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete this note?')) {
+          const success = deleteNote(currentQuestionIndex);
+
+          if (success) {
+            HapticEngine.medium();
+            showToast('Note deleted', 'info');
+            // Re-render to remove the note
+            renderQuestion();
+            updateQuestionGrid(); // Update grid to remove note indicator
+          } else {
+            showToast('Failed to delete note. Please try again.', 'error');
+          }
         }
       });
     }
@@ -2748,6 +2840,93 @@
     HapticEngine.light();
   }
 
+  // Issue #6: Notes management
+  function saveNote(questionIndex, noteText) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+
+      if (noteText.trim().length === 0) {
+        // If note is empty, delete it
+        delete notes[questionIndex];
+      } else {
+        notes[questionIndex] = {
+          text: noteText.trim(),
+          timestamp: Date.now(),
+          date: new Date().toLocaleDateString(),
+          questionId: `Q${questionIndex + 1}`
+        };
+      }
+
+      localStorage.setItem('questionNotes', JSON.stringify(notes));
+      return true;
+    } catch (error) {
+      console.warn('[Notes] Failed to save:', error);
+      return false;
+    }
+  }
+
+  function loadNote(questionIndex) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      return notes[questionIndex] || null;
+    } catch (error) {
+      console.warn('[Notes] Failed to load:', error);
+      return null;
+    }
+  }
+
+  function deleteNote(questionIndex) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      delete notes[questionIndex];
+      localStorage.setItem('questionNotes', JSON.stringify(notes));
+      return true;
+    } catch (error) {
+      console.warn('[Notes] Failed to delete:', error);
+      return false;
+    }
+  }
+
+  function getAllNotes() {
+    try {
+      return JSON.parse(localStorage.getItem('questionNotes') || '{}');
+    } catch (error) {
+      console.warn('[Notes] Failed to retrieve all notes:', error);
+      return {};
+    }
+  }
+
+  function exportNotesAsText() {
+    const notes = getAllNotes();
+    const noteCount = Object.keys(notes).length;
+
+    if (noteCount === 0) {
+      return 'No notes to export.';
+    }
+
+    let exportText = `TBank Study Notes\n`;
+    exportText += `Exported: ${new Date().toLocaleString()}\n`;
+    exportText += `Total Notes: ${noteCount}\n`;
+    exportText += `${'='.repeat(60)}\n\n`;
+
+    // Sort by question index
+    const sortedNotes = Object.entries(notes)
+      .sort(([a], [b]) => parseInt(a) - parseInt(b));
+
+    sortedNotes.forEach(([index, note]) => {
+      const question = questions[parseInt(index)];
+      const topic = question?.topic || 'General';
+
+      exportText += `${note.questionId} - ${topic}\n`;
+      exportText += `Date: ${note.date}\n`;
+      exportText += `${'-'.repeat(60)}\n`;
+      exportText += `${note.text}\n`;
+      exportText += `\n${'='.repeat(60)}\n\n`;
+    });
+
+    return exportText;
+  }
+
   // Issue #9: Session history management
   function saveSessionHistory(sessionData) {
     try {
@@ -3124,6 +3303,51 @@
     }
   }
 
+  // Issue #6: Export notes function
+  function handleExportNotes() {
+    const notes = getAllNotes();
+    const noteCount = Object.keys(notes).length;
+
+    if (noteCount === 0) {
+      showToast('No notes to export yet. Add notes to questions first!', 'info');
+      return;
+    }
+
+    const exportText = exportNotesAsText();
+
+    // Try to download as file first
+    try {
+      const blob = new Blob([exportText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const date = new Date().toISOString().split('T')[0];
+      a.href = url;
+      a.download = `TBank_Notes_${date}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      HapticEngine.success();
+      showToast(`Exported ${noteCount} note${noteCount > 1 ? 's' : ''} successfully!`, 'success');
+    } catch (error) {
+      // Fallback to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(exportText)
+          .then(() => {
+            HapticEngine.medium();
+            showToast(`${noteCount} note${noteCount > 1 ? 's' : ''} copied to clipboard!`, 'success');
+          })
+          .catch((err) => {
+            console.warn('[Export Notes] Error:', err);
+            showToast('Failed to export notes', 'error');
+          });
+      } else {
+        showToast('Export not supported on this device', 'error');
+      }
+    }
+  }
+
   // Reset progress function
   function resetProgress() {
     // Close any open modals first
@@ -3224,6 +3448,7 @@
     }
   });
   endSessionBtn.addEventListener('click', showSessionSummary);
+  exportNotesBtn.addEventListener('click', handleExportNotes);
   resetProgressBtn.addEventListener('click', resetProgress);
   summaryClose.addEventListener('click', closeSessionSummary);
   summaryShare.addEventListener('click', shareSessionResults);

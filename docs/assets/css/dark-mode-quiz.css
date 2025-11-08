@@ -843,3 +843,68 @@ body.dark-mode .slow-question-time {
 body.dark-mode .slow-questions-more {
   color: #9ca3af;
 }
+
+/* Issue #6: Notes feature - dark mode */
+
+body.dark-mode .notes-section {
+  background: linear-gradient(135deg, #78350f 0%, #713f12 100%);
+  border-left-color: #fbbf24;
+}
+
+body.dark-mode .notes-header h4 {
+  color: #fde68a;
+}
+
+body.dark-mode .note-date {
+  color: #fcd34d;
+}
+
+body.dark-mode .note-textarea {
+  background: #1f2937;
+  border-color: #92400e;
+  color: #e5e7eb;
+}
+
+body.dark-mode .note-textarea:focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+}
+
+body.dark-mode .note-textarea::placeholder {
+  color: #d97706;
+  opacity: 0.7;
+}
+
+body.dark-mode .notes-char-count {
+  color: #fcd34d;
+}
+
+body.dark-mode .notes-char-count span {
+  color: #fde68a;
+}
+
+body.dark-mode .note-save-btn {
+  background: #fbbf24;
+  color: #78350f;
+}
+
+body.dark-mode .note-save-btn:hover {
+  background: #fcd34d;
+}
+
+body.dark-mode .note-delete-btn {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+body.dark-mode .note-delete-btn:hover {
+  background: #991b1b;
+}
+
+body.dark-mode .notes-formatting-hint {
+  color: #fcd34d;
+}
+
+body.dark-mode .notes-formatting-hint strong {
+  color: #fde68a;
+}
