@@ -297,8 +297,9 @@
   const summaryContinue = document.getElementById('summary-continue');
   const summaryReset = document.getElementById('summary-reset');
 
-  // Save quiz state to localStorage
-  function saveState() {
+  // Save quiz state to localStorage (Issue #2 - Progress persistence)
+  let lastSaveNotification = 0;
+  function saveState(showNotification = false) {
     try {
       const state = {
         version: STATE_VERSION,
@@ -314,6 +315,13 @@
 
       localStorage.setItem('quizState', JSON.stringify(state));
       console.debug('[State] Progress saved');
+
+      // Show subtle save notification (Issue #2) - throttled to avoid spam
+      const now = Date.now();
+      if (showNotification && (now - lastSaveNotification > 3000)) {
+        lastSaveNotification = now;
+        showToast('✓ Progress auto-saved', 'success');
+      }
     } catch (error) {
       console.warn('[State] Failed to save progress:', error);
       // Fail silently - don't disrupt user experience
@@ -1401,8 +1409,10 @@
     // Save scroll position to restore after render (iOS fix)
     const scrollY = window.scrollY || window.pageYOffset;
 
-    // Update header
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    // Update header with question ID (Issue #25)
+    questionCounter.textContent = `Question #${currentQuestionIndex + 1} of ${questions.length}`;
+    questionCounter.title = `Click to copy question ID`;
+    questionCounter.style.cursor = 'pointer';
     updateProgressBar();
     updateNavigationButtons();
     updateQuestionGrid();
@@ -1504,34 +1514,58 @@
     });
     html += '</fieldset>';
 
-    // Explanation (shown after submission)
+    // Explanation (shown after submission) - Enhanced for Issues #1 and #4
     if (isSubmitted) {
-      html += '<div class="explanation-section">';
-      html += '<h3>Explanation</h3>';
+      html += '<div class="explanation-section" id="explanation-section">';
+      html += '<h3>📚 Explanation</h3>';
 
-      if (question.explanation?.correct) {
-        html += `<div class="explanation-text"><strong>Why ${escapeHtml(question.correctAnswer)} is correct:</strong><br>${escapeHtml(question.explanation.correct)}</div>`;
+      // Add TL;DR section with educational objective (Issue #4)
+      if (question.educationalObjective) {
+        html += `<div class="tldr-section">
+          <div class="tldr-header">💡 <strong>TL;DR - Key Takeaway</strong></div>
+          <div class="tldr-content">${escapeHtml(question.educationalObjective)}</div>
+        </div>`;
       }
 
-      // Show rationale for user's incorrect answer
+      // Correct answer explanation in highlighted box (Issue #1)
+      if (question.explanation?.correct) {
+        html += `<div class="explanation-correct">
+          <div class="explanation-heading">✓ Why ${escapeHtml(question.correctAnswer)} is Correct</div>
+          <div class="explanation-content">${escapeHtml(question.explanation.correct)}</div>
+        </div>`;
+      }
+
+      // Show rationale for user's incorrect answer in highlighted box (Issue #1)
       if (!answer.correct && question.explanation?.incorrect) {
         const incorrectRationale = question.explanation.incorrect[answer.selected];
         if (incorrectRationale) {
-          html += `<div class="explanation-text"><strong>Why ${escapeHtml(answer.selected)} is incorrect:</strong><br>${escapeHtml(incorrectRationale)}</div>`;
+          html += `<div class="explanation-incorrect">
+            <div class="explanation-heading">✗ Why ${escapeHtml(answer.selected)} is Incorrect</div>
+            <div class="explanation-content">${escapeHtml(incorrectRationale)}</div>
+          </div>`;
         }
       }
 
-      if (question.educationalObjective) {
-        html += `<div class="explanation-text"><strong>Educational Objective:</strong><br>${escapeHtml(question.educationalObjective)}</div>`;
-      }
-
+      // Collapsible detailed explanation (Issue #4)
       if (question.keyFacts && question.keyFacts.length > 0) {
+        html += '<div class="detailed-explanation">';
+        html += '<button class="toggle-details-btn" data-expanded="true">📖 <span>Hide Detailed Explanation</span></button>';
+        html += '<div class="details-content" style="display: block;">';
         html += '<div class="explanation-text"><strong>Key Facts:</strong><ul>';
         question.keyFacts.forEach(fact => {
           html += `<li>${escapeHtml(fact)}</li>`;
         });
         html += '</ul></div>';
+        html += '</div>';
+        html += '</div>';
       }
+
+      // Report Error button (Issue #24)
+      const questionId = `Q${currentQuestionIndex + 1}`;
+      const githubIssueUrl = `https://github.com/stevetodman/tbank/issues/new?title=Error%20in%20${questionId}&body=Question%20ID:%20${questionId}%0A%0ADescribe%20the%20error:%0A`;
+      html += `<div class="explanation-actions">
+        <a href="${githubIssueUrl}" target="_blank" class="report-error-btn">🐛 Report Error</a>
+      </div>`;
 
       html += '</div>';
     }
@@ -1735,10 +1769,51 @@
       }
     }
 
-    // Scroll to top of question display on mobile for better UX
+    // Event listener for toggle details button (Issue #4)
+    if (isSubmitted) {
+      const toggleBtn = document.querySelector('.toggle-details-btn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const expanded = toggleBtn.getAttribute('data-expanded') === 'true';
+          const detailsContent = document.querySelector('.details-content');
+          const btnText = toggleBtn.querySelector('span');
+
+          if (expanded) {
+            detailsContent.style.display = 'none';
+            btnText.textContent = 'Show Detailed Explanation';
+            toggleBtn.setAttribute('data-expanded', 'false');
+          } else {
+            detailsContent.style.display = 'block';
+            btnText.textContent = 'Hide Detailed Explanation';
+            toggleBtn.setAttribute('data-expanded', 'true');
+          }
+        });
+      }
+    }
+
+    // Event listener for question counter click to copy ID (Issue #25)
+    questionCounter.addEventListener('click', () => {
+      const questionId = `Q${currentQuestionIndex + 1}`;
+      navigator.clipboard.writeText(questionId).then(() => {
+        showToast(`Question ID ${questionId} copied to clipboard`, 'success');
+      }).catch(() => {
+        showToast('Failed to copy question ID', 'error');
+      });
+    });
+
+    // Scroll to top or explanation section (Issue #1 - auto-scroll to explanation)
     // Use requestAnimationFrame to ensure DOM has updated
     requestAnimationFrame(() => {
-      if (window.innerWidth <= 768) {
+      if (isSubmitted) {
+        // If just submitted, scroll to explanation section
+        const explanationSection = document.getElementById('explanation-section');
+        if (explanationSection) {
+          explanationSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+          });
+        }
+      } else if (window.innerWidth <= 768) {
         // On mobile, scroll to question display smoothly
         const questionDisplay = document.getElementById('question-display');
         if (questionDisplay) {
@@ -1808,8 +1883,8 @@
       currentStreak = 0;
     }
 
-    // Save state after submission
-    saveState();
+    // Save state after submission with notification (Issue #2)
+    saveState(true);
 
     renderQuestion();
     updateStats();

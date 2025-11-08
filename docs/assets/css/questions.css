@@ -273,6 +273,7 @@
   color: var(--color-neutral-900);
 }
 
+/* Issue #5: Improved visual hierarchy for vignette */
 .question-stem .vignette {
   margin: 0 0 1.5rem 0;
   font-family: var(--font-vignette);
@@ -280,15 +281,23 @@
   line-height: var(--leading-vignette);
   color: var(--color-text);
   max-width: 70ch;
+  background: var(--color-neutral-50);
+  padding: 1.25rem;
+  border-left: 4px solid var(--color-primary-500);
+  border-radius: var(--radius-sm);
 }
 
+/* Issue #5: Improved visual hierarchy for question text */
 .question-stem .question-text {
-  margin: 0;
+  margin: 1.5rem 0;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   line-height: 1.6;
   color: var(--color-neutral-900);
+  padding: 0.75rem 0;
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
 }
 
 .question-stem .question-text strong {
@@ -306,7 +315,7 @@
 .answer-choices {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   margin: 1.5rem 0;
   /* Reset fieldset default styles */
   border: none;
@@ -314,11 +323,12 @@
   min-width: 0;
 }
 
+/* Issue #5: Improved visual hierarchy for answer choices */
 .answer-choice {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
+  gap: 1rem;
+  padding: 1.125rem 1.5rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -338,15 +348,16 @@
   pointer-events: none;
 }
 
+/* Issue #5: Improved visual hierarchy - larger answer letters */
 .choice-letter {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  width: 24px;
-  height: 24px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 1.125rem;
   color: var(--color-neutral-700);
   background: var(--color-neutral-50);
   border: 2px solid var(--color-border-dark);
@@ -466,7 +477,7 @@
   color: var(--color-error-600);
 }
 
-/* Explanation Section */
+/* Explanation Section - Issue #1 and #4 enhancements */
 .explanation-section {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -476,12 +487,110 @@
 }
 
 .explanation-section h3 {
-  margin: 0 0 1rem 0;
-  font-size: 0.875rem;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--color-primary-700);
-  text-transform: uppercase;
   letter-spacing: 0.025em;
+}
+
+/* Issue #4: TL;DR Section */
+.tldr-section {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.tldr-header {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.tldr-content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #78350f;
+  font-weight: 500;
+}
+
+/* Issue #1: Correct Answer Explanation Box */
+.explanation-correct {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border: 2px solid var(--color-success-500);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.explanation-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.explanation-correct .explanation-heading {
+  color: var(--color-success-700);
+}
+
+.explanation-content {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-neutral-800);
+}
+
+/* Issue #1: Incorrect Answer Explanation Box */
+.explanation-incorrect {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+  border: 2px solid var(--color-error-500);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.explanation-incorrect .explanation-heading {
+  color: var(--color-error-700);
+}
+
+/* Issue #4: Collapsible Detailed Explanation */
+.detailed-explanation {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed var(--color-border);
+}
+
+.toggle-details-btn {
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggle-details-btn:hover {
+  background: var(--color-neutral-200);
+  border-color: var(--color-neutral-400);
+}
+
+.details-content {
+  margin-top: 1rem;
 }
 
 .explanation-text {
@@ -512,6 +621,38 @@
 
 .explanation-text li:last-child {
   margin-bottom: 0;
+}
+
+/* Issue #24: Report Error Button */
+.explanation-actions {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-error-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.report-error-btn:hover {
+  background: var(--color-neutral-200);
+  border-color: var(--color-neutral-400);
+  color: var(--color-neutral-900);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Navigation */

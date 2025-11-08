@@ -197,15 +197,90 @@ body.dark-mode .grid-question-btn.incorrect {
 
 body.dark-mode .explanation-section {
   background-color: #0f1419;
-  border-top-color: #374151;
+  border-left-color: var(--color-primary-400);
 }
 
 body.dark-mode .explanation-section h3 {
-  color: #d1d5db;
+  color: #e5e7eb;
 }
 
 body.dark-mode .explanation-text {
   color: #d1d5db;
+}
+
+/* Dark mode for Issue #4: TL;DR Section */
+body.dark-mode .tldr-section {
+  background: #78350f;
+  border-color: #f59e0b;
+}
+
+body.dark-mode .tldr-header {
+  color: #fef3c7;
+}
+
+body.dark-mode .tldr-content {
+  color: #fde68a;
+}
+
+/* Dark mode for Issue #1: Explanation Boxes */
+body.dark-mode .explanation-correct {
+  background: #064e3b;
+  border-color: var(--color-success-500);
+}
+
+body.dark-mode .explanation-correct .explanation-heading {
+  color: #a7f3d0;
+}
+
+body.dark-mode .explanation-incorrect {
+  background: #7f1d1d;
+  border-color: var(--color-error-500);
+}
+
+body.dark-mode .explanation-incorrect .explanation-heading {
+  color: #fca5a5;
+}
+
+body.dark-mode .explanation-content {
+  color: #e5e7eb;
+}
+
+/* Dark mode for Issue #4: Toggle Details Button */
+body.dark-mode .toggle-details-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+body.dark-mode .toggle-details-btn:hover {
+  background: #4b5563;
+  border-color: #6b7280;
+}
+
+/* Dark mode for Issue #24: Report Error Button */
+body.dark-mode .report-error-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+body.dark-mode .report-error-btn:hover {
+  background: #4b5563;
+  border-color: #6b7280;
+  color: #f9fafb;
+}
+
+/* Dark mode for Issue #5: Vignette and question visual hierarchy */
+body.dark-mode .vignette {
+  background: #0f1419;
+  border-left-color: var(--color-primary-400);
+  color: #e5e7eb;
+}
+
+body.dark-mode .question-text {
+  color: #f9fafb;
+  border-top-color: #374151;
+  border-bottom-color: #374151;
 }
 
 body.dark-mode .feedback-banner.correct {
