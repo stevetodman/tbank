@@ -1904,18 +1904,57 @@ input[type="checkbox"] {
     line-height: 1.5;
   }
 
-  /* Eliminate button - always visible on mobile */
+  /* Eliminate button - hide on mobile (swipe gestures used instead) */
   .eliminate-btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-    min-height: 36px;
-    opacity: 1;
-    position: static;
-    margin-left: auto;
-    transform: none;
+    display: none;
   }
 
-  .answer-choice .eliminate-btn {
+  /* Swipe gesture visual feedback */
+  .answer-choice {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .answer-choice.swiping {
+    transition: transform 0.05s ease;
+  }
+
+  .answer-choice::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .answer-choice.swipe-left-hint::after {
+    content: '✕ Cross out';
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1.5rem;
+    background: linear-gradient(to left, rgba(239, 68, 68, 0.15), transparent);
+    color: var(--color-error-700);
+    font-weight: 600;
+    font-size: 0.9rem;
+    opacity: 1;
+  }
+
+  .answer-choice.eliminated.swipe-right-hint::after {
+    content: '↺ Undo';
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 1.5rem;
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.15), transparent);
+    color: var(--color-primary-700);
+    font-weight: 600;
+    font-size: 0.9rem;
     opacity: 1;
   }
 
