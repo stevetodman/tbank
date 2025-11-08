@@ -1,11 +1,11 @@
 (function () {
-  const select = document.getElementById("question-set-select");
-  const searchInput = document.getElementById("question-search");
-  const systemFilter = document.getElementById("system-filter");
-  const list = document.getElementById("question-list");
-  const summary = document.getElementById("question-summary");
-  const statusSection = document.querySelector("section[aria-live]");
-  const currentYear = document.getElementById("current-year");
+  const select = document.getElementById('question-set-select');
+  const searchInput = document.getElementById('question-search');
+  const systemFilter = document.getElementById('system-filter');
+  const list = document.getElementById('question-list');
+  const summary = document.getElementById('question-summary');
+  const statusSection = document.querySelector('section[aria-live]');
+  const currentYear = document.getElementById('current-year');
 
   if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
@@ -17,11 +17,11 @@
 
   function setBusy(isBusy) {
     if (!statusSection) return;
-    statusSection.setAttribute("aria-busy", String(isBusy));
+    statusSection.setAttribute('aria-busy', String(isBusy));
   }
 
   function createOption(set) {
-    const option = document.createElement("option");
+    const option = document.createElement('option');
     option.value = set.id;
     option.textContent = `${set.title} (${set.questionCount})`;
     return option;
@@ -29,7 +29,7 @@
 
   function populateSelect() {
     if (!select) return;
-    select.innerHTML = "";
+    select.innerHTML = '';
     QUESTION_SETS.forEach((set) => {
       select.appendChild(createOption(set));
     });
@@ -40,19 +40,19 @@
     const systems = Array.from(
       new Set(
         questions
-          .map((q) => q.system || q.blueprintCategory || "")
+          .map((q) => q.system || q.blueprintCategory || '')
           .filter((value) => value && value.trim().length > 0)
       )
     ).sort((a, b) => a.localeCompare(b));
 
     const currentValue = systemFilter.value;
-    systemFilter.innerHTML = "";
-    const allOption = document.createElement("option");
-    allOption.value = "";
-    allOption.textContent = "All systems";
+    systemFilter.innerHTML = '';
+    const allOption = document.createElement('option');
+    allOption.value = '';
+    allOption.textContent = 'All systems';
     systemFilter.appendChild(allOption);
     systems.forEach((system) => {
-      const option = document.createElement("option");
+      const option = document.createElement('option');
       option.value = system;
       option.textContent = system;
       systemFilter.appendChild(option);
@@ -64,24 +64,24 @@
   }
 
   function toggleAnswerVisibility(button, answer) {
-    const expanded = button.getAttribute("aria-expanded") === "true";
-    button.setAttribute("aria-expanded", String(!expanded));
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!expanded));
     answer.hidden = expanded;
-    button.textContent = expanded ? "Show explanation" : "Hide explanation";
+    button.textContent = expanded ? 'Show explanation' : 'Hide explanation';
   }
 
   function createAnswerChoices(question) {
     if (!question.answerChoices || question.answerChoices.length === 0) return null;
-    const list = document.createElement("ol");
-    list.className = "answer-choices";
+    const list = document.createElement('ol');
+    list.className = 'answer-choices';
     question.answerChoices.forEach((choice) => {
-      const item = document.createElement("li");
-      const strong = document.createElement("strong");
+      const item = document.createElement('li');
+      const strong = document.createElement('strong');
       strong.textContent = `${choice.letter}.`;
       item.appendChild(strong);
       item.appendChild(document.createTextNode(` ${choice.text}`));
       if (choice.isCorrect) {
-        item.classList.add("answer-correct");
+        item.classList.add('answer-correct');
       }
       list.appendChild(item);
     });
@@ -91,14 +91,14 @@
   function createRationaleList(question) {
     const explanations = question.explanation || {};
     const incorrect = explanations.incorrect || {};
-    const hasCorrectLetter = typeof question.correctAnswer === "string" && question.correctAnswer.length > 0;
+    const hasCorrectLetter = typeof question.correctAnswer === 'string' && question.correctAnswer.length > 0;
 
     const reasonMap = new Map();
-    if (hasCorrectLetter && typeof explanations.correct === "string" && explanations.correct.trim().length > 0) {
+    if (hasCorrectLetter && typeof explanations.correct === 'string' && explanations.correct.trim().length > 0) {
       reasonMap.set(question.correctAnswer.trim(), explanations.correct.trim());
     }
     Object.entries(incorrect).forEach(([letter, rationale]) => {
-      if (typeof rationale === "string" && rationale.trim().length > 0) {
+      if (typeof rationale === 'string' && rationale.trim().length > 0) {
         reasonMap.set(letter.trim(), rationale.trim());
       }
     });
@@ -107,33 +107,33 @@
       return null;
     }
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "question-rationales";
+    const wrapper = document.createElement('div');
+    wrapper.className = 'question-rationales';
 
-    const heading = document.createElement("p");
-    heading.className = "rationales-heading";
-    heading.textContent = "Answer rationales";
+    const heading = document.createElement('p');
+    heading.className = 'rationales-heading';
+    heading.textContent = 'Answer rationales';
     wrapper.appendChild(heading);
 
-    const list = document.createElement("dl");
-    list.className = "rationale-list";
+    const list = document.createElement('dl');
+    list.className = 'rationale-list';
 
     question.answerChoices.forEach((choice) => {
       const letter = choice.letter?.trim();
       if (!letter || !reasonMap.has(letter)) return;
 
-      const item = document.createElement("div");
-      item.className = "rationale-item";
+      const item = document.createElement('div');
+      item.className = 'rationale-item';
       const isCorrect = choice.isCorrect || (hasCorrectLetter && letter === question.correctAnswer.trim());
       if (isCorrect) {
-        item.classList.add("rationale-item--correct");
+        item.classList.add('rationale-item--correct');
       }
 
-      const term = document.createElement("dt");
+      const term = document.createElement('dt');
       term.textContent = `${letter}. ${choice.text}`;
       item.appendChild(term);
 
-      const detail = document.createElement("dd");
+      const detail = document.createElement('dd');
       detail.textContent = reasonMap.get(letter);
       item.appendChild(detail);
 
@@ -149,17 +149,17 @@
   }
 
   function createQuestionCard(question) {
-    const item = document.createElement("article");
-    item.className = "question-item";
-    item.setAttribute("role", "listitem");
+    const item = document.createElement('article');
+    item.className = 'question-item';
+    item.setAttribute('role', 'listitem');
 
-    const header = document.createElement("header");
-    const title = document.createElement("h2");
+    const header = document.createElement('header');
+    const title = document.createElement('h2');
     title.textContent = `${question.id}. ${question.title}`;
     header.appendChild(title);
 
-    const meta = document.createElement("div");
-    meta.className = "question-meta";
+    const meta = document.createElement('div');
+    meta.className = 'question-meta';
 
     const difficulty = question.difficultyLabel || (question.difficulty ? `Difficulty ${question.difficulty}` : null);
     const fields = [
@@ -169,55 +169,55 @@
       question.topic,
       question.subtopic,
     ].filter(Boolean);
-    meta.textContent = fields.join(" • ");
+    meta.textContent = fields.join(' • ');
     header.appendChild(meta);
 
-    const stem = document.createElement("p");
-    stem.className = "question-stem";
-    stem.textContent = question.questionText || question.vignette || "";
+    const stem = document.createElement('p');
+    stem.className = 'question-stem';
+    stem.textContent = question.questionText || question.vignette || '';
 
     const answerChoices = createAnswerChoices(question);
 
-    const toggle = document.createElement("button");
-    toggle.className = "toggle-answer";
-    toggle.type = "button";
-    toggle.textContent = "Show explanation";
-    toggle.setAttribute("aria-expanded", "false");
+    const toggle = document.createElement('button');
+    toggle.className = 'toggle-answer';
+    toggle.type = 'button';
+    toggle.textContent = 'Show explanation';
+    toggle.setAttribute('aria-expanded', 'false');
 
-    const answer = document.createElement("div");
-    answer.className = "question-answer";
+    const answer = document.createElement('div');
+    answer.className = 'question-answer';
 
-    const correct = document.createElement("p");
-    const correctStrong = document.createElement("strong");
-    correctStrong.textContent = "Correct answer:";
+    const correct = document.createElement('p');
+    const correctStrong = document.createElement('strong');
+    correctStrong.textContent = 'Correct answer:';
     correct.appendChild(correctStrong);
-    correct.appendChild(document.createTextNode(` ${question.correctAnswer || "See explanation"}`));
+    correct.appendChild(document.createTextNode(` ${question.correctAnswer || 'See explanation'}`));
     answer.appendChild(correct);
 
     if (question.explanation?.correct) {
-      const explanation = document.createElement("p");
+      const explanation = document.createElement('p');
       explanation.textContent = question.explanation.correct;
       answer.appendChild(explanation);
     }
 
     if (question.educationalObjective) {
-      const objective = document.createElement("p");
-      const objectiveStrong = document.createElement("strong");
-      objectiveStrong.textContent = "Objective:";
+      const objective = document.createElement('p');
+      const objectiveStrong = document.createElement('strong');
+      objectiveStrong.textContent = 'Objective:';
       objective.appendChild(objectiveStrong);
       objective.appendChild(document.createTextNode(` ${question.educationalObjective}`));
       answer.appendChild(objective);
     }
 
     if (question.keyFacts && question.keyFacts.length > 0) {
-      const keyFactTitle = document.createElement("p");
-      const keyFactStrong = document.createElement("strong");
-      keyFactStrong.textContent = "Key facts:";
+      const keyFactTitle = document.createElement('p');
+      const keyFactStrong = document.createElement('strong');
+      keyFactStrong.textContent = 'Key facts:';
       keyFactTitle.appendChild(keyFactStrong);
       answer.appendChild(keyFactTitle);
-      const factList = document.createElement("ul");
+      const factList = document.createElement('ul');
       question.keyFacts.forEach((fact) => {
-        const li = document.createElement("li");
+        const li = document.createElement('li');
         li.textContent = fact;
         factList.appendChild(li);
       });
@@ -230,7 +230,7 @@
     }
 
     answer.hidden = true;
-    toggle.addEventListener("click", () => toggleAnswerVisibility(toggle, answer));
+    toggle.addEventListener('click', () => toggleAnswerVisibility(toggle, answer));
 
     item.append(header, stem);
     if (answerChoices) {
@@ -243,20 +243,20 @@
 
   function renderQuestions(questions) {
     if (!list) return;
-    list.innerHTML = "";
+    list.innerHTML = '';
     if (questions.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "empty-state";
-      empty.textContent = "No questions match the current filters.";
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'No questions match the current filters.';
       list.appendChild(empty);
-      summary.textContent = "";
+      summary.textContent = '';
       return;
     }
 
     const fragment = document.createDocumentFragment();
     questions.map(createQuestionCard).forEach((card) => fragment.appendChild(card));
     list.appendChild(fragment);
-    summary.textContent = `${questions.length} question${questions.length === 1 ? "" : "s"} shown.`;
+    summary.textContent = `${questions.length} question${questions.length === 1 ? '' : 's'} shown.`;
   }
 
   function normalise(text) {
@@ -264,26 +264,26 @@
   }
 
   function validateQuestionBank(data) {
-    if (!data || typeof data !== "object") {
-      return { valid: false, error: "Invalid data format: expected object" };
+    if (!data || typeof data !== 'object') {
+      return { valid: false, error: 'Invalid data format: expected object' };
     }
 
-    if (!data.questionBank || typeof data.questionBank !== "object") {
-      return { valid: false, error: "Missing or invalid questionBank property" };
+    if (!data.questionBank || typeof data.questionBank !== 'object') {
+      return { valid: false, error: 'Missing or invalid questionBank property' };
     }
 
     if (!Array.isArray(data.questionBank.questions)) {
-      return { valid: false, error: "Missing or invalid questions array" };
+      return { valid: false, error: 'Missing or invalid questions array' };
     }
 
     const questions = data.questionBank.questions;
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
-      if (!q || typeof q !== "object") {
+      if (!q || typeof q !== 'object') {
         return { valid: false, error: `Question ${i} is not an object` };
       }
 
-      const requiredFields = ["id", "title"];
+      const requiredFields = ['id', 'title'];
       for (const field of requiredFields) {
         if (!q[field]) {
           return { valid: false, error: `Question ${i} missing required field: ${field}` };
@@ -303,8 +303,8 @@
   }
 
   function filterQuestions() {
-    const term = normalise(searchInput?.value || "");
-    const system = systemFilter?.value || "";
+    const term = normalise(searchInput?.value || '');
+    const system = systemFilter?.value || '';
 
     const filtered = fullQuestionSet.filter((question) => {
       const haystack = normalise(
@@ -315,10 +315,10 @@
           question.subject,
           question.system,
           question.topic,
-          (question.tags || []).join(" "),
+          (question.tags || []).join(' '),
         ]
           .filter(Boolean)
-          .join(" ")
+          .join(' ')
       );
       const matchesTerm = !term || haystack.includes(term);
       const matchesSystem = !system || question.system === system || question.blueprintCategory === system;
@@ -347,7 +347,7 @@
 
     activeSetId = id;
     setBusy(true);
-    summary.textContent = "Loading questions...";
+    summary.textContent = 'Loading questions...';
 
     try {
       const response = await fetch(`../${selected.downloads.json}`, {
@@ -368,7 +368,7 @@
       filterQuestions();
       summary.textContent = `${fullQuestionSet.length} questions loaded from ${selected.title}.`;
     } catch (error) {
-      if (error.name === "AbortError") {
+      if (error.name === 'AbortError') {
         return;
       }
       console.error(error);
@@ -383,11 +383,11 @@
 
   function initialiseFromQuery() {
     const params = new URLSearchParams(window.location.search);
-    const requested = params.get("set");
+    const requested = params.get('set');
     const fallback = QUESTION_SETS[0]?.id;
     const initial = QUESTION_SETS.some((set) => set.id === requested) ? requested : fallback;
     if (select) {
-      select.value = initial || "";
+      select.value = initial || '';
     }
     if (initial) {
       loadQuestionSet(initial);
@@ -397,11 +397,11 @@
   populateSelect();
   initialiseFromQuery();
 
-  select?.addEventListener("change", (event) => {
+  select?.addEventListener('change', (event) => {
     const id = event.target.value;
     loadQuestionSet(id);
   });
 
-  searchInput?.addEventListener("input", filterQuestions);
-  systemFilter?.addEventListener("change", filterQuestions);
+  searchInput?.addEventListener('input', filterQuestions);
+  systemFilter?.addEventListener('change', filterQuestions);
 })();
