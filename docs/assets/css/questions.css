@@ -3687,3 +3687,92 @@ input[type="radio"]:focus-visible {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ============================================================================
+   Issue #7: Search Functionality
+   ============================================================================ */
+
+.search-container {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.125rem;
+  color: var(--color-neutral-500);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 3rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.search-input::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.clear-search-btn:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.search-results-count {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-primary-50);
+  border-left: 3px solid var(--color-primary-500);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary-700);
+}
+
+.search-results-count.no-results {
+  background: var(--color-error-50);
+  border-left-color: var(--color-error-500);
+  color: var(--color-error-700);
+}
+
+/* Highlight matching search terms in question text */
+.search-highlight {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.125rem;
+  font-weight: 600;
+}

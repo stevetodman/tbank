@@ -699,3 +699,57 @@ body.dark-mode .grid-question-btn:focus-visible {
 body.dark-mode *:focus-visible {
   outline-color: var(--color-primary-400);
 }
+
+/* ===========================================================================
+   Dark mode for Issue #7: Search Functionality
+   =========================================================================== */
+
+body.dark-mode .search-container {
+  background: #1f2937;
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .search-icon {
+  color: #9ca3af;
+}
+
+body.dark-mode .search-input {
+  background: #111827;
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .search-input:focus {
+  border-color: var(--color-primary-400);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+body.dark-mode .search-input::placeholder {
+  color: #6b7280;
+}
+
+body.dark-mode .clear-search-btn {
+  color: #9ca3af;
+}
+
+body.dark-mode .clear-search-btn:hover {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .search-results-count {
+  background: #1e3a5f;
+  border-left-color: var(--color-primary-400);
+  color: var(--color-primary-200);
+}
+
+body.dark-mode .search-results-count.no-results {
+  background: #7f1d1d;
+  border-left-color: var(--color-error-400);
+  color: #fca5a5;
+}
+
+body.dark-mode .search-highlight {
+  background: #78350f;
+  color: #fde68a;
+}

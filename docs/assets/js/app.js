@@ -275,6 +275,11 @@
   const topicMasterySection = document.getElementById('topic-mastery');
   const topicList = document.getElementById('topic-list');
 
+  // Issue #7: Search elements
+  const questionSearch = document.getElementById('question-search');
+  const clearSearchBtn = document.getElementById('clear-search-btn');
+  const searchResultsCount = document.getElementById('search-results-count');
+
   // New feature elements
   const timerDisplay = document.getElementById('timer-display');
   const timerText = document.getElementById('timer-text');
@@ -2249,6 +2254,80 @@
     showFlaggedBtn.setAttribute('aria-pressed', filterType === 'flagged' ? 'true' : 'false');
   }
 
+  // Issue #7: Search functionality
+  function searchQuestions(searchTerm) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    let matchCount = 0;
+
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach((btn, index) => {
+      const question = questions[index];
+      let matches = false;
+
+      // Search across question text, topic, and keywords
+      const searchableText = [
+        question.vignette || '',
+        question.questionText || '',
+        question.topic || '',
+        ...(question.answerChoices?.map(c => c.text) || [])
+      ].join(' ').toLowerCase();
+
+      matches = searchableText.includes(lowerSearchTerm);
+
+      // Show/hide based on match
+      btn.style.display = matches ? '' : 'none';
+      if (matches) matchCount++;
+    });
+
+    // Update results count
+    updateSearchResultsCount(matchCount, searchTerm);
+
+    // Deactivate all filter buttons when searching
+    showAllBtn.classList.remove('active');
+    showIncorrectBtn.classList.remove('active');
+    showUnansweredBtn.classList.remove('active');
+    showFlaggedBtn.classList.remove('active');
+
+    // Update ARIA states
+    showAllBtn.setAttribute('aria-pressed', 'false');
+    showIncorrectBtn.setAttribute('aria-pressed', 'false');
+    showUnansweredBtn.setAttribute('aria-pressed', 'false');
+    showFlaggedBtn.setAttribute('aria-pressed', 'false');
+
+    // Announce results to screen readers
+    announceToScreenReader(`Search found ${matchCount} matching question${matchCount !== 1 ? 's' : ''}`);
+  }
+
+  function clearSearch() {
+    questionSearch.value = '';
+    clearSearchBtn.hidden = true;
+    searchResultsCount.hidden = true;
+
+    // Show all questions
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach(btn => {
+      btn.style.display = '';
+    });
+
+    // Re-activate "All" filter
+    filterQuestionGrid('all');
+
+    // Announce to screen readers
+    announceToScreenReader('Search cleared, showing all questions');
+  }
+
+  function updateSearchResultsCount(count, searchTerm) {
+    searchResultsCount.hidden = false;
+
+    if (count === 0) {
+      searchResultsCount.className = 'search-results-count no-results';
+      searchResultsCount.textContent = `No questions found matching "${searchTerm}"`;
+    } else {
+      searchResultsCount.className = 'search-results-count';
+      searchResultsCount.textContent = `Found ${count} question${count !== 1 ? 's' : ''} matching "${searchTerm}"`;
+    }
+  }
+
   // Update topic mastery display
   function updateTopicMastery() {
     const topicStats = {};
@@ -2950,6 +3029,19 @@
   showIncorrectBtn.addEventListener('click', () => filterQuestionGrid('incorrect'));
   showUnansweredBtn.addEventListener('click', () => filterQuestionGrid('unanswered'));
   showFlaggedBtn.addEventListener('click', () => filterQuestionGrid('flagged'));
+
+  // Issue #7: Search event listeners
+  questionSearch.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.trim();
+    if (searchTerm.length > 0) {
+      searchQuestions(searchTerm);
+      clearSearchBtn.hidden = false;
+    } else {
+      clearSearch();
+    }
+  });
+
+  clearSearchBtn.addEventListener('click', clearSearch);
 
   // New feature event listeners
   settingsBtn.addEventListener('click', openSettings);

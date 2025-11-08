@@ -82,6 +82,24 @@
         <h2 id="question-menu-title">Questions</h2>
         <button id="menu-close" class="close-btn" aria-label="Close question menu">&times;</button>
       </div>
+
+      <!-- Issue #7: Search bar -->
+      <div class="search-container" role="search">
+        <div class="search-input-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            id="question-search"
+            class="search-input"
+            placeholder="Search questions, topics, or keywords..."
+            aria-label="Search questions"
+            autocomplete="off"
+          />
+          <button id="clear-search-btn" class="clear-search-btn" hidden aria-label="Clear search">✕</button>
+        </div>
+        <div id="search-results-count" class="search-results-count" hidden></div>
+      </div>
+
       <div class="question-menu-stats" role="region" aria-label="Session statistics">
         <span id="answered-count" aria-label="Questions answered">Answered: 0/52</span>
         <span id="correct-count" aria-label="Correct answers">Correct: 0</span>
