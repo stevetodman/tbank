@@ -19,11 +19,11 @@
   function escapeHtml(unsafe) {
     if (!unsafe) return '';
     return String(unsafe)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   // Haptic feedback engine for iOS/mobile devices
@@ -204,47 +204,47 @@
   let currentSelection = null;
 
   // DOM elements
-  const questionDisplay = document.getElementById("question-display");
-  const questionCounter = document.getElementById("question-counter");
-  const progressBar = document.getElementById("progress-bar");
-  const prevBtn = document.getElementById("prev-btn");
-  const nextBtn = document.getElementById("next-btn");
-  const submitBtn = document.getElementById("submit-btn");
-  const menuToggle = document.getElementById("menu-toggle");
-  const menuClose = document.getElementById("menu-close");
-  const questionMenu = document.getElementById("question-menu");
-  const questionGrid = document.getElementById("question-grid");
-  const answeredCount = document.getElementById("answered-count");
-  const correctCount = document.getElementById("correct-count");
-  const percentageDisplay = document.getElementById("percentage");
-  const showAllBtn = document.getElementById("show-all-btn");
-  const showIncorrectBtn = document.getElementById("show-incorrect-btn");
-  const showUnansweredBtn = document.getElementById("show-unanswered-btn");
-  const showFlaggedBtn = document.getElementById("show-flagged-btn");
-  const topicMasterySection = document.getElementById("topic-mastery");
-  const topicList = document.getElementById("topic-list");
+  const questionDisplay = document.getElementById('question-display');
+  const questionCounter = document.getElementById('question-counter');
+  const progressBar = document.getElementById('progress-bar');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuClose = document.getElementById('menu-close');
+  const questionMenu = document.getElementById('question-menu');
+  const questionGrid = document.getElementById('question-grid');
+  const answeredCount = document.getElementById('answered-count');
+  const correctCount = document.getElementById('correct-count');
+  const percentageDisplay = document.getElementById('percentage');
+  const showAllBtn = document.getElementById('show-all-btn');
+  const showIncorrectBtn = document.getElementById('show-incorrect-btn');
+  const showUnansweredBtn = document.getElementById('show-unanswered-btn');
+  const showFlaggedBtn = document.getElementById('show-flagged-btn');
+  const topicMasterySection = document.getElementById('topic-mastery');
+  const topicList = document.getElementById('topic-list');
 
   // New feature elements
-  const timerDisplay = document.getElementById("timer-display");
-  const timerText = document.getElementById("timer-text");
-  const timerToggleBtn = document.getElementById("timer-toggle");
-  const settingsBtn = document.getElementById("settings-btn");
-  const settingsModal = document.getElementById("settings-modal");
-  const settingsClose = document.getElementById("settings-close");
-  const darkModeToggle = document.getElementById("dark-mode-toggle");
-  const pullToRefreshToggle = document.getElementById("pull-to-refresh-toggle");
-  const timedModeToggle = document.getElementById("timed-mode-toggle");
-  const timerDurationInput = document.getElementById("timer-duration");
-  const timerDurationGroup = document.getElementById("timer-duration-group");
-  const settingsSaveBtn = document.getElementById("settings-save");
-  const endSessionBtn = document.getElementById("end-session-btn");
-  const resetProgressBtn = document.getElementById("reset-progress-btn");
-  const sessionSummaryModal = document.getElementById("session-summary-modal");
-  const summaryContent = document.getElementById("summary-content");
-  const summaryClose = document.getElementById("summary-close");
-  const summaryShare = document.getElementById("summary-share");
-  const summaryContinue = document.getElementById("summary-continue");
-  const summaryReset = document.getElementById("summary-reset");
+  const timerDisplay = document.getElementById('timer-display');
+  const timerText = document.getElementById('timer-text');
+  const timerToggleBtn = document.getElementById('timer-toggle');
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsModal = document.getElementById('settings-modal');
+  const settingsClose = document.getElementById('settings-close');
+  const darkModeToggle = document.getElementById('dark-mode-toggle');
+  const pullToRefreshToggle = document.getElementById('pull-to-refresh-toggle');
+  const timedModeToggle = document.getElementById('timed-mode-toggle');
+  const timerDurationInput = document.getElementById('timer-duration');
+  const timerDurationGroup = document.getElementById('timer-duration-group');
+  const settingsSaveBtn = document.getElementById('settings-save');
+  const endSessionBtn = document.getElementById('end-session-btn');
+  const resetProgressBtn = document.getElementById('reset-progress-btn');
+  const sessionSummaryModal = document.getElementById('session-summary-modal');
+  const summaryContent = document.getElementById('summary-content');
+  const summaryClose = document.getElementById('summary-close');
+  const summaryShare = document.getElementById('summary-share');
+  const summaryContinue = document.getElementById('summary-continue');
+  const summaryReset = document.getElementById('summary-reset');
 
   // Load questions from JSON
   async function loadQuestions() {
@@ -257,8 +257,8 @@
     `;
 
     try {
-      const response = await fetch("assets/question_banks/all_questions.json");
-      if (!response.ok) throw new Error("Failed to load questions");
+      const response = await fetch('assets/question_banks/all_questions.json');
+      if (!response.ok) throw new Error('Failed to load questions');
       const data = await response.json();
       questions = data.questionBank.questions;
       initializeQuiz();
@@ -374,7 +374,7 @@
     const tourSteps = [
       {
         title: 'Welcome to TBank! 👋',
-        content: `TBank is optimized for mobile learning with advanced features designed to enhance your study experience. Let's explore what makes it special!`,
+        content: 'TBank is optimized for mobile learning with advanced features designed to enhance your study experience. Let\'s explore what makes it special!',
         highlight: null,
         screenshot: null
       },
@@ -585,17 +585,17 @@
 
   // Build question grid for menu
   function buildQuestionGrid() {
-    questionGrid.innerHTML = "";
+    questionGrid.innerHTML = '';
     questions.forEach((q, index) => {
-      const btn = document.createElement("button");
-      btn.className = "grid-question-btn";
+      const btn = document.createElement('button');
+      btn.className = 'grid-question-btn';
       btn.textContent = index + 1;
 
       // Add flag indicator if question is flagged
       if (userAnswers[index]?.flagged) {
-        const flagIcon = document.createElement("span");
-        flagIcon.className = "grid-flag-icon";
-        flagIcon.textContent = "🚩";
+        const flagIcon = document.createElement('span');
+        flagIcon.className = 'grid-flag-icon';
+        flagIcon.textContent = '🚩';
         btn.appendChild(flagIcon);
       }
 
@@ -765,7 +765,7 @@
     }, { passive: false });
 
     // Handle touch end
-    questionDisplay.addEventListener('touchend', (e) => {
+    questionDisplay.addEventListener('touchend', (_e) => {
       if (pulling && pullIndicator) {
         const threshold = 120;
         const currentHeight = parseInt(pullIndicator.style.height) || 0;
@@ -982,7 +982,7 @@
     document.addEventListener('mouseup', handleTextSelection);
   }
 
-  function handleTextSelection(e) {
+  function handleTextSelection(_e) {
     // Hide toolbar first
     if (highlightToolbar) {
       highlightToolbar.classList.remove('show');
@@ -1284,7 +1284,7 @@
       let longPressTimer = null;
       let longPressTriggered = false;
 
-      flagBtn.addEventListener('touchstart', (e) => {
+      flagBtn.addEventListener('touchstart', (_e) => {
         longPressTriggered = false;
         longPressTimer = setTimeout(() => {
           longPressTriggered = true;
@@ -1293,7 +1293,7 @@
         }, 500); // 500ms for long press
       }, { passive: true });
 
-      flagBtn.addEventListener('touchend', (e) => {
+      flagBtn.addEventListener('touchend', (_e) => {
         if (longPressTimer) {
           clearTimeout(longPressTimer);
         }
@@ -1302,14 +1302,14 @@
         }
       });
 
-      flagBtn.addEventListener('touchcancel', (e) => {
+      flagBtn.addEventListener('touchcancel', (_e) => {
         if (longPressTimer) {
           clearTimeout(longPressTimer);
         }
       });
 
       // For desktop/non-touch devices, use regular click
-      flagBtn.addEventListener('click', (e) => {
+      flagBtn.addEventListener('click', (_e) => {
         // Only handle click if it's not a touch device
         if (!('ontouchstart' in window)) {
           toggleFlag();
@@ -1317,7 +1317,7 @@
       });
 
       // Also support mousedown/mouseup for desktop long-press
-      flagBtn.addEventListener('mousedown', (e) => {
+      flagBtn.addEventListener('mousedown', (_e) => {
         if ('ontouchstart' in window) return; // Skip on touch devices
         longPressTriggered = false;
         longPressTimer = setTimeout(() => {
@@ -1326,7 +1326,7 @@
         }, 500);
       });
 
-      flagBtn.addEventListener('mouseup', (e) => {
+      flagBtn.addEventListener('mouseup', (_e) => {
         if ('ontouchstart' in window) return;
         if (longPressTimer) {
           clearTimeout(longPressTimer);
@@ -1334,7 +1334,7 @@
         // Click is handled by the click event listener
       });
 
-      flagBtn.addEventListener('mouseleave', (e) => {
+      flagBtn.addEventListener('mouseleave', (_e) => {
         if (longPressTimer) {
           clearTimeout(longPressTimer);
         }
@@ -1364,13 +1364,13 @@
         const isEliminated = answer?.eliminated?.includes(letter) || false;
 
         initSwipeGesture(choiceElement, {
-          onSwipeLeft: (element) => {
+          onSwipeLeft: (_element) => {
             // Swipe left to eliminate (only if not already eliminated)
             if (!isEliminated) {
               toggleElimination(letter);
             }
           },
-          onSwipeRight: (element) => {
+          onSwipeRight: (_element) => {
             // Swipe right to undo elimination (only if eliminated)
             const currentEliminated = userAnswers[currentQuestionIndex]?.eliminated?.includes(letter) || false;
             if (currentEliminated) {
@@ -1552,8 +1552,8 @@
         <p class="milestone-stats">${correct} correct • ${percentage}% accuracy</p>
         <p class="milestone-encouragement">
           ${percentage >= 80 ? 'Outstanding performance! Keep it up!' :
-            percentage >= 70 ? 'Great work! You\'re doing well!' :
-            'Every question is a learning opportunity!'}
+    percentage >= 70 ? 'Great work! You\'re doing well!' :
+      'Every question is a learning opportunity!'}
         </p>
         <button class="milestone-continue-btn" onclick="this.parentElement.parentElement.remove()">
           ${milestone === 52 ? 'Review Results' : 'Continue'}
@@ -1913,7 +1913,7 @@
       }))
       .sort((a, b) => a.percentage - b.percentage);
 
-    let html = `
+    const html = `
       <div class="summary-stats">
         <div class="summary-stat-card">
           <div class="stat-number">${answered}</div>
@@ -2007,11 +2007,11 @@
     const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
 
-    const shareText = `TBank Quiz Results 📊\n\n` +
+    const shareText = 'TBank Quiz Results 📊\n\n' +
       `Questions: ${answered}/${questions.length}\n` +
       `Score: ${percentage}% (${correct}/${answered} correct)\n` +
       `Streak: ${bestStreak} correct in a row 🔥\n\n` +
-      `Study congenital heart disease with TBank!`;
+      'Study congenital heart disease with TBank!';
 
     const shareData = {
       title: 'TBank Quiz Results',
@@ -2192,7 +2192,7 @@
             console.info('[Performance] CLS:', clsValue.toFixed(4));
           });
           clsObserver.observe({ type: 'layout-shift', buffered: true });
-        } catch (e) {
+        } catch {
           // Silently fail if PerformanceObserver not supported
         }
       }
@@ -2223,7 +2223,7 @@
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/tbank/sw.js')
           .then((registration) => {
-            console.log('[App] Service Worker registered successfully:', registration.scope);
+            console.info('[App] Service Worker registered successfully:', registration.scope);
 
             // Cache question banks after registration
             registration.active?.postMessage({ type: 'CACHE_QUESTION_BANKS' });
@@ -2242,7 +2242,7 @@
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           if (refreshing) return;
           refreshing = true;
-          console.log('[App] New service worker activated, reloading...');
+          console.info('[App] New service worker activated, reloading...');
           window.location.reload();
         });
       });
@@ -2262,7 +2262,7 @@
       e.preventDefault();
       deferredPrompt = e;
 
-      console.log('[App] Install prompt available');
+      console.info('[App] Install prompt available');
 
       // Show install prompt after user has answered a few questions (engagement check)
       const answeredCount = Object.values(userAnswers).filter(a => a.submitted).length;
@@ -2275,7 +2275,7 @@
 
     // Track successful installation
     window.addEventListener('appinstalled', () => {
-      console.log('[App] PWA installed successfully');
+      console.info('[App] PWA installed successfully');
       localStorage.setItem('installPromptShown', 'true');
       deferredPrompt = null;
       showToast('📱 App installed! Access from your home screen', 'success');
@@ -2311,7 +2311,7 @@
       if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        console.log('[App] Install prompt outcome:', outcome);
+        console.info('[App] Install prompt outcome:', outcome);
 
         if (outcome === 'accepted') {
           HapticEngine.success();
