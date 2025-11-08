@@ -142,10 +142,14 @@ jobs:
             exit 1
           fi
 
-          # Check JavaScript jobs (conditional)
-          if [ "${{ needs.lint-js.result }}" == "failure" ] || \
-             [ "${{ needs.test-js.result }}" == "failure" ]; then
-            echo "❌ JavaScript checks failed"
+          # Check JavaScript jobs (conditional - allow skipped or success)
+          if [ "${{ needs.lint-js.result }}" == "failure" ]; then
+            echo "❌ JavaScript linting failed"
+            exit 1
+          fi
+
+          if [ "${{ needs.test-js.result }}" == "failure" ]; then
+            echo "❌ JavaScript tests failed"
             exit 1
           fi
 
