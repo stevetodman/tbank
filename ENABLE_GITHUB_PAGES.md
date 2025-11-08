@@ -77,9 +77,9 @@ After enabling Pages, verify:
 - [ ] Main page loads: https://stevetodman.github.io/tbank/
 - [ ] No 403 or 404 errors
 - [ ] CSS styles are applied
-- [ ] Navigation menu works
-- [ ] Interactive practice page: https://stevetodman.github.io/tbank/questions/
+- [ ] Interactive quiz interface works
 - [ ] Question data loads correctly
+- [ ] Navigation and settings menus function properly
 
 ## Still Having Issues?
 

@@ -8,7 +8,6 @@ const QUESTION_SETS = [
     questionCount: 8,
     description:
       "Focuses on Tetralogy of Fallot pathophysiology, shunt dynamics, and foundational hemodynamics encountered in pediatrics and Step 1 exams.",
-    interactivePath: "questions/index.html?set=chd-part1",
     downloads: {
       json: "assets/question_banks/congenital_heart_disease_part1.json",
       markdown: "assets/question_banks/congenital_heart_disease_part1.md"
@@ -23,7 +22,6 @@ const QUESTION_SETS = [
     questionCount: 8,
     description:
       "Covers ductal-dependent lesions, cyanotic emergencies, and the genetics behind syndromic presentations of congenital heart disease.",
-    interactivePath: "questions/index.html?set=chd-part2",
     downloads: {
       json: "assets/question_banks/congenital_heart_disease_part2.json",
       markdown: "assets/question_banks/congenital_heart_disease_part2.md"
@@ -38,7 +36,6 @@ const QUESTION_SETS = [
     questionCount: 16,
     description:
       "Integrates complex syndromic associations, cardiomyopathy workups, and oxygen saturation step-ups for advanced learners.",
-    interactivePath: "questions/index.html?set=chd-part3",
     downloads: {
       json: "assets/question_banks/congenital_heart_disease_part3.json",
       markdown: "assets/question_banks/congenital_heart_disease_part3.md"
@@ -59,10 +56,28 @@ const QUESTION_SETS = [
     questionCount: 5,
     description:
       "Spotlights airway-compressing vascular anomalies, paradoxical emboli workups, neonatal circulation shifts, and nuanced cath interpretation clues for complex board scenarios.",
-    interactivePath: "questions/index.html?set=chd-part4",
     downloads: {
       json: "assets/question_banks/congenital_heart_disease_part4.json",
       markdown: "assets/question_banks/congenital_heart_disease_part4.md"
+    }
+  },
+  {
+    id: "chd-part5",
+    title: "Congenital Heart Disease – Part 5",
+    subtitle: "Maternal Risk Factors, Rare Defects, and Complications",
+    difficulty: "Advanced",
+    tags: [
+      "Maternal diabetes",
+      "Teratology",
+      "Rare anomalies",
+      "Complications",
+      "Advanced pathophysiology"
+    ],
+    questionCount: 15,
+    description:
+      "Explores maternal risk factors for CHD, rare structural defects, and complex clinical presentations requiring advanced integration of pathophysiology.",
+    downloads: {
+      json: "assets/question_banks/congenital_heart_disease_part5.json"
     }
   }
 ];
