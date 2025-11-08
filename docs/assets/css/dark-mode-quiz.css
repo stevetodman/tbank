@@ -761,3 +761,63 @@ body.dark-mode .pull-text {
 body.dark-mode .pull-indicator.ready .pull-text {
   color: var(--color-success-500);
 }
+
+/* Tour System - Dark Mode */
+body.dark-mode .tour-modal {
+  background: #2d3748;
+}
+
+body.dark-mode .tour-header {
+  background: #1e3a5f;
+  border-bottom-color: #4a5568;
+}
+
+body.dark-mode .tour-step-indicator {
+  color: var(--color-primary-300);
+}
+
+body.dark-mode .tour-close {
+  color: #a0aec0;
+}
+
+body.dark-mode .tour-close:hover {
+  background: #4a5568;
+  color: #edf2f7;
+}
+
+body.dark-mode .tour-content h2 {
+  color: #edf2f7;
+}
+
+body.dark-mode .tour-description {
+  color: #cbd5e0;
+}
+
+body.dark-mode .tour-description strong {
+  color: #edf2f7;
+}
+
+body.dark-mode .tour-footer {
+  background: #1a202c;
+  border-top-color: #4a5568;
+}
+
+body.dark-mode .tour-btn-secondary {
+  background: #4a5568;
+  color: #edf2f7;
+}
+
+body.dark-mode .tour-btn-secondary:hover {
+  background: #718096;
+}
+
+body.dark-mode .welcome-tour-btn {
+  background: #4a5568;
+  color: #edf2f7;
+  border-color: #718096;
+}
+
+body.dark-mode .welcome-tour-btn:hover {
+  background: #718096;
+  border-color: #a0aec0;
+}
