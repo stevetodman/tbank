@@ -28,60 +28,64 @@
 
   // Haptic feedback engine for iOS/mobile devices
   const HapticEngine = {
-    isSupported: 'vibrate' in navigator,
+    isSupported: 'vibrate' in navigator && typeof navigator.vibrate === 'function',
+
+    // Try to vibrate, with error handling
+    _vibrate: function(pattern) {
+      if (!this.isSupported) return false;
+
+      try {
+        return navigator.vibrate(pattern);
+      } catch (e) {
+        console.warn('[Haptic] Vibration failed:', e);
+        return false;
+      }
+    },
 
     // Light tap feedback (10ms) - for selections, toggles
     light: function() {
-      if (this.isSupported) {
-        navigator.vibrate(10);
-      }
+      this._vibrate(10);
     },
 
     // Medium tap feedback (20ms) - for confirmations
     medium: function() {
-      if (this.isSupported) {
-        navigator.vibrate(20);
-      }
+      this._vibrate(20);
     },
 
     // Success pattern - for correct answers, achievements
     success: function() {
-      if (this.isSupported) {
-        navigator.vibrate([15, 50, 20]);
-      }
+      this._vibrate([15, 50, 20]);
     },
 
     // Error pattern - for incorrect answers
     error: function() {
-      if (this.isSupported) {
-        navigator.vibrate([10, 40, 10, 40, 10]);
-      }
+      this._vibrate([10, 40, 10, 40, 10]);
     },
 
     // Warning pattern - for timer warnings
     warning: function() {
-      if (this.isSupported) {
-        navigator.vibrate(200);
-      }
+      this._vibrate(200);
     },
 
     // Celebration pattern - for milestones
     celebration: function() {
-      if (this.isSupported) {
-        navigator.vibrate([20, 60, 20, 60, 30]);
-      }
+      this._vibrate([20, 60, 20, 60, 30]);
     },
 
     // Subtle feedback - for navigation, minimal disruption (5ms)
     subtle: function() {
-      if (this.isSupported) {
-        navigator.vibrate(5);
-      }
+      this._vibrate(5);
     }
   };
 
   // Swipe gesture detection for mobile
   function initSwipeGesture(element, options = {}) {
+    // Skip if already initialized (prevent duplicate listeners)
+    if (element._swipeInitialized) {
+      return;
+    }
+    element._swipeInitialized = true;
+
     const minSwipeDistance = options.minDistance || 60;
     const maxVerticalDistance = options.maxVerticalDistance || 80;
     const threshold = options.threshold || 30;
@@ -94,7 +98,7 @@
     let isSwiping = false;
     let touchStartTarget = null;
 
-    element.addEventListener('touchstart', (e) => {
+    const handleTouchStart = (e) => {
       // Check if touch started on an excluded element
       touchStartTarget = e.target;
       if (excludeSelectors.length > 0) {
@@ -109,9 +113,9 @@
       touchStartX = e.changedTouches[0].screenX;
       touchStartY = e.changedTouches[0].screenY;
       isSwiping = false;
-    }, { passive: true });
+    };
 
-    element.addEventListener('touchmove', (e) => {
+    const handleTouchMove = (e) => {
       if (!touchStartTarget) return; // Skip if started on excluded element
 
       touchEndX = e.changedTouches[0].screenX;
@@ -137,9 +141,9 @@
         // Apply transform to follow finger
         element.style.transform = `translateX(${deltaX * 0.3}px)`;
       }
-    }, { passive: true });
+    };
 
-    element.addEventListener('touchend', (e) => {
+    const handleTouchEnd = (e) => {
       if (!touchStartTarget) return; // Skip if started on excluded element
 
       touchEndX = e.changedTouches[0].screenX;
@@ -172,7 +176,27 @@
       }
 
       touchStartTarget = null;
-    }, { passive: true });
+    };
+
+    element.addEventListener('touchstart', handleTouchStart, { passive: true });
+    element.addEventListener('touchmove', handleTouchMove, { passive: true });
+    element.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    // Store cleanup function
+    element._swipeCleanup = () => {
+      element.removeEventListener('touchstart', handleTouchStart);
+      element.removeEventListener('touchmove', handleTouchMove);
+      element.removeEventListener('touchend', handleTouchEnd);
+      element._swipeInitialized = false;
+      delete element._swipeCleanup;
+    };
+  }
+
+  // Cleanup swipe gestures for an element
+  function cleanupSwipeGesture(element) {
+    if (element._swipeCleanup) {
+      element._swipeCleanup();
+    }
   }
 
   // State management
@@ -185,9 +209,9 @@
   let bestStreak = 0; // Track best streak
   let milestonesShown = []; // Track which milestones have been shown
 
-  // Timer state
-  let timedMode = false;
-  let timerDuration = CONSTANTS.DEFAULT_TIMER_DURATION; // seconds per question
+  // Timer state (load from localStorage if available)
+  let timedMode = localStorage.getItem('timedMode') === 'true';
+  let timerDuration = parseInt(localStorage.getItem('timerDuration')) || CONSTANTS.DEFAULT_TIMER_DURATION; // seconds per question
   let currentTimer = null;
   let timerSeconds = 0;
   let timerPaused = false;
@@ -196,8 +220,8 @@
   // Dark mode state
   let darkModeEnabled = false;
 
-  // Pull-to-refresh state
-  let pullToRefreshEnabled = false;
+  // Pull-to-refresh state (load from localStorage if available)
+  let pullToRefreshEnabled = localStorage.getItem('pullToRefresh') === 'true';
 
   // Highlighting state
   let highlightToolbar = null;
@@ -751,15 +775,15 @@
       if (questionDisplay.scrollTop === 0) {
         const pullDistance = e.touches[0].clientY - pullStartY;
 
+        // Prevent browser's pull-to-refresh when pulling down at top
+        if (pullDistance > 0) {
+          e.preventDefault();
+        }
+
         // Only start showing indicator after 40px pull (prevents accidental triggers)
         if (pullDistance > 40) {
           pulling = true;
           updatePullIndicator(pullDistance - 40); // Offset by 40px
-
-          // Prevent default scrolling when pulling significantly
-          if (pullDistance > 50) {
-            e.preventDefault();
-          }
         }
       }
     }, { passive: false });
@@ -1250,8 +1274,8 @@
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTap;
 
-            // Double tap detected (within 500ms)
-            if (tapLength < 500 && tapLength > 0) {
+            // Double tap detected (between 50ms and 350ms for more intentional taps)
+            if (tapLength >= 50 && tapLength < 350) {
               e.preventDefault();
 
               // Get the radio button in this choice
@@ -1262,6 +1286,12 @@
                   radio.checked = true;
                   handleAnswerSelection({ target: radio });
                 }
+
+                // Visual feedback for double-tap
+                choiceElement.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                  choiceElement.style.transform = '';
+                }, 100);
 
                 // Submit immediately
                 setTimeout(() => {
@@ -1503,6 +1533,31 @@
     checkMilestones();
   }
 
+  // Create confetti animation
+  function createConfetti() {
+    const colors = ['#3182ce', '#38a169', '#e53e3e', '#d69e2e', '#805ad5', '#dd6b20'];
+    const confettiCount = 50;
+
+    for (let i = 0; i < confettiCount; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.3 + 's';
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+      // Randomize size and shape
+      const size = Math.random() * 8 + 4;
+      confetti.style.width = size + 'px';
+      confetti.style.height = size + 'px';
+
+      document.body.appendChild(confetti);
+
+      // Remove confetti after animation
+      setTimeout(() => confetti.remove(), 4000);
+    }
+  }
+
   // Show streak notification
   function showStreakNotification(streak) {
     const messages = {
@@ -1513,6 +1568,11 @@
 
     // Celebration haptic for streak milestones
     HapticEngine.celebration();
+
+    // Confetti for bigger milestones
+    if (streak >= 5) {
+      createConfetti();
+    }
 
     showToast(messages[streak] || `🔥 ${streak} in a row!`, 'success');
   }
@@ -1543,6 +1603,13 @@
 
     // Celebration haptic for question milestones
     HapticEngine.celebration();
+
+    // Confetti for all milestones (more for bigger milestones)
+    createConfetti();
+    if (milestone >= 40) {
+      // Extra confetti burst for major milestones
+      setTimeout(() => createConfetti(), 200);
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'milestone-overlay';
@@ -1851,14 +1918,24 @@
 
     // Save timer settings
     const wasTimedMode = timedMode;
+    const oldTimerDuration = timerDuration;
     timedMode = timedModeToggle.checked;
     timerDuration = parseInt(timerDurationInput.value);
+
+    // Persist timer settings to localStorage
+    localStorage.setItem('timedMode', timedMode.toString());
+    localStorage.setItem('timerDuration', timerDuration.toString());
 
     // Show/hide timer display
     timerDisplay.hidden = !timedMode;
 
     // If switching from untimed to timed mode on current question
     if (!wasTimedMode && timedMode && !userAnswers[currentQuestionIndex]?.submitted) {
+      startTimer();
+    }
+    // If timer duration changed while in timed mode, restart timer
+    else if (wasTimedMode && timedMode && oldTimerDuration !== timerDuration && !userAnswers[currentQuestionIndex]?.submitted) {
+      stopTimer();
       startTimer();
     }
 
@@ -2332,9 +2409,15 @@
     });
   }
 
+  // Initialize timer display based on saved settings
+  function initTimerSettings() {
+    timerDisplay.hidden = !timedMode;
+  }
+
   // Initialize app
   initDarkMode();
   initPullToRefreshSetting();
+  initTimerSettings();
   loadQuestions();
   initPerformanceMonitoring();
   initKeyboardHandling();
