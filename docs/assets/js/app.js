@@ -1,4 +1,31 @@
 (function () {
+  // Constants
+  const CONSTANTS = {
+    DEFAULT_TIMER_DURATION: 90,
+    KEYBOARD_HINT_DELAY: 2000,
+    KEYBOARD_HINT_DISPLAY: 4000,
+    TOAST_DURATION: 3000,
+    TOAST_FADE_IN: 100,
+    TOAST_FADE_OUT: 300,
+    STREAK_ANIMATION_DELAY: 600,
+    MILESTONE_ANIMATION_DELAY: 800,
+    TIME_EXPIRED_DELAY: 1500,
+    TIMER_WARNING_THRESHOLD: 10,
+    STREAK_MILESTONES: [3, 5, 10],
+    QUESTION_MILESTONES: [10, 25, 40, 52]
+  };
+
+  // Security helper - sanitize HTML to prevent XSS
+  function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return String(unsafe)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   // State management
   let questions = [];
   let currentQuestionIndex = 0;
@@ -11,7 +38,7 @@
 
   // Timer state
   let timedMode = false;
-  let timerDuration = 90; // seconds per question
+  let timerDuration = CONSTANTS.DEFAULT_TIMER_DURATION; // seconds per question
   let currentTimer = null;
   let timerSeconds = 0;
   let timerPaused = false;
@@ -70,8 +97,11 @@
       questions = data.questionBank.questions;
       initializeQuiz();
     } catch (error) {
-      console.error(error);
-      questionDisplay.innerHTML = '<p class="error">Failed to load questions. Please refresh the page.</p>';
+      console.error('Failed to load questions:', error);
+      const errorMessage = error.message && error.message.includes('fetch')
+        ? 'Network error. Please check your connection and refresh the page.'
+        : 'Error loading questions. Please try refreshing the page.';
+      questionDisplay.innerHTML = `<p class="error">${escapeHtml(errorMessage)}</p>`;
     }
   }
 
@@ -150,27 +180,14 @@
     renderQuestion();
 
     // Show keyboard hint after a moment
-    setTimeout(showKeyboardHint, 2000);
+    setTimeout(showKeyboardHint, CONSTANTS.KEYBOARD_HINT_DELAY);
   }
 
   // Show keyboard hint toast
   function showKeyboardHint() {
     if (keyboardHintShown) return;
     keyboardHintShown = true;
-
-    const toast = document.createElement('div');
-    toast.className = 'keyboard-hint-toast';
-    toast.innerHTML = '💡 Tip: Use ← → arrow keys to navigate';
-    document.body.appendChild(toast);
-
-    // Fade in
-    setTimeout(() => toast.classList.add('show'), 100);
-
-    // Fade out after 4 seconds
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 4000);
+    showToast('💡 Tip: Use ← → arrow keys to navigate', 'info');
   }
 
   // Build question grid for menu
@@ -207,8 +224,8 @@
         timerSeconds--;
         updateTimerDisplay();
 
-        // Warning at 10 seconds
-        if (timerSeconds === 10) {
+        // Warning at threshold
+        if (timerSeconds === CONSTANTS.TIMER_WARNING_THRESHOLD) {
           timerDisplay.classList.add('timer-warning');
         }
 
@@ -268,7 +285,7 @@
         if (currentQuestionIndex < questions.length - 1) {
           goToNext();
         }
-      }, 1500);
+      }, CONSTANTS.TIME_EXPIRED_DELAY);
     }
   }
 
@@ -488,7 +505,7 @@
     // Question metadata with flag button
     html += '<div class="question-meta">';
     const meta = [question.subject, question.system, question.topic].filter(Boolean).join(' • ');
-    if (meta) html += `<p class="meta-text">${meta}</p>`;
+    if (meta) html += `<p class="meta-text">${escapeHtml(meta)}</p>`;
 
     // Flag button
     const isFlagged = answer?.flagged || false;
@@ -502,12 +519,12 @@
 
     // Show vignette (clinical case) if present
     if (question.vignette) {
-      html += `<p class="vignette">${question.vignette}</p>`;
+      html += `<p class="vignette">${escapeHtml(question.vignette)}</p>`;
     }
 
     // Show question text (the actual question being asked)
     if (question.questionText) {
-      html += `<p class="question-text" id="question-text-${currentQuestionIndex}"><strong>${question.questionText}</strong></p>`;
+      html += `<p class="question-text" id="question-text-${currentQuestionIndex}"><strong>${escapeHtml(question.questionText)}</strong></p>`;
     }
 
     html += '</div>';
@@ -533,9 +550,9 @@
       const checked = isSelected ? 'checked' : '';
 
       html += `<label class="${choiceClass}">`;
-      html += `<input type="radio" name="answer" value="${letter}" ${checked} ${disabled} />`;
-      html += `<span class="choice-letter">${letter}</span>`;
-      html += `<span class="choice-text">${choice.text}</span>`;
+      html += `<input type="radio" name="answer" value="${escapeHtml(letter)}" ${checked} ${disabled} />`;
+      html += `<span class="choice-letter">${escapeHtml(letter)}</span>`;
+      html += `<span class="choice-text">${escapeHtml(choice.text)}</span>`;
 
       // Add eliminate button (only show before submission)
       if (!isSubmitted) {
@@ -556,25 +573,25 @@
       html += '<h3>Explanation</h3>';
 
       if (question.explanation?.correct) {
-        html += `<div class="explanation-text"><strong>Why ${question.correctAnswer} is correct:</strong><br>${question.explanation.correct}</div>`;
+        html += `<div class="explanation-text"><strong>Why ${escapeHtml(question.correctAnswer)} is correct:</strong><br>${escapeHtml(question.explanation.correct)}</div>`;
       }
 
       // Show rationale for user's incorrect answer
       if (!answer.correct && question.explanation?.incorrect) {
         const incorrectRationale = question.explanation.incorrect[answer.selected];
         if (incorrectRationale) {
-          html += `<div class="explanation-text"><strong>Why ${answer.selected} is incorrect:</strong><br>${incorrectRationale}</div>`;
+          html += `<div class="explanation-text"><strong>Why ${escapeHtml(answer.selected)} is incorrect:</strong><br>${escapeHtml(incorrectRationale)}</div>`;
         }
       }
 
       if (question.educationalObjective) {
-        html += `<div class="explanation-text"><strong>Educational Objective:</strong><br>${question.educationalObjective}</div>`;
+        html += `<div class="explanation-text"><strong>Educational Objective:</strong><br>${escapeHtml(question.educationalObjective)}</div>`;
       }
 
       if (question.keyFacts && question.keyFacts.length > 0) {
         html += '<div class="explanation-text"><strong>Key Facts:</strong><ul>';
         question.keyFacts.forEach(fact => {
-          html += `<li>${fact}</li>`;
+          html += `<li>${escapeHtml(fact)}</li>`;
         });
         html += '</ul></div>';
       }
@@ -670,9 +687,9 @@
         bestStreak = currentStreak;
       }
 
-      // Show streak notification for 3, 5, 10 in a row
-      if (currentStreak === 3 || currentStreak === 5 || currentStreak === 10) {
-        setTimeout(() => showStreakNotification(currentStreak), 600);
+      // Show streak notification for milestones
+      if (CONSTANTS.STREAK_MILESTONES.includes(currentStreak)) {
+        setTimeout(() => showStreakNotification(currentStreak), CONSTANTS.STREAK_ANIMATION_DELAY);
       }
     } else {
       currentStreak = 0;
@@ -692,29 +709,17 @@
       5: '🌟 5 correct in a row! Amazing streak!',
       10: '🎯 10 in a row! Incredible mastery!'
     };
-
-    const toast = document.createElement('div');
-    toast.className = 'streak-toast';
-    toast.innerHTML = messages[streak] || `🔥 ${streak} in a row!`;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.classList.add('show'), 100);
-
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    showToast(messages[streak] || `🔥 ${streak} in a row!`, 'success');
   }
 
   // Check and show milestone celebrations
   function checkMilestones() {
     const answered = Object.values(userAnswers).filter(a => a.submitted).length;
-    const milestones = [10, 25, 40, 52];
 
-    milestones.forEach(milestone => {
+    CONSTANTS.QUESTION_MILESTONES.forEach(milestone => {
       if (answered === milestone && !milestonesShown.includes(milestone)) {
         milestonesShown.push(milestone);
-        setTimeout(() => showMilestoneCelebration(milestone), 800);
+        setTimeout(() => showMilestoneCelebration(milestone), CONSTANTS.MILESTONE_ANIMATION_DELAY);
       }
     });
   }
@@ -960,12 +965,12 @@
     toast.textContent = message;
     document.body.appendChild(toast);
 
-    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => toast.classList.add('show'), CONSTANTS.TOAST_FADE_IN);
 
     setTimeout(() => {
       toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
+      setTimeout(() => toast.remove(), CONSTANTS.TOAST_FADE_OUT);
+    }, CONSTANTS.TOAST_DURATION);
   }
 
   // Settings modal functions
@@ -1196,6 +1201,47 @@
   // Initialize highlighting (only once)
   initializeHighlighting();
 
+  // Performance monitoring (production only)
+  function initPerformanceMonitoring() {
+    // Only run performance monitoring in production (not localhost)
+    if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      if ('PerformanceObserver' in window) {
+        try {
+          // Monitor Largest Contentful Paint (LCP)
+          const lcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            console.info('[Performance] LCP:', Math.round(lastEntry.startTime), 'ms');
+          });
+          lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+
+          // Monitor First Input Delay (FID) / Interaction to Next Paint (INP)
+          const fidObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              console.info('[Performance] FID:', Math.round(entry.processingStart - entry.startTime), 'ms');
+            });
+          });
+          fidObserver.observe({ type: 'first-input', buffered: true });
+
+          // Monitor Cumulative Layout Shift (CLS)
+          let clsValue = 0;
+          const clsObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+              }
+            });
+            console.info('[Performance] CLS:', clsValue.toFixed(4));
+          });
+          clsObserver.observe({ type: 'layout-shift', buffered: true });
+        } catch (e) {
+          // Silently fail if PerformanceObserver not supported
+        }
+      }
+    }
+  }
+
   // Initialize app
   loadQuestions();
+  initPerformanceMonitoring();
 })();
