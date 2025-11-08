@@ -260,6 +260,7 @@
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
   const submitBtn = document.getElementById('submit-btn');
+  const skipBtn = document.getElementById('skip-btn');
   const menuToggle = document.getElementById('menu-toggle');
   const menuClose = document.getElementById('menu-close');
   const questionMenu = document.getElementById('question-menu');
@@ -297,8 +298,9 @@
   const summaryContinue = document.getElementById('summary-continue');
   const summaryReset = document.getElementById('summary-reset');
 
-  // Save quiz state to localStorage
-  function saveState() {
+  // Save quiz state to localStorage (Issue #2 - Progress persistence)
+  let lastSaveNotification = 0;
+  function saveState(showNotification = false) {
     try {
       const state = {
         version: STATE_VERSION,
@@ -314,6 +316,13 @@
 
       localStorage.setItem('quizState', JSON.stringify(state));
       console.debug('[State] Progress saved');
+
+      // Show subtle save notification (Issue #2) - throttled to avoid spam
+      const now = Date.now();
+      if (showNotification && (now - lastSaveNotification > 3000)) {
+        lastSaveNotification = now;
+        showToast('✓ Progress auto-saved', 'success');
+      }
     } catch (error) {
       console.warn('[State] Failed to save progress:', error);
       // Fail silently - don't disrupt user experience
@@ -902,7 +911,8 @@
       clearInterval(currentTimer);
       currentTimer = null;
     }
-    timerDisplay.classList.remove('timer-warning');
+    // Issue #8: Remove all timer warning classes
+    timerDisplay.classList.remove('timer-warning', 'timer-caution');
 
     // Record time spent if question is being submitted
     if (questionStartTime) {
@@ -927,10 +937,23 @@
     timerToggleBtn.setAttribute('aria-label', 'Pause timer');
   }
 
+  // Issue #8: Enhanced timer display with color warnings
   function updateTimerDisplay() {
     const minutes = Math.floor(timerSeconds / 60);
     const seconds = timerSeconds % 60;
     timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    // Add color states based on remaining time (Issue #8)
+    timerDisplay.classList.remove('timer-caution', 'timer-warning');
+
+    if (timerSeconds <= CONSTANTS.TIMER_WARNING_THRESHOLD) {
+      // Critical: 10 seconds or less - red with pulse
+      timerDisplay.classList.add('timer-warning');
+    } else if (timerSeconds <= 30) {
+      // Caution: 30 seconds or less - yellow
+      timerDisplay.classList.add('timer-caution');
+    }
+    // Normal: more than 30 seconds - default gray
   }
 
   function handleTimeExpired() {
@@ -1401,8 +1424,10 @@
     // Save scroll position to restore after render (iOS fix)
     const scrollY = window.scrollY || window.pageYOffset;
 
-    // Update header
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    // Update header with question ID (Issue #25)
+    questionCounter.textContent = `Question #${currentQuestionIndex + 1} of ${questions.length}`;
+    questionCounter.title = `Click to copy question ID`;
+    questionCounter.style.cursor = 'pointer';
     updateProgressBar();
     updateNavigationButtons();
     updateQuestionGrid();
@@ -1449,6 +1474,14 @@
     html += `<button id="flag-btn" class="flag-btn ${isFlagged ? 'flagged' : ''}" aria-label="${isFlagged ? 'Unflag question' : 'Flag question for review'}">
       ${isFlagged ? '🚩 Flagged' : '🏳️ Flag'}
     </button>`;
+
+    // Issue #26: Previous Explanation link (if previous question was answered)
+    if (currentQuestionIndex > 0 && userAnswers[currentQuestionIndex - 1]?.submitted) {
+      html += `<button id="prev-explanation-btn" class="prev-explanation-btn" aria-label="View previous explanation">
+        ← Previous Explanation
+      </button>`;
+    }
+
     html += '</div>';
 
     // Question stem
@@ -1504,36 +1537,69 @@
     });
     html += '</fieldset>';
 
-    // Explanation (shown after submission)
+    // Explanation (shown after submission) - Enhanced for Issues #1 and #4
     if (isSubmitted) {
-      html += '<div class="explanation-section">';
-      html += '<h3>Explanation</h3>';
+      html += '<div class="explanation-section" id="explanation-section">';
+      html += '<h3>📚 Explanation</h3>';
 
-      if (question.explanation?.correct) {
-        html += `<div class="explanation-text"><strong>Why ${escapeHtml(question.correctAnswer)} is correct:</strong><br>${escapeHtml(question.explanation.correct)}</div>`;
+      // Add TL;DR section with educational objective (Issue #4)
+      if (question.educationalObjective) {
+        html += `<div class="tldr-section">
+          <div class="tldr-header">💡 <strong>TL;DR - Key Takeaway</strong></div>
+          <div class="tldr-content">${escapeHtml(question.educationalObjective)}</div>
+        </div>`;
       }
 
-      // Show rationale for user's incorrect answer
+      // Correct answer explanation in highlighted box (Issue #1)
+      if (question.explanation?.correct) {
+        html += `<div class="explanation-correct">
+          <div class="explanation-heading">✓ Why ${escapeHtml(question.correctAnswer)} is Correct</div>
+          <div class="explanation-content">${escapeHtml(question.explanation.correct)}</div>
+        </div>`;
+      }
+
+      // Show rationale for user's incorrect answer in highlighted box (Issue #1)
       if (!answer.correct && question.explanation?.incorrect) {
         const incorrectRationale = question.explanation.incorrect[answer.selected];
         if (incorrectRationale) {
-          html += `<div class="explanation-text"><strong>Why ${escapeHtml(answer.selected)} is incorrect:</strong><br>${escapeHtml(incorrectRationale)}</div>`;
+          html += `<div class="explanation-incorrect">
+            <div class="explanation-heading">✗ Why ${escapeHtml(answer.selected)} is Incorrect</div>
+            <div class="explanation-content">${escapeHtml(incorrectRationale)}</div>
+          </div>`;
         }
       }
 
-      if (question.educationalObjective) {
-        html += `<div class="explanation-text"><strong>Educational Objective:</strong><br>${escapeHtml(question.educationalObjective)}</div>`;
-      }
-
+      // Collapsible detailed explanation (Issue #4)
       if (question.keyFacts && question.keyFacts.length > 0) {
+        html += '<div class="detailed-explanation">';
+        html += '<button class="toggle-details-btn" data-expanded="true">📖 <span>Hide Detailed Explanation</span></button>';
+        html += '<div class="details-content" style="display: block;">';
         html += '<div class="explanation-text"><strong>Key Facts:</strong><ul>';
         question.keyFacts.forEach(fact => {
           html += `<li>${escapeHtml(fact)}</li>`;
         });
         html += '</ul></div>';
+        html += '</div>';
+        html += '</div>';
       }
 
+      // Action buttons for explanation (Issues #24, #28)
+      const questionId = `Q${currentQuestionIndex + 1}`;
+      const githubIssueUrl = `https://github.com/stevetodman/tbank/issues/new?title=Error%20in%20${questionId}&body=Question%20ID:%20${questionId}%0A%0ADescribe%20the%20error:%0A`;
+      html += `<div class="explanation-actions">
+        <button id="reset-question-btn" class="reset-question-btn">🔄 Reset This Question</button>
+        <a href="${githubIssueUrl}" target="_blank" class="report-error-btn">🐛 Report Error</a>
+      </div>`;
+
       html += '</div>';
+    }
+
+    // Issue #29: Show Answer button (before submission)
+    if (!isSubmitted && answer?.selected) {
+      html += `<div class="show-answer-section">
+        <button id="show-answer-btn" class="show-answer-btn">👁️ Show Answer</button>
+        <p class="show-answer-hint">See the correct answer without submitting</p>
+      </div>`;
     }
 
     html += '</div>';
@@ -1690,13 +1756,16 @@
       });
     }
 
-    // Update submit button state
+    // Update submit and skip button state (Issue #23)
     const hasSelection = answer?.selected;
     submitBtn.disabled = !hasSelection || isSubmitted;
     if (isSubmitted) {
       submitBtn.style.display = 'none';
+      skipBtn.hidden = true;
     } else {
       submitBtn.style.display = 'inline-block';
+      // Show skip button only if question is not yet answered
+      skipBtn.hidden = false;
     }
 
     // Start timer for this question if in timed mode and not already submitted
@@ -1735,10 +1804,112 @@
       }
     }
 
-    // Scroll to top of question display on mobile for better UX
+    // Event listener for toggle details button (Issue #4)
+    if (isSubmitted) {
+      const toggleBtn = document.querySelector('.toggle-details-btn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const expanded = toggleBtn.getAttribute('data-expanded') === 'true';
+          const detailsContent = document.querySelector('.details-content');
+          const btnText = toggleBtn.querySelector('span');
+
+          if (expanded) {
+            detailsContent.style.display = 'none';
+            btnText.textContent = 'Show Detailed Explanation';
+            toggleBtn.setAttribute('data-expanded', 'false');
+          } else {
+            detailsContent.style.display = 'block';
+            btnText.textContent = 'Hide Detailed Explanation';
+            toggleBtn.setAttribute('data-expanded', 'true');
+          }
+        });
+      }
+    }
+
+    // Event listener for question counter click to copy ID (Issue #25)
+    questionCounter.addEventListener('click', () => {
+      const questionId = `Q${currentQuestionIndex + 1}`;
+      navigator.clipboard.writeText(questionId).then(() => {
+        showToast(`Question ID ${questionId} copied to clipboard`, 'success');
+      }).catch(() => {
+        showToast('Failed to copy question ID', 'error');
+      });
+    });
+
+    // Event listener for Previous Explanation button (Issue #26)
+    const prevExplanationBtn = document.getElementById('prev-explanation-btn');
+    if (prevExplanationBtn) {
+      prevExplanationBtn.addEventListener('click', () => {
+        HapticEngine.light();
+        goToPrevious();
+        // Scroll to explanation after navigating
+        setTimeout(() => {
+          const explanationSection = document.getElementById('explanation-section');
+          if (explanationSection) {
+            explanationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      });
+    }
+
+    // Event listener for Reset Question button (Issue #28)
+    const resetQuestionBtn = document.getElementById('reset-question-btn');
+    if (resetQuestionBtn) {
+      resetQuestionBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset this question? Your answer will be cleared.')) {
+          // Clear the answer for this question
+          delete userAnswers[currentQuestionIndex];
+          HapticEngine.medium();
+          saveState();
+          renderQuestion();
+          updateQuestionGrid();
+          updateStats();
+          showToast('Question reset - try again!', 'info');
+        }
+      });
+    }
+
+    // Event listener for Show Answer button (Issue #29)
+    const showAnswerBtn = document.getElementById('show-answer-btn');
+    if (showAnswerBtn) {
+      showAnswerBtn.addEventListener('click', () => {
+        // Find the correct answer choice
+        const question = questions[currentQuestionIndex];
+        const correctChoice = question.answerChoices.find(c => c.isCorrect);
+
+        if (correctChoice) {
+          // Highlight the correct answer temporarily
+          const answerChoices = document.querySelectorAll('.answer-choice');
+          answerChoices.forEach(choice => {
+            const radio = choice.querySelector('input[name="answer"]');
+            if (radio && radio.value === correctChoice.letter) {
+              choice.classList.add('answer-peek');
+              // Remove highlight after 3 seconds
+              setTimeout(() => {
+                choice.classList.remove('answer-peek');
+              }, 3000);
+            }
+          });
+
+          HapticEngine.light();
+          showToast(`The correct answer is ${correctChoice.letter}`, 'info');
+        }
+      });
+    }
+
+    // Scroll to top or explanation section (Issue #1 - auto-scroll to explanation)
     // Use requestAnimationFrame to ensure DOM has updated
     requestAnimationFrame(() => {
-      if (window.innerWidth <= 768) {
+      if (isSubmitted) {
+        // If just submitted, scroll to explanation section
+        const explanationSection = document.getElementById('explanation-section');
+        if (explanationSection) {
+          explanationSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+          });
+        }
+      } else if (window.innerWidth <= 768) {
         // On mobile, scroll to question display smoothly
         const questionDisplay = document.getElementById('question-display');
         if (questionDisplay) {
@@ -1808,8 +1979,8 @@
       currentStreak = 0;
     }
 
-    // Save state after submission
-    saveState();
+    // Save state after submission with notification (Issue #2)
+    saveState(true);
 
     renderQuestion();
     updateStats();
@@ -1819,9 +1990,10 @@
   }
 
   // Create confetti animation
+  // Issue #35: Less intrusive confetti
   function createConfetti() {
     const colors = ['#3182ce', '#38a169', '#e53e3e', '#d69e2e', '#805ad5', '#dd6b20'];
-    const confettiCount = 50;
+    const confettiCount = 25; // Reduced from 50 to 25
 
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div');
@@ -1829,33 +2001,33 @@
       confetti.style.left = Math.random() * 100 + '%';
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.animationDelay = Math.random() * 0.3 + 's';
-      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      confetti.style.animationDuration = (Math.random() * 1.5 + 2) + 's'; // Faster: 2-3.5s instead of 2-4s
 
-      // Randomize size and shape
-      const size = Math.random() * 8 + 4;
+      // Randomize size and shape (slightly smaller)
+      const size = Math.random() * 6 + 3; // 3-9px instead of 4-12px
       confetti.style.width = size + 'px';
       confetti.style.height = size + 'px';
 
       document.body.appendChild(confetti);
 
-      // Remove confetti after animation
-      setTimeout(() => confetti.remove(), 4000);
+      // Remove confetti after animation (faster cleanup)
+      setTimeout(() => confetti.remove(), 3000); // 3s instead of 4s
     }
   }
 
-  // Show streak notification
+  // Show streak notification - Issue #35: Less intrusive
   function showStreakNotification(streak) {
     const messages = {
-      3: '🔥 3 in a row! You\'re on fire!',
-      5: '🌟 5 correct in a row! Amazing streak!',
-      10: '🎯 10 in a row! Incredible mastery!'
+      3: '🔥 3 in a row!',
+      5: '🌟 5 correct in a row!',
+      10: '🎯 10 in a row! Incredible!'
     };
 
-    // Celebration haptic for streak milestones
-    HapticEngine.celebration();
+    // Medium haptic instead of celebration (less intense)
+    HapticEngine.medium();
 
-    // Confetti for bigger milestones
-    if (streak >= 5) {
+    // Confetti only for 10+ streak (Issue #35: less intrusive)
+    if (streak >= 10) {
       createConfetti();
     }
 
@@ -1950,10 +2122,22 @@
   }
 
   // Update progress bar
+  // Issue #27: Add progress bar tooltip
   function updateProgressBar() {
     const answeredQuestions = Object.values(userAnswers).filter(a => a.submitted).length;
+    const correctQuestions = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const percentage = (answeredQuestions / questions.length) * 100;
+    const accuracyPercentage = answeredQuestions > 0 ? Math.round((correctQuestions / answeredQuestions) * 100) : 0;
+
     progressBar.style.width = `${percentage}%`;
+
+    // Add tooltip with detailed progress (Issue #27)
+    const tooltipText = answeredQuestions > 0
+      ? `Progress: ${answeredQuestions}/${questions.length} questions answered (${Math.round(percentage)}%)\nAccuracy: ${correctQuestions}/${answeredQuestions} correct (${accuracyPercentage}%)`
+      : `Progress: 0/${questions.length} questions answered - Let's get started!`;
+
+    progressBar.title = tooltipText;
+    progressBar.parentElement.title = tooltipText; // Also add to container for better UX
   }
 
   // Update question grid styling
@@ -2117,6 +2301,12 @@
     questionMenu.hidden = false;
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when menu is open
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     updateStats();
     updateTopicMastery();
   }
@@ -2125,6 +2315,11 @@
     questionMenu.hidden = true;
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when menu is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   // Generic toast notification
@@ -2186,6 +2381,12 @@
     settingsModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when modal is open
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     darkModeToggle.checked = darkModeEnabled;
     pullToRefreshToggle.checked = pullToRefreshEnabled;
     hapticFeedbackToggle.checked = hapticsEnabled;
@@ -2199,6 +2400,11 @@
     settingsModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   function saveSettings() {
@@ -2368,6 +2574,12 @@
     sessionSummaryModal.hidden = false;
     sessionSummaryModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     closeMenu();
   }
 
@@ -2376,6 +2588,11 @@
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   // Web Share API - Share progress
@@ -2471,10 +2688,39 @@
     showToast('Progress reset. Starting fresh!', 'success');
   }
 
+  // Handle skip question (Issue #23)
+  function handleSkip() {
+    const answer = userAnswers[currentQuestionIndex];
+
+    // Mark as skipped
+    if (!userAnswers[currentQuestionIndex]) {
+      userAnswers[currentQuestionIndex] = {};
+    }
+    userAnswers[currentQuestionIndex].skipped = true;
+
+    // Save state
+    saveState();
+
+    // Update grid
+    updateQuestionGrid();
+
+    // Haptic feedback
+    HapticEngine.subtle();
+
+    // Move to next question if available
+    if (currentQuestionIndex < questions.length - 1) {
+      goToNext();
+      showToast('Question skipped', 'info');
+    } else {
+      showToast('No more questions. Review skipped questions from the menu.', 'info');
+    }
+  }
+
   // Event listeners
   prevBtn.addEventListener('click', goToPrevious);
   nextBtn.addEventListener('click', goToNext);
   submitBtn.addEventListener('click', handleSubmit);
+  skipBtn.addEventListener('click', handleSkip);
   menuToggle.addEventListener('click', openMenu);
   menuClose.addEventListener('click', closeMenu);
 
