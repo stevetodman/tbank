@@ -578,3 +578,62 @@ body.dark-mode .welcome-tour-btn:hover {
   background: #4b5563;
   border-color: #9ca3af;
 }
+
+/* Dark mode for Issue #26: Previous Explanation Button */
+body.dark-mode .prev-explanation-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: var(--color-primary-300);
+}
+
+body.dark-mode .prev-explanation-btn:hover {
+  background: #4b5563;
+  border-color: #6b7280;
+  color: var(--color-primary-200);
+}
+
+/* Dark mode for Issue #28: Reset Question Button */
+body.dark-mode .reset-question-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+body.dark-mode .reset-question-btn:hover {
+  background: #4b5563;
+  border-color: var(--color-primary-400);
+  color: var(--color-primary-200);
+}
+
+/* Dark mode for Issue #29: Show Answer Section */
+body.dark-mode .show-answer-section {
+  background: #78350f;
+  border-color: #f59e0b;
+}
+
+body.dark-mode .show-answer-btn {
+  background: #1f2937;
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+body.dark-mode .show-answer-btn:hover {
+  background: #78350f;
+  border-color: #d97706;
+  color: #fef3c7;
+}
+
+body.dark-mode .show-answer-hint {
+  color: #fde68a;
+}
+
+/* Dark mode for answer peek animation */
+body.dark-mode .answer-choice.answer-peek {
+  background: #1e3a5f;
+  border-color: var(--color-primary-400);
+}
+
+body.dark-mode .answer-choice.answer-peek .choice-letter {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-400);
+}

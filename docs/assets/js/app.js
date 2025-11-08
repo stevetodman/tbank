@@ -1474,6 +1474,14 @@
     html += `<button id="flag-btn" class="flag-btn ${isFlagged ? 'flagged' : ''}" aria-label="${isFlagged ? 'Unflag question' : 'Flag question for review'}">
       ${isFlagged ? '🚩 Flagged' : '🏳️ Flag'}
     </button>`;
+
+    // Issue #26: Previous Explanation link (if previous question was answered)
+    if (currentQuestionIndex > 0 && userAnswers[currentQuestionIndex - 1]?.submitted) {
+      html += `<button id="prev-explanation-btn" class="prev-explanation-btn" aria-label="View previous explanation">
+        ← Previous Explanation
+      </button>`;
+    }
+
     html += '</div>';
 
     // Question stem
@@ -1575,14 +1583,23 @@
         html += '</div>';
       }
 
-      // Report Error button (Issue #24)
+      // Action buttons for explanation (Issues #24, #28)
       const questionId = `Q${currentQuestionIndex + 1}`;
       const githubIssueUrl = `https://github.com/stevetodman/tbank/issues/new?title=Error%20in%20${questionId}&body=Question%20ID:%20${questionId}%0A%0ADescribe%20the%20error:%0A`;
       html += `<div class="explanation-actions">
+        <button id="reset-question-btn" class="reset-question-btn">🔄 Reset This Question</button>
         <a href="${githubIssueUrl}" target="_blank" class="report-error-btn">🐛 Report Error</a>
       </div>`;
 
       html += '</div>';
+    }
+
+    // Issue #29: Show Answer button (before submission)
+    if (!isSubmitted && answer?.selected) {
+      html += `<div class="show-answer-section">
+        <button id="show-answer-btn" class="show-answer-btn">👁️ Show Answer</button>
+        <p class="show-answer-hint">See the correct answer without submitting</p>
+      </div>`;
     }
 
     html += '</div>';
@@ -1818,6 +1835,67 @@
         showToast('Failed to copy question ID', 'error');
       });
     });
+
+    // Event listener for Previous Explanation button (Issue #26)
+    const prevExplanationBtn = document.getElementById('prev-explanation-btn');
+    if (prevExplanationBtn) {
+      prevExplanationBtn.addEventListener('click', () => {
+        HapticEngine.light();
+        goToPrevious();
+        // Scroll to explanation after navigating
+        setTimeout(() => {
+          const explanationSection = document.getElementById('explanation-section');
+          if (explanationSection) {
+            explanationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      });
+    }
+
+    // Event listener for Reset Question button (Issue #28)
+    const resetQuestionBtn = document.getElementById('reset-question-btn');
+    if (resetQuestionBtn) {
+      resetQuestionBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset this question? Your answer will be cleared.')) {
+          // Clear the answer for this question
+          delete userAnswers[currentQuestionIndex];
+          HapticEngine.medium();
+          saveState();
+          renderQuestion();
+          updateQuestionGrid();
+          updateStats();
+          showToast('Question reset - try again!', 'info');
+        }
+      });
+    }
+
+    // Event listener for Show Answer button (Issue #29)
+    const showAnswerBtn = document.getElementById('show-answer-btn');
+    if (showAnswerBtn) {
+      showAnswerBtn.addEventListener('click', () => {
+        // Find the correct answer choice
+        const question = questions[currentQuestionIndex];
+        const correctChoice = question.answerChoices.find(c => c.isCorrect);
+
+        if (correctChoice) {
+          // Highlight the correct answer temporarily
+          const answerChoices = document.querySelectorAll('.answer-choice');
+          answerChoices.forEach(choice => {
+            const radio = choice.querySelector('input[name="answer"]');
+            if (radio && radio.value === correctChoice.letter) {
+              choice.classList.add('answer-peek');
+              // Remove highlight after 3 seconds
+              setTimeout(() => {
+                choice.classList.remove('answer-peek');
+              }, 3000);
+            }
+          });
+
+          HapticEngine.light();
+          showToast(`The correct answer is ${correctChoice.letter}`, 'info');
+        }
+      });
+    }
 
     // Scroll to top or explanation section (Issue #1 - auto-scroll to explanation)
     // Use requestAnimationFrame to ensure DOM has updated
