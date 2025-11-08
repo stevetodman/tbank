@@ -34,6 +34,10 @@
     _vibrate: function(pattern) {
       if (!this.isSupported) return false;
 
+      // Check if haptic feedback is enabled (check localStorage directly to avoid circular dependency)
+      const isEnabled = localStorage.getItem('hapticFeedback') !== 'false';
+      if (!isEnabled) return false;
+
       try {
         return navigator.vibrate(pattern);
       } catch (e) {
@@ -223,9 +227,130 @@
   // Pull-to-refresh state (load from localStorage if available)
   let pullToRefreshEnabled = localStorage.getItem('pullToRefresh') === 'true';
 
+  // Haptic feedback state (load from localStorage, default to true)
+  let hapticFeedbackEnabled = localStorage.getItem('hapticFeedback') !== 'false';
+
   // Highlighting state
   let highlightToolbar = null;
   let currentSelection = null;
+
+  // IndexedDB for persistent state storage
+  const DB_NAME = 'TBankDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'quizState';
+  let db = null;
+
+  // Initialize IndexedDB
+  function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+      request.onerror = () => {
+        console.warn('[DB] IndexedDB not available, progress will not persist');
+        resolve(null);
+      };
+
+      request.onsuccess = (event) => {
+        db = event.target.result;
+        console.info('[DB] IndexedDB initialized successfully');
+        resolve(db);
+      };
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+
+        // Create object store if it doesn't exist
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          const objectStore = db.createObjectStore(STORE_NAME);
+          console.info('[DB] Object store created');
+        }
+      };
+    });
+  }
+
+  // Save state to IndexedDB
+  function saveState() {
+    if (!db) return Promise.resolve();
+
+    const state = {
+      userAnswers,
+      currentQuestionIndex,
+      currentStreak,
+      bestStreak,
+      milestonesShown,
+      timestamp: Date.now()
+    };
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const objectStore = transaction.objectStore(STORE_NAME);
+      const request = objectStore.put(state, 'currentSession');
+
+      request.onsuccess = () => {
+        console.debug('[DB] State saved successfully');
+        resolve();
+      };
+
+      request.onerror = () => {
+        console.warn('[DB] Failed to save state:', request.error);
+        resolve(); // Don't reject, just warn
+      };
+    });
+  }
+
+  // Load state from IndexedDB
+  function loadState() {
+    if (!db) return Promise.resolve(null);
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const objectStore = transaction.objectStore(STORE_NAME);
+      const request = objectStore.get('currentSession');
+
+      request.onsuccess = () => {
+        const state = request.result;
+        if (state) {
+          console.info('[DB] State loaded successfully');
+
+          // Restore state
+          userAnswers = state.userAnswers || {};
+          currentQuestionIndex = state.currentQuestionIndex || 0;
+          currentStreak = state.currentStreak || 0;
+          bestStreak = state.bestStreak || 0;
+          milestonesShown = state.milestonesShown || [];
+
+          console.info(`[DB] Restored progress: ${Object.keys(userAnswers).length} questions answered`);
+        }
+        resolve(state);
+      };
+
+      request.onerror = () => {
+        console.warn('[DB] Failed to load state:', request.error);
+        resolve(null);
+      };
+    });
+  }
+
+  // Clear state from IndexedDB
+  function clearState() {
+    if (!db) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const objectStore = transaction.objectStore(STORE_NAME);
+      const request = objectStore.delete('currentSession');
+
+      request.onsuccess = () => {
+        console.info('[DB] State cleared successfully');
+        resolve();
+      };
+
+      request.onerror = () => {
+        console.warn('[DB] Failed to clear state:', request.error);
+        resolve();
+      };
+    });
+  }
 
   // DOM elements
   const questionDisplay = document.getElementById('question-display');
@@ -257,6 +382,7 @@
   const settingsClose = document.getElementById('settings-close');
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const pullToRefreshToggle = document.getElementById('pull-to-refresh-toggle');
+  const hapticFeedbackToggle = document.getElementById('haptic-feedback-toggle');
   const timedModeToggle = document.getElementById('timed-mode-toggle');
   const timerDurationInput = document.getElementById('timer-duration');
   const timerDurationGroup = document.getElementById('timer-duration-group');
@@ -281,10 +407,18 @@
     `;
 
     try {
+      // Initialize IndexedDB first
+      await initDB();
+
+      // Load questions
       const response = await fetch('assets/question_banks/all_questions.json');
       if (!response.ok) throw new Error('Failed to load questions');
       const data = await response.json();
       questions = data.questionBank.questions;
+
+      // Load saved state after questions are loaded
+      await loadState();
+
       initializeQuiz();
     } catch (error) {
       console.error('Failed to load questions:', error);
@@ -716,6 +850,7 @@
     HapticEngine.light(); // Light haptic for flag toggle
     renderQuestion();
     updateQuestionGrid();
+    saveState(); // Save state after flagging
   }
 
   // Pull-to-refresh functionality for question display
@@ -1011,6 +1146,7 @@
     HapticEngine.light(); // Light haptic for elimination toggle
 
     renderQuestion();
+    saveState(); // Save state after elimination
   }
 
   // Text highlighting functions
@@ -1144,6 +1280,8 @@
     if (highlightToolbar) {
       highlightToolbar.classList.remove('show');
     }
+
+    saveState(); // Save state after highlighting
   }
 
   // Render current question
@@ -1520,6 +1658,9 @@
 
     // Haptic feedback on selection
     HapticEngine.light();
+
+    // Save state after answer selection
+    saveState();
   }
 
   // Handle submit answer
@@ -1564,6 +1705,9 @@
 
     // Check for milestone celebrations
     checkMilestones();
+
+    // Save state to IndexedDB
+    saveState();
   }
 
   // Create confetti animation
@@ -1686,6 +1830,7 @@
     currentQuestionIndex = index;
     renderQuestion();
     closeMenu();
+    saveState(); // Save state after navigation
   }
 
   // Update navigation buttons
@@ -1930,6 +2075,7 @@
     document.body.style.overflow = 'hidden';
     darkModeToggle.checked = darkModeEnabled;
     pullToRefreshToggle.checked = pullToRefreshEnabled;
+    hapticFeedbackToggle.checked = hapticFeedbackEnabled;
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -1948,6 +2094,10 @@
     // Save pull-to-refresh setting
     pullToRefreshEnabled = pullToRefreshToggle.checked;
     localStorage.setItem('pullToRefresh', pullToRefreshEnabled.toString());
+
+    // Save haptic feedback setting
+    hapticFeedbackEnabled = hapticFeedbackToggle.checked;
+    localStorage.setItem('hapticFeedback', hapticFeedbackEnabled.toString());
 
     // Save timer settings
     const wasTimedMode = timedMode;
@@ -2194,6 +2344,9 @@
     stopTimer();
     closeMenu();
 
+    // Clear IndexedDB state
+    clearState();
+
     // Re-initialize to show welcome screen
     initializeQuiz();
     updateStats();
@@ -2317,6 +2470,24 @@
 
     window.addEventListener('online', () => {
       showToast('Back online!', 'success');
+    });
+
+    // Pause timer when page is hidden (user switches tabs or minimizes)
+    document.addEventListener('visibilitychange', () => {
+      if (!timedMode || !currentTimer) return;
+
+      if (document.hidden) {
+        // Save the paused state before hiding
+        const wasPaused = timerPaused;
+        pauseTimer();
+        // Store if timer was already paused by user
+        document._timerWasManuallyPaused = wasPaused;
+      } else {
+        // Only resume if user hadn't manually paused it
+        if (!document._timerWasManuallyPaused) {
+          resumeTimer();
+        }
+      }
     });
 
     // Show initial offline status if offline
