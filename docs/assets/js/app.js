@@ -29,10 +29,11 @@
   // Haptic feedback engine for iOS/mobile devices
   const HapticEngine = {
     isSupported: 'vibrate' in navigator && typeof navigator.vibrate === 'function',
+    enabled: localStorage.getItem('hapticsEnabled') !== 'false', // Default true for backwards compatibility
 
     // Try to vibrate, with error handling
     _vibrate: function(pattern) {
-      if (!this.isSupported) return false;
+      if (!this.isSupported || !this.enabled) return false;
 
       try {
         return navigator.vibrate(pattern);
@@ -78,6 +79,14 @@
     }
   };
 
+  // Global swipe management state
+  let swipesEnabled = true;
+
+  // Disable/enable swipes globally (useful for modals)
+  function setSwipesEnabled(enabled) {
+    swipesEnabled = enabled;
+  }
+
   // Swipe gesture detection for mobile
   function initSwipeGesture(element, options = {}) {
     // Skip if already initialized (prevent duplicate listeners)
@@ -99,8 +108,21 @@
     let touchStartTarget = null;
 
     const handleTouchStart = (e) => {
-      // Check if touch started on an excluded element
+      // Check if swipes are globally disabled
+      if (!swipesEnabled) {
+        touchStartTarget = null;
+        return;
+      }
+
+      // Check if touch started on an excluded element or any modal
       touchStartTarget = e.target;
+      if (touchStartTarget.closest('.modal:not([hidden])') ||
+          touchStartTarget.closest('.tour-overlay') ||
+          touchStartTarget.closest('.highlight-toolbar')) {
+        touchStartTarget = null;
+        return;
+      }
+
       if (excludeSelectors.length > 0) {
         for (const selector of excludeSelectors) {
           if (touchStartTarget.closest(selector)) {
@@ -200,6 +222,7 @@
   }
 
   // State management
+  const STATE_VERSION = 1; // Increment when state structure changes
   let questions = [];
   let currentQuestionIndex = 0;
   let userAnswers = {}; // { questionIndex: { selected: 'A', submitted: true, correct: true, timeSpent: 45, flagged: false, eliminated: [], highlights: [] } }
@@ -222,6 +245,9 @@
 
   // Pull-to-refresh state (load from localStorage if available)
   let pullToRefreshEnabled = localStorage.getItem('pullToRefresh') === 'true';
+
+  // Haptic feedback state (load from localStorage, default true)
+  let hapticsEnabled = localStorage.getItem('hapticsEnabled') !== 'false';
 
   // Highlighting state
   let highlightToolbar = null;
@@ -257,6 +283,7 @@
   const settingsClose = document.getElementById('settings-close');
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const pullToRefreshToggle = document.getElementById('pull-to-refresh-toggle');
+  const hapticFeedbackToggle = document.getElementById('haptic-feedback-toggle');
   const timedModeToggle = document.getElementById('timed-mode-toggle');
   const timerDurationInput = document.getElementById('timer-duration');
   const timerDurationGroup = document.getElementById('timer-duration-group');
@@ -270,34 +297,240 @@
   const summaryContinue = document.getElementById('summary-continue');
   const summaryReset = document.getElementById('summary-reset');
 
+  // Save quiz state to localStorage
+  function saveState() {
+    try {
+      const state = {
+        version: STATE_VERSION,
+        timestamp: Date.now(),
+        currentQuestionIndex,
+        userAnswers,
+        showWelcome,
+        keyboardHintShown,
+        currentStreak,
+        bestStreak,
+        milestonesShown
+      };
+
+      localStorage.setItem('quizState', JSON.stringify(state));
+      console.debug('[State] Progress saved');
+    } catch (error) {
+      console.warn('[State] Failed to save progress:', error);
+      // Fail silently - don't disrupt user experience
+    }
+  }
+
+  // Load quiz state from localStorage
+  function loadState() {
+    try {
+      const savedState = localStorage.getItem('quizState');
+      if (!savedState) {
+        console.info('[State] No saved progress found');
+        return false;
+      }
+
+      const state = JSON.parse(savedState);
+
+      // Check version compatibility
+      if (state.version !== STATE_VERSION) {
+        console.warn('[State] Saved state version mismatch, resetting');
+        localStorage.removeItem('quizState');
+        return false;
+      }
+
+      // Restore state
+      currentQuestionIndex = state.currentQuestionIndex || 0;
+      userAnswers = state.userAnswers || {};
+      showWelcome = state.showWelcome !== undefined ? state.showWelcome : true;
+      keyboardHintShown = state.keyboardHintShown || false;
+      currentStreak = state.currentStreak || 0;
+      bestStreak = state.bestStreak || 0;
+      milestonesShown = state.milestonesShown || [];
+
+      const ageInDays = (Date.now() - state.timestamp) / (1000 * 60 * 60 * 24);
+      console.info(`[State] Loaded progress from ${ageInDays.toFixed(1)} days ago`);
+
+      return true;
+    } catch (error) {
+      console.warn('[State] Failed to load progress:', error);
+      localStorage.removeItem('quizState');
+      return false;
+    }
+  }
+
+  // Clear saved state
+  function clearState() {
+    try {
+      localStorage.removeItem('quizState');
+      console.info('[State] Progress cleared');
+    } catch (error) {
+      console.warn('[State] Failed to clear progress:', error);
+    }
+  }
+
+  // Validate question data structure
+  function validateQuestions(data) {
+    const errors = [];
+
+    // Validate top-level structure
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid data format: expected object');
+    }
+
+    if (!data.questionBank || typeof data.questionBank !== 'object') {
+      throw new Error('Invalid data format: missing questionBank');
+    }
+
+    if (!Array.isArray(data.questionBank.questions)) {
+      throw new Error('Invalid data format: questions must be an array');
+    }
+
+    const questions = data.questionBank.questions;
+
+    // Validate each question
+    questions.forEach((question, index) => {
+      const qNum = index + 1;
+
+      // Required fields
+      if (!question.questionText || typeof question.questionText !== 'string') {
+        errors.push(`Question ${qNum}: missing or invalid questionText`);
+      }
+
+      if (!question.correctAnswer || typeof question.correctAnswer !== 'string') {
+        errors.push(`Question ${qNum}: missing or invalid correctAnswer`);
+      }
+
+      // Validate answer choices
+      if (!Array.isArray(question.answerChoices) || question.answerChoices.length !== 5) {
+        errors.push(`Question ${qNum}: must have exactly 5 answer choices`);
+      } else {
+        const letters = new Set();
+        let correctCount = 0;
+
+        question.answerChoices.forEach((choice, cIndex) => {
+          if (!choice.letter || typeof choice.letter !== 'string') {
+            errors.push(`Question ${qNum}, Choice ${cIndex + 1}: missing or invalid letter`);
+          } else {
+            if (letters.has(choice.letter)) {
+              errors.push(`Question ${qNum}: duplicate letter "${choice.letter}"`);
+            }
+            letters.add(choice.letter);
+          }
+
+          if (!choice.text || typeof choice.text !== 'string') {
+            errors.push(`Question ${qNum}, Choice ${cIndex + 1}: missing or invalid text`);
+          }
+
+          if (typeof choice.isCorrect !== 'boolean') {
+            errors.push(`Question ${qNum}, Choice ${cIndex + 1}: missing or invalid isCorrect`);
+          } else if (choice.isCorrect) {
+            correctCount++;
+          }
+        });
+
+        // Validate exactly one correct answer
+        if (correctCount !== 1) {
+          errors.push(`Question ${qNum}: must have exactly one correct answer (found ${correctCount})`);
+        }
+
+        // Validate correctAnswer matches a choice letter
+        if (question.correctAnswer && !letters.has(question.correctAnswer)) {
+          errors.push(`Question ${qNum}: correctAnswer "${question.correctAnswer}" does not match any choice letter`);
+        }
+      }
+    });
+
+    if (errors.length > 0) {
+      console.error('[Validation] Question validation failed:', errors);
+      throw new Error(`Question validation failed: ${errors.slice(0, 3).join('; ')}${errors.length > 3 ? ` (and ${errors.length - 3} more)` : ''}`);
+    }
+
+    return true;
+  }
+
+  // Retry helper with exponential backoff
+  async function retryWithBackoff(fn, maxRetries = 3, baseDelay = 1000) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        const isLastAttempt = attempt === maxRetries;
+        const isNetworkError = error.name === 'TypeError' || error.message.includes('fetch');
+
+        // Don't retry non-network errors
+        if (!isNetworkError || isLastAttempt) {
+          throw error;
+        }
+
+        // Calculate delay with exponential backoff
+        const delay = baseDelay * Math.pow(2, attempt);
+        console.warn(`[Retry] Attempt ${attempt + 1}/${maxRetries + 1} failed, retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
   // Load questions from JSON
-  async function loadQuestions() {
+  async function loadQuestions(isRetry = false) {
     // Show loading indicator
     questionDisplay.innerHTML = `
       <div style="text-align: center; padding: 4rem 1rem;">
         <div class="loading-spinner"></div>
-        <p>Loading questions...</p>
+        <p>${isRetry ? 'Retrying...' : 'Loading questions...'}</p>
       </div>
     `;
 
     try {
-      const response = await fetch('assets/question_banks/all_questions.json');
-      if (!response.ok) throw new Error('Failed to load questions');
-      const data = await response.json();
+      const data = await retryWithBackoff(async () => {
+        const response = await fetch('assets/question_banks/all_questions.json');
+        if (!response.ok) throw new Error('Failed to load questions');
+        return await response.json();
+      });
+
+      // Validate question data structure
+      validateQuestions(data);
+
       questions = data.questionBank.questions;
+      console.info(`[App] Loaded and validated ${questions.length} questions`);
       initializeQuiz();
     } catch (error) {
       console.error('Failed to load questions:', error);
-      const errorMessage = error.message && error.message.includes('fetch')
-        ? 'Network error. Please check your connection and refresh the page.'
-        : 'Error loading questions. Please try refreshing the page.';
-      questionDisplay.innerHTML = `<p class="error">${escapeHtml(errorMessage)}</p>`;
+      let errorMessage;
+      let showRetryButton = false;
+
+      if (error.message && error.message.includes('validation')) {
+        errorMessage = 'Question data is malformed. Please contact support.';
+      } else if (error.name === 'TypeError' || error.message.includes('fetch')) {
+        errorMessage = 'Network error. Please check your connection and try again.';
+        showRetryButton = true;
+      } else {
+        errorMessage = 'Error loading questions. Please try refreshing the page.';
+        showRetryButton = true;
+      }
+
+      questionDisplay.innerHTML = `
+        <div style="text-align: center; padding: 2rem 1rem;">
+          <p class="error">${escapeHtml(errorMessage)}</p>
+          ${showRetryButton ? '<button id="retry-load-btn" class="button-primary" style="margin-top: 1rem;">Retry</button>' : ''}
+        </div>
+      `;
+
+      // Add retry button listener
+      if (showRetryButton) {
+        document.getElementById('retry-load-btn')?.addEventListener('click', () => {
+          loadQuestions(true);
+        });
+      }
     }
   }
 
   // Initialize quiz
   function initializeQuiz() {
     if (questions.length === 0) return;
+
+    // Load saved state before building grid
+    const stateLoaded = loadState();
+
     buildQuestionGrid();
 
     // Show welcome screen or go straight to questions
@@ -305,6 +538,14 @@
       renderWelcomeScreen();
     } else {
       renderQuestion();
+
+      // Show toast if resuming from saved state
+      if (stateLoaded && Object.keys(userAnswers).length > 0) {
+        const answered = Object.values(userAnswers).filter(a => a.submitted).length;
+        setTimeout(() => {
+          showToast(`✓ Resumed session (${answered} questions answered)`, 'success');
+        }, 500);
+      }
     }
   }
 
@@ -714,6 +955,7 @@
     }
     userAnswers[currentQuestionIndex].flagged = !userAnswers[currentQuestionIndex].flagged;
     HapticEngine.light(); // Light haptic for flag toggle
+    saveState(); // Save state when flagging
     renderQuestion();
     updateQuestionGrid();
   }
@@ -890,6 +1132,9 @@
     // Reset to first question
     currentQuestionIndex = 0;
 
+    // Save state after randomization
+    saveState();
+
     // Re-render
     renderQuestion();
     updateQuestionGrid();
@@ -1009,6 +1254,7 @@
     }
 
     HapticEngine.light(); // Light haptic for elimination toggle
+    saveState(); // Save state when eliminating answers
 
     renderQuestion();
   }
@@ -1520,6 +1766,9 @@
 
     // Haptic feedback on selection
     HapticEngine.light();
+
+    // Save state
+    saveState();
   }
 
   // Handle submit answer
@@ -1558,6 +1807,9 @@
     } else {
       currentStreak = 0;
     }
+
+    // Save state after submission
+    saveState();
 
     renderQuestion();
     updateStats();
@@ -1670,6 +1922,7 @@
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
       HapticEngine.subtle(); // Subtle haptic for navigation
+      saveState(); // Save navigation state
       renderQuestion();
     }
   }
@@ -1678,12 +1931,14 @@
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
       HapticEngine.subtle(); // Subtle haptic for navigation
+      saveState(); // Save navigation state
       renderQuestion();
     }
   }
 
   function jumpToQuestion(index) {
     currentQuestionIndex = index;
+    saveState(); // Save navigation state
     renderQuestion();
     closeMenu();
   }
@@ -1861,6 +2116,7 @@
   function openMenu() {
     questionMenu.hidden = false;
     document.body.style.overflow = 'hidden';
+    setSwipesEnabled(false); // Disable swipes when menu is open
     updateStats();
     updateTopicMastery();
   }
@@ -1868,6 +2124,7 @@
   function closeMenu() {
     questionMenu.hidden = true;
     document.body.style.overflow = '';
+    setSwipesEnabled(true); // Re-enable swipes when menu is closed
   }
 
   // Generic toast notification
@@ -1928,8 +2185,10 @@
     settingsModal.hidden = false;
     settingsModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    setSwipesEnabled(false); // Disable swipes when modal is open
     darkModeToggle.checked = darkModeEnabled;
     pullToRefreshToggle.checked = pullToRefreshEnabled;
+    hapticFeedbackToggle.checked = hapticsEnabled;
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -1939,6 +2198,7 @@
     settingsModal.hidden = true;
     settingsModal.style.display = 'none';
     document.body.style.overflow = '';
+    setSwipesEnabled(true); // Re-enable swipes when modal is closed
   }
 
   function saveSettings() {
@@ -1948,6 +2208,11 @@
     // Save pull-to-refresh setting
     pullToRefreshEnabled = pullToRefreshToggle.checked;
     localStorage.setItem('pullToRefresh', pullToRefreshEnabled.toString());
+
+    // Save haptic feedback setting
+    hapticsEnabled = hapticFeedbackToggle.checked;
+    HapticEngine.enabled = hapticsEnabled;
+    localStorage.setItem('hapticsEnabled', hapticsEnabled.toString());
 
     // Save timer settings
     const wasTimedMode = timedMode;
@@ -1985,6 +2250,7 @@
 
   // Session summary functions
   function showSessionSummary() {
+    setSwipesEnabled(false); // Disable swipes when summary modal is open
     const answered = Object.values(userAnswers).filter(a => a.submitted).length;
     const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const incorrect = answered - correct;
@@ -2109,6 +2375,7 @@
     sessionSummaryModal.hidden = true;
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
+    setSwipesEnabled(true); // Re-enable swipes when modal is closed
   }
 
   // Web Share API - Share progress
@@ -2190,6 +2457,9 @@
     milestonesShown = [];
     currentQuestionIndex = 0;
     showWelcome = true; // Reset to show welcome screen
+
+    // Clear saved state from localStorage
+    clearState();
 
     stopTimer();
     closeMenu();
@@ -2447,10 +2717,37 @@
     timerDisplay.hidden = !timedMode;
   }
 
+  // Handle page visibility changes for timer
+  function initVisibilityHandler() {
+    let hiddenTime = null;
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        // Page is hidden - pause timer and record when
+        if (timedMode && currentTimer && !timerPaused) {
+          hiddenTime = Date.now();
+          pauseTimer();
+        }
+      } else {
+        // Page is visible again - resume timer and adjust time
+        if (timedMode && currentTimer && timerPaused && hiddenTime) {
+          const hiddenDuration = Date.now() - hiddenTime;
+          // Adjust questionStartTime to compensate for hidden duration
+          if (questionStartTime) {
+            questionStartTime += hiddenDuration;
+          }
+          hiddenTime = null;
+          resumeTimer();
+        }
+      }
+    });
+  }
+
   // Initialize app
   initDarkMode();
   initPullToRefreshSetting();
   initTimerSettings();
+  initVisibilityHandler();
   loadQuestions();
   initPerformanceMonitoring();
   initKeyboardHandling();
