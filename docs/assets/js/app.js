@@ -26,6 +26,37 @@
       .replace(/'/g, '&#039;');
   }
 
+  // Safe localStorage helper to prevent crashes in private mode
+  function safeGetLocalStorage(key, defaultValue) {
+    try {
+      const value = localStorage.getItem(key);
+      return value !== null ? value : defaultValue;
+    } catch (e) {
+      console.warn(`[Storage] Failed to read ${key}:`, e);
+      return defaultValue;
+    }
+  }
+
+  function safeSetLocalStorage(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      console.warn(`[Storage] Failed to write ${key}:`, e);
+      return false;
+    }
+  }
+
+  function _safeRemoveLocalStorage(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (e) {
+      console.warn(`[Storage] Failed to remove ${key}:`, e);
+      return false;
+    }
+  }
+
   // Haptic feedback engine for iOS/mobile devices
   const HapticEngine = {
     isSupported: 'vibrate' in navigator && typeof navigator.vibrate === 'function',
@@ -232,9 +263,9 @@
   let bestStreak = 0; // Track best streak
   let milestonesShown = []; // Track which milestones have been shown
 
-  // Timer state (load from localStorage if available)
-  let timedMode = localStorage.getItem('timedMode') === 'true';
-  let timerDuration = parseInt(localStorage.getItem('timerDuration')) || CONSTANTS.DEFAULT_TIMER_DURATION; // seconds per question
+  // Timer state (load from localStorage if available - using safe helper)
+  let timedMode = safeGetLocalStorage('timedMode', 'false') === 'true';
+  let timerDuration = parseInt(safeGetLocalStorage('timerDuration', String(CONSTANTS.DEFAULT_TIMER_DURATION))) || CONSTANTS.DEFAULT_TIMER_DURATION; // seconds per question
   let currentTimer = null;
   let timerSeconds = 0;
   let timerPaused = false;
@@ -243,11 +274,11 @@
   // Dark mode state
   let darkModeEnabled = false;
 
-  // Pull-to-refresh state (load from localStorage if available)
-  let pullToRefreshEnabled = localStorage.getItem('pullToRefresh') === 'true';
+  // Pull-to-refresh state (load from localStorage if available - using safe helper)
+  let pullToRefreshEnabled = safeGetLocalStorage('pullToRefresh', 'false') === 'true';
 
-  // Haptic feedback state (load from localStorage, default true)
-  let hapticsEnabled = localStorage.getItem('hapticsEnabled') !== 'false';
+  // Haptic feedback state (load from localStorage, default true - using safe helper)
+  let hapticsEnabled = safeGetLocalStorage('hapticsEnabled', 'true') !== 'false';
 
   // Highlighting state
   let highlightToolbar = null;
@@ -485,8 +516,17 @@
     }
   }
 
+  // AbortController for fetch cancellation
+  let loadQuestionsAbortController = null;
+
   // Load questions from JSON
   async function loadQuestions(isRetry = false) {
+    // Cancel any existing load
+    if (loadQuestionsAbortController) {
+      loadQuestionsAbortController.abort();
+    }
+    loadQuestionsAbortController = new AbortController();
+
     // Show loading indicator
     questionDisplay.innerHTML = `
       <div style="text-align: center; padding: 4rem 1rem;">
@@ -497,7 +537,9 @@
 
     try {
       const data = await retryWithBackoff(async () => {
-        const response = await fetch('assets/question_banks/all_questions.json');
+        const response = await fetch('assets/question_banks/all_questions.json', {
+          signal: loadQuestionsAbortController.signal
+        });
         if (!response.ok) throw new Error('Failed to load questions');
         return await response.json();
       });
@@ -1443,7 +1485,7 @@
 
     // Update header with question ID (Issue #25)
     questionCounter.textContent = `Question #${currentQuestionIndex + 1} of ${questions.length}`;
-    questionCounter.title = `Click to copy question ID`;
+    questionCounter.title = 'Click to copy question ID';
     questionCounter.style.cursor = 'pointer';
     updateProgressBar();
     updateNavigationButtons();
@@ -1638,7 +1680,7 @@
               <span id="char-count">${noteText.length}</span>/${maxChars}
             </div>
             <div class="notes-actions">
-              ${existingNote ? `<button id="delete-note-btn" class="note-action-btn note-delete-btn" aria-label="Delete note">🗑️ Delete</button>` : ''}
+              ${existingNote ? '<button id="delete-note-btn" class="note-action-btn note-delete-btn" aria-label="Delete note">🗑️ Delete</button>' : ''}
               <button id="save-note-btn" class="note-action-btn note-save-btn" aria-label="Save note">💾 Save Note</button>
             </div>
           </div>
@@ -2047,59 +2089,77 @@
     saveState();
   }
 
+  // Debouncing flag for submit to prevent double submissions
+  let isSubmitting = false;
+
   // Handle submit answer
   function handleSubmit() {
+    // Debounce check
+    if (isSubmitting) {
+      console.debug('[Submit] Already processing, ignoring duplicate');
+      return;
+    }
+
     const answer = userAnswers[currentQuestionIndex];
     if (!answer || !answer.selected) return;
 
-    // Stop timer and record time spent
-    stopTimer();
+    isSubmitting = true;
 
-    const question = questions[currentQuestionIndex];
-    const correctAnswer = question.correctAnswer;
-    const isCorrect = answer.selected === correctAnswer;
+    try {
+      // Stop timer and record time spent
+      stopTimer();
 
-    userAnswers[currentQuestionIndex].submitted = true;
-    userAnswers[currentQuestionIndex].correct = isCorrect;
+      const question = questions[currentQuestionIndex];
+      const correctAnswer = question.correctAnswer;
+      const isCorrect = answer.selected === correctAnswer;
 
-    // Issue #10: Screen reader announcement for result
-    const answerLetter = answer.selected;
-    if (isCorrect) {
-      announceToScreenReader(`Correct! Your answer ${answerLetter} is the right choice.`);
-    } else {
-      announceToScreenReader(`Incorrect. You selected ${answerLetter}. The correct answer is ${correctAnswer}.`);
-    }
+      userAnswers[currentQuestionIndex].submitted = true;
+      userAnswers[currentQuestionIndex].correct = isCorrect;
 
-    // Haptic feedback based on correctness
-    if (isCorrect) {
-      HapticEngine.success();
-    } else {
-      HapticEngine.error();
-    }
-
-    // Update streak tracking
-    if (isCorrect) {
-      currentStreak++;
-      if (currentStreak > bestStreak) {
-        bestStreak = currentStreak;
+      // Issue #10: Screen reader announcement for result
+      const answerLetter = answer.selected;
+      if (isCorrect) {
+        announceToScreenReader(`Correct! Your answer ${answerLetter} is the right choice.`);
+      } else {
+        announceToScreenReader(`Incorrect. You selected ${answerLetter}. The correct answer is ${correctAnswer}.`);
       }
 
-      // Show streak notification for milestones
-      if (CONSTANTS.STREAK_MILESTONES.includes(currentStreak)) {
-        setTimeout(() => showStreakNotification(currentStreak), CONSTANTS.STREAK_ANIMATION_DELAY);
+      // Haptic feedback based on correctness
+      if (isCorrect) {
+        HapticEngine.success();
+      } else {
+        HapticEngine.error();
       }
-    } else {
-      currentStreak = 0;
+
+      // Update streak tracking
+      if (isCorrect) {
+        currentStreak++;
+        if (currentStreak > bestStreak) {
+          bestStreak = currentStreak;
+        }
+
+        // Show streak notification for milestones
+        if (CONSTANTS.STREAK_MILESTONES.includes(currentStreak)) {
+          setTimeout(() => showStreakNotification(currentStreak), CONSTANTS.STREAK_ANIMATION_DELAY);
+        }
+      } else {
+        currentStreak = 0;
+      }
+
+      // Save state after submission with notification (Issue #2)
+      saveState(true);
+
+      renderQuestion();
+      updateStats();
+
+      // Check for milestone celebrations
+      checkMilestones();
+    } finally {
+      // Reset debounce flag after small delay to prevent rapid re-submission
+      setTimeout(() => {
+        isSubmitting = false;
+      }, 300);
     }
-
-    // Save state after submission with notification (Issue #2)
-    saveState(true);
-
-    renderQuestion();
-    updateStats();
-
-    // Check for milestone celebrations
-    checkMilestones();
   }
 
   // Create confetti animation
@@ -2482,7 +2542,7 @@
         <div class="topic-item ${statusClass}">
           <div class="topic-header">
             <span class="topic-emoji">${statusEmoji}</span>
-            <span class="topic-name">${topic}</span>
+            <span class="topic-name">${escapeHtml(topic)}</span>
           </div>
           <div class="topic-stats">
             <span class="topic-score">${stats.correct}/${stats.total}</span>
@@ -2840,34 +2900,53 @@
     HapticEngine.light();
   }
 
-  // Issue #6: Notes management
-  function saveNote(questionIndex, noteText) {
-    try {
-      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+  // Issue #6: Notes management with optimistic locking to prevent race conditions
+  function saveNote(questionIndex, noteText, maxRetries = 3) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const data = safeGetLocalStorage('questionNotes', '{}');
+        const parsed = JSON.parse(data);
+        const notes = parsed.notes || parsed; // Support both old and new format
+        const currentVersion = parsed.version || 0;
 
-      if (noteText.trim().length === 0) {
-        // If note is empty, delete it
-        delete notes[questionIndex];
-      } else {
-        notes[questionIndex] = {
-          text: noteText.trim(),
-          timestamp: Date.now(),
-          date: new Date().toLocaleDateString(),
-          questionId: `Q${questionIndex + 1}`
+        if (noteText.trim().length === 0) {
+          // If note is empty, delete it
+          delete notes[questionIndex];
+        } else {
+          notes[questionIndex] = {
+            text: noteText.trim(),
+            timestamp: Date.now(),
+            date: new Date().toLocaleDateString(),
+            questionId: `Q${questionIndex + 1}`
+          };
+        }
+
+        const newData = {
+          notes: notes,
+          version: currentVersion + 1
         };
-      }
 
-      localStorage.setItem('questionNotes', JSON.stringify(notes));
-      return true;
-    } catch (error) {
-      console.warn('[Notes] Failed to save:', error);
-      return false;
+        safeSetLocalStorage('questionNotes', JSON.stringify(newData));
+        return true;
+      } catch (error) {
+        console.warn(`[Notes] Save attempt ${attempt + 1} failed:`, error);
+        if (attempt === maxRetries - 1) {
+          return false;
+        }
+        // Brief delay before retry
+        const delay = 10 * (attempt + 1);
+        const start = Date.now();
+        while (Date.now() - start < delay) { /* busy wait */ }
+      }
     }
+    return false;
   }
 
   function loadNote(questionIndex) {
     try {
-      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      const data = safeGetLocalStorage('questionNotes', '{}');
+      const parsed = JSON.parse(data);
+      const notes = parsed.notes || parsed; // Support both old and new format
       return notes[questionIndex] || null;
     } catch (error) {
       console.warn('[Notes] Failed to load:', error);
@@ -2877,9 +2956,19 @@
 
   function deleteNote(questionIndex) {
     try {
-      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      const data = safeGetLocalStorage('questionNotes', '{}');
+      const parsed = JSON.parse(data);
+      const notes = parsed.notes || parsed;
+      const currentVersion = parsed.version || 0;
+
       delete notes[questionIndex];
-      localStorage.setItem('questionNotes', JSON.stringify(notes));
+
+      const newData = {
+        notes: notes,
+        version: currentVersion + 1
+      };
+
+      safeSetLocalStorage('questionNotes', JSON.stringify(newData));
       return true;
     } catch (error) {
       console.warn('[Notes] Failed to delete:', error);
@@ -2889,7 +2978,9 @@
 
   function getAllNotes() {
     try {
-      return JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      const data = safeGetLocalStorage('questionNotes', '{}');
+      const parsed = JSON.parse(data);
+      return parsed.notes || parsed; // Support both old and new format
     } catch (error) {
       console.warn('[Notes] Failed to retrieve all notes:', error);
       return {};
@@ -2904,7 +2995,7 @@
       return 'No notes to export.';
     }
 
-    let exportText = `TBank Study Notes\n`;
+    let exportText = 'TBank Study Notes\n';
     exportText += `Exported: ${new Date().toLocaleString()}\n`;
     exportText += `Total Notes: ${noteCount}\n`;
     exportText += `${'='.repeat(60)}\n\n`;
@@ -3046,7 +3137,7 @@
     // Issue #9: Generate recommendations
     const recommendations = [];
     if (weakestTopic && weakestTopic.percentage < 70) {
-      recommendations.push(`Focus on ${weakestTopic.topic} (${weakestTopic.percentage}% accuracy)`);
+      recommendations.push(`Focus on ${escapeHtml(weakestTopic.topic)} (${weakestTopic.percentage}% accuracy)`);
     }
     if (slowQuestions.length > 3) {
       recommendations.push(`Practice time management - ${slowQuestions.length} questions took too long`);
@@ -3145,7 +3236,7 @@
             ${slowQuestions.slice(0, 5).map(sq => `
               <div class="slow-question-item">
                 <span class="slow-question-number">Q${sq.index + 1}</span>
-                <span class="slow-question-topic">${sq.topic}</span>
+                <span class="slow-question-topic">${escapeHtml(sq.topic)}</span>
                 <span class="slow-question-time">${sq.timeSpent}s</span>
               </div>
             `).join('')}
@@ -3172,7 +3263,7 @@
             ${sortedTopics.map(t => `
               <div class="summary-topic-item">
                 <div class="summary-topic-header">
-                  <span class="summary-topic-name">${t.topic}</span>
+                  <span class="summary-topic-name">${escapeHtml(t.topic)}</span>
                   <span class="summary-topic-score">${t.correct}/${t.total} (${t.percentage}%)</span>
                 </div>
                 <div class="summary-topic-bar">
@@ -3330,8 +3421,8 @@
 
       HapticEngine.success();
       showToast(`Exported ${noteCount} note${noteCount > 1 ? 's' : ''} successfully!`, 'success');
-    } catch (_error) {
-      // Fallback to clipboard - error intentionally unused
+    } catch {
+      // Fallback to clipboard if file download fails
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(exportText)
           .then(() => {
@@ -3651,6 +3742,9 @@
   }
 
   // Service Worker Registration for PWA support
+  // Store SW update interval for cleanup
+  let swUpdateInterval = null;
+
   function initServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -3661,8 +3755,13 @@
             // Cache question banks after registration
             registration.active?.postMessage({ type: 'CACHE_QUESTION_BANKS' });
 
+            // Clear any existing interval before creating new one
+            if (swUpdateInterval) {
+              clearInterval(swUpdateInterval);
+            }
+
             // Check for updates periodically
-            setInterval(() => {
+            swUpdateInterval = setInterval(() => {
               registration.update();
             }, 60 * 60 * 1000); // Check every hour
           })
@@ -3796,12 +3895,37 @@
     });
   }
 
+  // Global error handlers
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('[App] Unhandled promise rejection:', event.reason);
+    // Show user-friendly error for critical failures
+    if (event.reason?.message?.includes('Failed to load')) {
+      showToast('An error occurred loading data. Please refresh the page.', 'error');
+    }
+  });
+
+  window.addEventListener('error', (event) => {
+    console.error('[App] Global error:', event.error);
+  });
+
   // Initialize app
   initDarkMode();
   initPullToRefreshSetting();
   initTimerSettings();
   initVisibilityHandler();
-  loadQuestions();
+
+  // Load questions with proper error handling
+  loadQuestions().catch(error => {
+    console.error('[App] Fatal error during initialization:', error);
+    questionDisplay.innerHTML = `
+      <div style="text-align: center; padding: 2rem;">
+        <h2>Failed to Initialize</h2>
+        <p>The application could not start. Please refresh the page.</p>
+        <button onclick="location.reload()" class="button-primary" style="margin-top: 1rem;">Reload</button>
+      </div>
+    `;
+  });
+
   initPerformanceMonitoring();
   initKeyboardHandling();
   initPullToRefresh();
