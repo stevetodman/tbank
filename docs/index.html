@@ -54,133 +54,137 @@
     <link rel="stylesheet" href="assets/css/dark-mode-quiz.css" />
   </head>
   <body>
+    <!-- Issue #10: Screen reader announcements -->
+    <div id="sr-announcements" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
     <a href="#question-display" class="skip-to-content">Skip to main content</a>
-    <header class="quiz-header">
+    <header class="quiz-header" role="banner">
       <div class="quiz-header-content">
         <h1 class="logo">TBank</h1>
-        <div class="progress-info">
-          <div id="timer-display" class="timer-display" hidden>
-            <span id="timer-text">--:--</span>
-            <button id="timer-toggle" class="timer-toggle-btn" aria-label="Pause timer">⏸</button>
+        <div class="progress-info" role="navigation" aria-label="Quiz controls">
+          <div id="timer-display" class="timer-display" hidden aria-live="off">
+            <span id="timer-text" aria-label="Time remaining">--:--</span>
+            <button id="timer-toggle" class="timer-toggle-btn" aria-label="Pause timer" aria-pressed="false">⏸</button>
           </div>
-          <span id="question-counter">Question 1 of 52</span>
-          <button id="settings-btn" class="settings-btn" aria-label="Settings">⚙️</button>
-          <button id="menu-toggle" class="menu-btn" aria-label="Question menu">☰</button>
+          <span id="question-counter" aria-live="polite">Question 1 of 52</span>
+          <button id="settings-btn" class="settings-btn" aria-label="Open settings menu">⚙️</button>
+          <button id="menu-toggle" class="menu-btn" aria-label="Open question menu" aria-expanded="false">☰</button>
         </div>
       </div>
-      <div class="progress-bar-container">
+      <div class="progress-bar-container" role="progressbar" aria-label="Quiz progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
         <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
       </div>
     </header>
 
-    <div id="question-menu" class="question-menu" hidden>
+    <!-- Issue #10: Question menu with ARIA attributes -->
+    <div id="question-menu" class="question-menu" hidden role="dialog" aria-modal="true" aria-labelledby="question-menu-title">
       <div class="question-menu-header">
-        <h2>Questions</h2>
-        <button id="menu-close" class="close-btn" aria-label="Close menu">&times;</button>
+        <h2 id="question-menu-title">Questions</h2>
+        <button id="menu-close" class="close-btn" aria-label="Close question menu">&times;</button>
       </div>
-      <div class="question-menu-stats">
-        <span id="answered-count">Answered: 0/52</span>
-        <span id="correct-count">Correct: 0</span>
-        <span id="percentage">0%</span>
-      </div>
-
-      <div class="menu-filters">
-        <button id="show-all-btn" class="filter-btn active">All</button>
-        <button id="show-incorrect-btn" class="filter-btn">Review Incorrect</button>
-        <button id="show-unanswered-btn" class="filter-btn">Unanswered</button>
-        <button id="show-flagged-btn" class="filter-btn">Flagged 🚩</button>
+      <div class="question-menu-stats" role="region" aria-label="Session statistics">
+        <span id="answered-count" aria-label="Questions answered">Answered: 0/52</span>
+        <span id="correct-count" aria-label="Correct answers">Correct: 0</span>
+        <span id="percentage" aria-label="Accuracy percentage">0%</span>
       </div>
 
-      <div class="menu-actions">
+      <div class="menu-filters" role="group" aria-label="Question filters">
+        <button id="show-all-btn" class="filter-btn active" aria-pressed="true">All</button>
+        <button id="show-incorrect-btn" class="filter-btn" aria-pressed="false">Review Incorrect</button>
+        <button id="show-unanswered-btn" class="filter-btn" aria-pressed="false">Unanswered</button>
+        <button id="show-flagged-btn" class="filter-btn" aria-pressed="false">Flagged 🚩</button>
+      </div>
+
+      <div class="menu-actions" role="group" aria-label="Session actions">
         <button id="end-session-btn" class="menu-action-btn">End Session & Review</button>
         <button id="reset-progress-btn" class="menu-action-btn menu-action-btn-secondary">Reset All Progress</button>
       </div>
 
-      <div id="topic-mastery" class="topic-mastery" hidden>
+      <div id="topic-mastery" class="topic-mastery" hidden role="region" aria-label="Topic mastery statistics">
         <h3>Topic Mastery</h3>
         <div id="topic-list"></div>
       </div>
 
-      <div id="question-grid" class="question-grid"></div>
+      <div id="question-grid" class="question-grid" role="navigation" aria-label="Question grid"></div>
     </div>
 
-    <main class="quiz-container">
-      <div id="question-display" class="question-display">
+    <main class="quiz-container" role="main">
+      <div id="question-display" class="question-display" role="region" aria-label="Current question">
         <!-- Question content will be injected here -->
       </div>
 
-      <div class="quiz-navigation">
-        <button id="prev-btn" class="nav-btn" disabled>← Previous</button>
-        <button id="skip-btn" class="nav-btn skip-btn" hidden>Skip Question</button>
-        <button id="submit-btn" class="submit-btn" disabled>Submit Answer</button>
-        <button id="next-btn" class="nav-btn">Next →</button>
-      </div>
+      <nav class="quiz-navigation" aria-label="Question navigation">
+        <button id="prev-btn" class="nav-btn" disabled aria-label="Go to previous question" aria-disabled="true">← Previous</button>
+        <button id="skip-btn" class="nav-btn skip-btn" hidden aria-label="Skip current question">Skip Question</button>
+        <button id="submit-btn" class="submit-btn" disabled aria-label="Submit your answer" aria-disabled="true">Submit Answer</button>
+        <button id="next-btn" class="nav-btn" aria-label="Go to next question">Next →</button>
+      </nav>
     </main>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal" hidden>
+    <!-- Issue #10: Settings Modal with ARIA attributes -->
+    <div id="settings-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
       <div class="modal-content settings-modal">
         <div class="modal-header">
-          <h2>Session Settings</h2>
-          <button id="settings-close" class="close-btn" aria-label="Close settings">&times;</button>
+          <h2 id="settings-modal-title">Session Settings</h2>
+          <button id="settings-close" class="close-btn" aria-label="Close settings dialog">&times;</button>
         </div>
         <div class="modal-body">
           <div class="setting-group">
             <label class="setting-label">
-              <input type="checkbox" id="dark-mode-toggle" />
+              <input type="checkbox" id="dark-mode-toggle" aria-describedby="dark-mode-desc" />
               <span>Dark Mode</span>
             </label>
-            <p class="setting-description">Override system theme preference</p>
+            <p class="setting-description" id="dark-mode-desc">Override system theme preference</p>
           </div>
           <div class="setting-group">
             <label class="setting-label">
-              <input type="checkbox" id="pull-to-refresh-toggle" />
+              <input type="checkbox" id="pull-to-refresh-toggle" aria-describedby="pull-refresh-desc" />
               <span>Pull-to-Refresh</span>
             </label>
-            <p class="setting-description">Pull down to randomize question order (mobile only)</p>
+            <p class="setting-description" id="pull-refresh-desc">Pull down to randomize question order (mobile only)</p>
           </div>
           <div class="setting-group">
             <label class="setting-label">
-              <input type="checkbox" id="haptic-feedback-toggle" />
+              <input type="checkbox" id="haptic-feedback-toggle" aria-describedby="haptic-desc" />
               <span>Haptic Feedback</span>
             </label>
-            <p class="setting-description">Vibration feedback for interactions (mobile only)</p>
+            <p class="setting-description" id="haptic-desc">Vibration feedback for interactions (mobile only)</p>
           </div>
           <div class="setting-group">
             <label class="setting-label">
-              <input type="checkbox" id="timed-mode-toggle" />
+              <input type="checkbox" id="timed-mode-toggle" aria-describedby="timed-mode-desc" />
               <span>Timed Mode</span>
             </label>
-            <p class="setting-description">Enable countdown timer for each question</p>
+            <p class="setting-description" id="timed-mode-desc">Enable countdown timer for each question</p>
           </div>
           <div class="setting-group" id="timer-duration-group" hidden>
-            <label class="setting-label">
+            <label class="setting-label" for="timer-duration">
               <span>Time per question (seconds)</span>
             </label>
-            <input type="number" id="timer-duration" value="90" min="30" max="600" step="15" />
-            <p class="setting-description">Default: 90 seconds (UWorld standard)</p>
+            <input type="number" id="timer-duration" value="90" min="30" max="600" step="15" aria-describedby="timer-duration-desc" />
+            <p class="setting-description" id="timer-duration-desc">Default: 90 seconds (UWorld standard)</p>
           </div>
         </div>
         <div class="modal-footer">
-          <button id="settings-save" class="button-primary">Save Settings</button>
+          <button id="settings-save" class="button-primary" aria-label="Save settings and close dialog">Save Settings</button>
         </div>
       </div>
     </div>
 
-    <!-- Session Summary Modal -->
-    <div id="session-summary-modal" class="modal" hidden>
+    <!-- Issue #10: Session Summary Modal with ARIA attributes -->
+    <div id="session-summary-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="summary-modal-title">
       <div class="modal-content summary-modal">
         <div class="modal-header">
-          <h2>Session Complete</h2>
-          <button id="summary-close" class="close-btn" aria-label="Close summary">&times;</button>
+          <h2 id="summary-modal-title">Session Complete</h2>
+          <button id="summary-close" class="close-btn" aria-label="Close session summary dialog">&times;</button>
         </div>
-        <div class="modal-body" id="summary-content">
+        <div class="modal-body" id="summary-content" role="region" aria-label="Session summary results">
           <!-- Summary content will be injected here -->
         </div>
         <div class="modal-footer">
-          <button id="summary-share" class="button-secondary" hidden>📤 Share Results</button>
-          <button id="summary-continue" class="button-primary">Continue Studying</button>
-          <button id="summary-reset" class="button-secondary">Start Over</button>
+          <button id="summary-share" class="button-secondary" hidden aria-label="Share session results">📤 Share Results</button>
+          <button id="summary-continue" class="button-primary" aria-label="Continue studying and close dialog">Continue Studying</button>
+          <button id="summary-reset" class="button-secondary" aria-label="Reset all progress and start over">Start Over</button>
         </div>
       </div>
     </div>

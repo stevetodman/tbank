@@ -929,12 +929,14 @@
     timerPaused = true;
     timerToggleBtn.textContent = '▶';
     timerToggleBtn.setAttribute('aria-label', 'Resume timer');
+    timerToggleBtn.setAttribute('aria-pressed', 'true'); // Issue #10: Update ARIA pressed state
   }
 
   function resumeTimer() {
     timerPaused = false;
     timerToggleBtn.textContent = '⏸';
     timerToggleBtn.setAttribute('aria-label', 'Pause timer');
+    timerToggleBtn.setAttribute('aria-pressed', 'false'); // Issue #10: Update ARIA pressed state
   }
 
   // Issue #8: Enhanced timer display with color warnings
@@ -1520,27 +1522,33 @@
       const checked = isSelected ? 'checked' : '';
 
       html += `<label class="${choiceClass}">`;
-      html += `<input type="radio" name="answer" value="${escapeHtml(letter)}" ${checked} ${disabled} />`;
-      html += `<span class="choice-letter">${escapeHtml(letter)}</span>`;
-      html += `<span class="choice-text">${escapeHtml(choice.text)}</span>`;
+      // Issue #10: Add comprehensive ARIA labels for answer choices
+      let ariaLabel = `Answer ${letter}: ${choice.text}`;
+      if (isEliminated) ariaLabel += ' (crossed out)';
+      if (isSubmitted && isCorrect) ariaLabel += ' - Correct answer';
+      if (isSubmitted && isSelected && !isCorrect) ariaLabel += ' - Incorrect (your answer)';
+      html += `<input type="radio" name="answer" value="${escapeHtml(letter)}" ${checked} ${disabled} aria-label="${escapeHtml(ariaLabel)}" />`;
+      html += `<span class="choice-letter" aria-hidden="true">${escapeHtml(letter)}</span>`;
+      html += `<span class="choice-text" aria-hidden="true">${escapeHtml(choice.text)}</span>`;
 
       // Add eliminate button (only show before submission)
       if (!isSubmitted) {
-        html += `<button class="eliminate-btn" data-choice="${letter}" type="button">
+        const eliminateLabel = isEliminated ? `Undo cross out for answer ${letter}` : `Cross out answer ${letter}`;
+        html += `<button class="eliminate-btn" data-choice="${letter}" type="button" aria-label="${eliminateLabel}">
           ${isEliminated ? 'Undo' : 'Cross out'}
         </button>`;
       }
 
-      if (isSubmitted && isCorrect) html += '<span class="choice-icon">✓</span>';
-      if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon">✗</span>';
+      if (isSubmitted && isCorrect) html += '<span class="choice-icon" aria-hidden="true">✓</span>';
+      if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon" aria-hidden="true">✗</span>';
       html += '</label>';
     });
     html += '</fieldset>';
 
     // Explanation (shown after submission) - Enhanced for Issues #1 and #4
     if (isSubmitted) {
-      html += '<div class="explanation-section" id="explanation-section">';
-      html += '<h3>📚 Explanation</h3>';
+      html += '<div class="explanation-section" id="explanation-section" role="region" aria-labelledby="explanation-heading-' + currentQuestionIndex + '">';
+      html += '<h3 id="explanation-heading-' + currentQuestionIndex + '">📚 Explanation</h3>';
 
       // Add TL;DR section with educational objective (Issue #4)
       if (question.educationalObjective) {
@@ -1957,6 +1965,14 @@
     userAnswers[currentQuestionIndex].submitted = true;
     userAnswers[currentQuestionIndex].correct = isCorrect;
 
+    // Issue #10: Screen reader announcement for result
+    const answerLetter = answer.selected;
+    if (isCorrect) {
+      announceToScreenReader(`Correct! Your answer ${answerLetter} is the right choice.`);
+    } else {
+      announceToScreenReader(`Incorrect. You selected ${answerLetter}. The correct answer is ${correctAnswer}.`);
+    }
+
     // Haptic feedback based on correctness
     if (isCorrect) {
       HapticEngine.success();
@@ -2119,6 +2135,10 @@
   function updateNavigationButtons() {
     prevBtn.disabled = currentQuestionIndex === 0;
     nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+
+    // Issue #10: Update ARIA disabled states
+    prevBtn.setAttribute('aria-disabled', currentQuestionIndex === 0 ? 'true' : 'false');
+    nextBtn.setAttribute('aria-disabled', currentQuestionIndex === questions.length - 1 ? 'true' : 'false');
   }
 
   // Update progress bar
@@ -2130,6 +2150,11 @@
     const accuracyPercentage = answeredQuestions > 0 ? Math.round((correctQuestions / answeredQuestions) * 100) : 0;
 
     progressBar.style.width = `${percentage}%`;
+
+    // Issue #10: Update ARIA attributes for progress bar
+    const progressBarContainer = progressBar.parentElement;
+    progressBarContainer.setAttribute('aria-valuenow', Math.round(percentage));
+    progressBarContainer.setAttribute('aria-valuetext', `${answeredQuestions} of ${questions.length} questions answered, ${accuracyPercentage}% correct`);
 
     // Add tooltip with detailed progress (Issue #27)
     const tooltipText = answeredQuestions > 0
@@ -2216,6 +2241,12 @@
     showIncorrectBtn.classList.toggle('active', filterType === 'incorrect');
     showUnansweredBtn.classList.toggle('active', filterType === 'unanswered');
     showFlaggedBtn.classList.toggle('active', filterType === 'flagged');
+
+    // Issue #10: Update ARIA pressed states for filter buttons
+    showAllBtn.setAttribute('aria-pressed', filterType === 'all' ? 'true' : 'false');
+    showIncorrectBtn.setAttribute('aria-pressed', filterType === 'incorrect' ? 'true' : 'false');
+    showUnansweredBtn.setAttribute('aria-pressed', filterType === 'unanswered' ? 'true' : 'false');
+    showFlaggedBtn.setAttribute('aria-pressed', filterType === 'flagged' ? 'true' : 'false');
   }
 
   // Update topic mastery display
@@ -2302,6 +2333,10 @@
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when menu is open
 
+    // Issue #10: Update ARIA expanded state and trap focus
+    menuToggle.setAttribute('aria-expanded', 'true');
+    trapFocus(questionMenu);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2315,6 +2350,10 @@
     questionMenu.hidden = true;
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when menu is closed
+
+    // Issue #10: Update ARIA expanded state and remove focus trap
+    menuToggle.setAttribute('aria-expanded', 'false');
+    removeFocusTrap(questionMenu);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
@@ -2335,6 +2374,75 @@
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), CONSTANTS.TOAST_FADE_OUT);
     }, CONSTANTS.TOAST_DURATION);
+  }
+
+  // Issue #10: Screen reader announcements
+  function announceToScreenReader(message) {
+    const srAnnouncements = document.getElementById('sr-announcements');
+    if (srAnnouncements) {
+      // Clear previous announcement
+      srAnnouncements.textContent = '';
+      // Trigger reflow to ensure screen readers pick up the change
+      void srAnnouncements.offsetHeight;
+      // Set new announcement
+      srAnnouncements.textContent = message;
+    }
+  }
+
+  // Issue #10: Focus trap for modals
+  let lastFocusedElement = null;
+  const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  function trapFocus(modal) {
+    const focusableElements = modal.querySelectorAll(focusableSelectors);
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    // Save currently focused element
+    lastFocusedElement = document.activeElement;
+
+    // Focus first element
+    if (firstFocusable) {
+      setTimeout(() => firstFocusable.focus(), 100);
+    }
+
+    // Add keydown listener for focus trapping
+    const handleFocusTrap = (e) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    };
+
+    modal.addEventListener('keydown', handleFocusTrap);
+    modal.dataset.focusTrapActive = 'true';
+
+    // Store the handler so we can remove it later
+    modal._focusTrapHandler = handleFocusTrap;
+  }
+
+  function removeFocusTrap(modal) {
+    if (modal._focusTrapHandler) {
+      modal.removeEventListener('keydown', modal._focusTrapHandler);
+      delete modal._focusTrapHandler;
+      delete modal.dataset.focusTrapActive;
+    }
+
+    // Restore focus to last focused element
+    if (lastFocusedElement && lastFocusedElement.focus) {
+      lastFocusedElement.focus();
+    }
   }
 
   // Dark mode functions
@@ -2382,6 +2490,9 @@
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when modal is open
 
+    // Issue #10: Trap focus in modal
+    trapFocus(settingsModal);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2400,6 +2511,9 @@
     settingsModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #10: Remove focus trap
+    removeFocusTrap(settingsModal);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
@@ -2676,6 +2790,9 @@
     sessionSummaryModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
+    // Issue #10: Trap focus in modal
+    trapFocus(sessionSummaryModal);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2689,6 +2806,9 @@
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #10: Remove focus trap
+    removeFocusTrap(sessionSummaryModal);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
