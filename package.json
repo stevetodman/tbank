@@ -1,0 +1,41 @@
+{
+  "name": "tbank",
+  "version": "1.0.0",
+  "description": "USMLE Step 1 Congenital Heart Disease Question Bank - Progressive Web App",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8000 --directory docs",
+    "sync": "python3 scripts/sync_question_banks.py",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "lint": "eslint docs/assets/js/**/*.js",
+    "lint:fix": "eslint docs/assets/js/**/*.js --fix",
+    "format": "prettier --write 'docs/**/*.{js,css,html}'",
+    "format:check": "prettier --check 'docs/**/*.{js,css,html}'"
+  },
+  "keywords": [
+    "medical-education",
+    "usmle",
+    "step-1",
+    "cardiology",
+    "pwa",
+    "question-bank"
+  ],
+  "author": "TBank Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^14.0.0",
+    "happy-dom": "^12.0.0",
+    "prettier": "^3.1.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
