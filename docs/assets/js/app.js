@@ -26,6 +26,81 @@
       .replace(/'/g, "&#039;");
   }
 
+  // Swipe gesture detection for mobile
+  function initSwipeGesture(element, options = {}) {
+    const minSwipeDistance = options.minDistance || 60;
+    const maxVerticalDistance = options.maxVerticalDistance || 80;
+    const threshold = options.threshold || 30;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    let isSwiping = false;
+
+    element.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+      isSwiping = false;
+    }, { passive: true });
+
+    element.addEventListener('touchmove', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = Math.abs(touchEndY - touchStartY);
+
+      // Only track horizontal swipes (not vertical scrolls)
+      if (Math.abs(deltaX) > threshold && deltaY < maxVerticalDistance) {
+        isSwiping = true;
+        element.classList.add('swiping');
+
+        // Show visual hints
+        if (deltaX < -threshold) {
+          element.classList.add('swipe-left-hint');
+          element.classList.remove('swipe-right-hint');
+        } else if (deltaX > threshold) {
+          element.classList.add('swipe-right-hint');
+          element.classList.remove('swipe-left-hint');
+        }
+
+        // Apply transform to follow finger
+        element.style.transform = `translateX(${deltaX * 0.3}px)`;
+      }
+    }, { passive: true });
+
+    element.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = Math.abs(touchEndY - touchStartY);
+
+      // Reset visual state
+      element.classList.remove('swiping', 'swipe-left-hint', 'swipe-right-hint');
+      element.style.transform = '';
+
+      // Only trigger if it's a valid swipe
+      if (!isSwiping || deltaY > maxVerticalDistance) {
+        return;
+      }
+
+      // Swipe left
+      if (deltaX < -minSwipeDistance) {
+        if (options.onSwipeLeft) {
+          options.onSwipeLeft(element);
+        }
+      }
+      // Swipe right
+      else if (deltaX > minSwipeDistance) {
+        if (options.onSwipeRight) {
+          options.onSwipeRight(element);
+        }
+      }
+    }, { passive: true });
+  }
+
   // State management
   let questions = [];
   let currentQuestionIndex = 0;
@@ -631,6 +706,34 @@
           e.stopPropagation();
           const choice = e.target.getAttribute('data-choice');
           toggleElimination(choice);
+        });
+      });
+    }
+
+    // Add swipe gestures to answer choices on mobile
+    if (!isSubmitted && window.innerWidth <= 768) {
+      document.querySelectorAll('.answer-choice').forEach(choiceElement => {
+        // Get the choice letter from the input
+        const input = choiceElement.querySelector('input[name="answer"]');
+        if (!input) return;
+
+        const letter = input.value;
+        const isEliminated = answer?.eliminated?.includes(letter) || false;
+
+        initSwipeGesture(choiceElement, {
+          onSwipeLeft: (element) => {
+            // Swipe left to eliminate (only if not already eliminated)
+            if (!isEliminated) {
+              toggleElimination(letter);
+            }
+          },
+          onSwipeRight: (element) => {
+            // Swipe right to undo elimination (only if eliminated)
+            const currentEliminated = userAnswers[currentQuestionIndex]?.eliminated?.includes(letter) || false;
+            if (currentEliminated) {
+              toggleElimination(letter);
+            }
+          }
         });
       });
     }
