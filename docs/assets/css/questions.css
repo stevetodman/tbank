@@ -1958,6 +1958,44 @@ input[type="checkbox"] {
     opacity: 1;
   }
 
+  /* Question navigation swipe hints */
+  .question-content {
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+
+  .question-content.swiping {
+    transition: transform 0.05s ease;
+  }
+
+  .question-content::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .question-content.swipe-left-hint::before {
+    content: '→';
+    right: 2rem;
+    color: var(--color-primary-600);
+    opacity: 0.8;
+  }
+
+  .question-content.swipe-right-hint::before {
+    content: '←';
+    left: 2rem;
+    color: var(--color-primary-600);
+    opacity: 0.8;
+  }
+
   /* Explanation section */
   .explanation-section {
     padding: 1.25rem 1rem;
@@ -2576,4 +2614,136 @@ button {
   background: white;
   color: var(--color-error-600);
   font-weight: 700;
+}
+
+/* ========================================
+   PWA INSTALL PROMPT
+   ======================================== */
+
+.install-prompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+  border-top: 2px solid var(--color-primary-600);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  padding: 1.25rem;
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+}
+
+.install-prompt.show {
+  transform: translateY(0);
+}
+
+.install-prompt-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.install-prompt-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.install-prompt-text {
+  flex: 1;
+}
+
+.install-prompt-text strong {
+  display: block;
+  font-size: 1.0625rem;
+  color: var(--color-neutral-800);
+  margin-bottom: 0.25rem;
+}
+
+.install-prompt-text p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-neutral-600);
+  line-height: 1.4;
+}
+
+.install-prompt-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.install-prompt-btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  min-height: 44px;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.install-btn-primary {
+  background: var(--color-primary-600);
+  color: white;
+}
+
+.install-btn-primary:hover {
+  background: var(--color-primary-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(43, 108, 176, 0.2);
+}
+
+.install-btn-primary:active {
+  transform: translateY(0);
+}
+
+.install-btn-secondary {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.install-btn-secondary:hover {
+  background: var(--color-neutral-200);
+}
+
+@media (max-width: 768px) {
+  .install-prompt {
+    padding: 1rem;
+  }
+
+  .install-prompt-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+
+  .install-prompt-icon {
+    font-size: 2rem;
+  }
+
+  .install-prompt-text strong {
+    font-size: 1rem;
+  }
+
+  .install-prompt-text p {
+    font-size: 0.875rem;
+  }
+
+  .install-prompt-actions {
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .install-prompt-btn {
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
 }

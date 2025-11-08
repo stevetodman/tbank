@@ -26,6 +26,60 @@
       .replace(/'/g, "&#039;");
   }
 
+  // Haptic feedback engine for iOS/mobile devices
+  const HapticEngine = {
+    isSupported: 'vibrate' in navigator,
+
+    // Light tap feedback (10ms) - for selections, toggles
+    light: function() {
+      if (this.isSupported) {
+        navigator.vibrate(10);
+      }
+    },
+
+    // Medium tap feedback (20ms) - for confirmations
+    medium: function() {
+      if (this.isSupported) {
+        navigator.vibrate(20);
+      }
+    },
+
+    // Success pattern - for correct answers, achievements
+    success: function() {
+      if (this.isSupported) {
+        navigator.vibrate([15, 50, 20]);
+      }
+    },
+
+    // Error pattern - for incorrect answers
+    error: function() {
+      if (this.isSupported) {
+        navigator.vibrate([10, 40, 10, 40, 10]);
+      }
+    },
+
+    // Warning pattern - for timer warnings
+    warning: function() {
+      if (this.isSupported) {
+        navigator.vibrate(200);
+      }
+    },
+
+    // Celebration pattern - for milestones
+    celebration: function() {
+      if (this.isSupported) {
+        navigator.vibrate([20, 60, 20, 60, 30]);
+      }
+    },
+
+    // Subtle feedback - for navigation, minimal disruption (5ms)
+    subtle: function() {
+      if (this.isSupported) {
+        navigator.vibrate(5);
+      }
+    }
+  };
+
   // Swipe gesture detection for mobile
   function initSwipeGesture(element, options = {}) {
     const minSwipeDistance = options.minDistance || 60;
@@ -310,6 +364,7 @@
         // Warning at threshold
         if (timerSeconds === CONSTANTS.TIMER_WARNING_THRESHOLD) {
           timerDisplay.classList.add('timer-warning');
+          HapticEngine.warning(); // Warning haptic at 10 seconds
         }
 
         // Time's up
@@ -378,6 +433,7 @@
       userAnswers[currentQuestionIndex] = {};
     }
     userAnswers[currentQuestionIndex].flagged = !userAnswers[currentQuestionIndex].flagged;
+    HapticEngine.light(); // Light haptic for flag toggle
     renderQuestion();
     updateQuestionGrid();
   }
@@ -401,6 +457,8 @@
       // Add to eliminated
       eliminated.push(letter);
     }
+
+    HapticEngine.light(); // Light haptic for elimination toggle
 
     renderQuestion();
   }
@@ -690,6 +748,41 @@
       document.querySelectorAll('input[name="answer"]').forEach(radio => {
         radio.addEventListener('change', handleAnswerSelection);
       });
+
+      // Add double-tap to submit on mobile
+      if (window.innerWidth <= 768) {
+        document.querySelectorAll('.answer-choice').forEach((choiceElement) => {
+          let lastTap = 0;
+          choiceElement.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+
+            // Double tap detected (within 500ms)
+            if (tapLength < 500 && tapLength > 0) {
+              e.preventDefault();
+
+              // Get the radio button in this choice
+              const radio = choiceElement.querySelector('input[name="answer"]');
+              if (radio && !radio.disabled) {
+                // Select the answer if not already selected
+                if (!radio.checked) {
+                  radio.checked = true;
+                  handleAnswerSelection({ target: radio });
+                }
+
+                // Submit immediately
+                setTimeout(() => {
+                  if (!answer?.submitted && submitBtn && !submitBtn.disabled) {
+                    HapticEngine.medium(); // Medium haptic for quick submit
+                    handleSubmit();
+                  }
+                }, 100);
+              }
+            }
+            lastTap = currentTime;
+          });
+        });
+      }
     }
 
     // Add flag button event listener
@@ -758,6 +851,29 @@
       }
     }
 
+    // Add swipe gesture to question display for navigation (mobile only)
+    if (window.innerWidth <= 768 && !isSubmitted) {
+      const questionContent = document.querySelector('.question-content');
+      if (questionContent) {
+        initSwipeGesture(questionContent, {
+          minDistance: 80, // Longer swipe required for question navigation
+          maxVerticalDistance: 100,
+          onSwipeLeft: () => {
+            // Swipe left = Next question
+            if (currentQuestionIndex < questions.length - 1) {
+              goToNext();
+            }
+          },
+          onSwipeRight: () => {
+            // Swipe right = Previous question
+            if (currentQuestionIndex > 0) {
+              goToPrevious();
+            }
+          }
+        });
+      }
+    }
+
     // Scroll to top of question display on mobile for better UX
     // Use requestAnimationFrame to ensure DOM has updated
     requestAnimationFrame(() => {
@@ -786,6 +902,9 @@
     userAnswers[currentQuestionIndex].selected = selected;
     userAnswers[currentQuestionIndex].submitted = false;
     submitBtn.disabled = false;
+
+    // Haptic feedback on selection
+    HapticEngine.light();
   }
 
   // Handle submit answer
@@ -802,6 +921,13 @@
 
     userAnswers[currentQuestionIndex].submitted = true;
     userAnswers[currentQuestionIndex].correct = isCorrect;
+
+    // Haptic feedback based on correctness
+    if (isCorrect) {
+      HapticEngine.success();
+    } else {
+      HapticEngine.error();
+    }
 
     // Update streak tracking
     if (isCorrect) {
@@ -832,6 +958,10 @@
       5: '🌟 5 correct in a row! Amazing streak!',
       10: '🎯 10 in a row! Incredible mastery!'
     };
+
+    // Celebration haptic for streak milestones
+    HapticEngine.celebration();
+
     showToast(messages[streak] || `🔥 ${streak} in a row!`, 'success');
   }
 
@@ -859,6 +989,9 @@
       52: '🏆 Test Complete! Congratulations!'
     };
 
+    // Celebration haptic for question milestones
+    HapticEngine.celebration();
+
     const overlay = document.createElement('div');
     overlay.className = 'milestone-overlay';
     overlay.innerHTML = `
@@ -884,6 +1017,7 @@
   function goToPrevious() {
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
+      HapticEngine.subtle(); // Subtle haptic for navigation
       renderQuestion();
     }
   }
@@ -891,6 +1025,7 @@
   function goToNext() {
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
+      HapticEngine.subtle(); // Subtle haptic for navigation
       renderQuestion();
     }
   }
@@ -1131,6 +1266,8 @@
     if (wasTimedMode && !timedMode) {
       stopTimer();
     }
+
+    HapticEngine.medium(); // Medium haptic for settings save
 
     closeSettings();
     showToast(timedMode ? `Timed mode enabled (${timerDuration}s per question)` : 'Timed mode disabled', 'success');
@@ -1410,9 +1547,126 @@
     }
   }
 
+  // Service Worker Registration for PWA support
+  function initServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/tbank/sw.js')
+          .then((registration) => {
+            console.log('[App] Service Worker registered successfully:', registration.scope);
+
+            // Cache question banks after registration
+            registration.active?.postMessage({ type: 'CACHE_QUESTION_BANKS' });
+
+            // Check for updates periodically
+            setInterval(() => {
+              registration.update();
+            }, 60 * 60 * 1000); // Check every hour
+          })
+          .catch((error) => {
+            console.error('[App] Service Worker registration failed:', error);
+          });
+
+        // Handle service worker updates
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+          console.log('[App] New service worker activated, reloading...');
+          window.location.reload();
+        });
+      });
+    } else {
+      console.warn('[App] Service Workers are not supported in this browser');
+    }
+  }
+
+  // PWA Install Prompt
+  function initInstallPrompt() {
+    let deferredPrompt = null;
+    const installPromptShown = localStorage.getItem('installPromptShown');
+
+    // Capture the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      deferredPrompt = e;
+
+      console.log('[App] Install prompt available');
+
+      // Show install prompt after user has answered a few questions (engagement check)
+      const answeredCount = Object.values(userAnswers).filter(a => a.submitted).length;
+
+      // Show after 5 questions answered, and only if not shown before
+      if (answeredCount >= 5 && !installPromptShown) {
+        showInstallPrompt(deferredPrompt);
+      }
+    });
+
+    // Track successful installation
+    window.addEventListener('appinstalled', () => {
+      console.log('[App] PWA installed successfully');
+      localStorage.setItem('installPromptShown', 'true');
+      deferredPrompt = null;
+      showToast('📱 App installed! Access from your home screen', 'success');
+    });
+  }
+
+  function showInstallPrompt(deferredPrompt) {
+    // Don't show on iOS (they use their own Add to Home Screen flow)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) return;
+
+    const installBanner = document.createElement('div');
+    installBanner.className = 'install-prompt';
+    installBanner.innerHTML = `
+      <div class="install-prompt-content">
+        <div class="install-prompt-icon">📱</div>
+        <div class="install-prompt-text">
+          <strong>Install TBank</strong>
+          <p>Add to your home screen for quick access and offline use</p>
+        </div>
+        <div class="install-prompt-actions">
+          <button class="install-prompt-btn install-btn-primary" id="install-accept">Install</button>
+          <button class="install-prompt-btn install-btn-secondary" id="install-dismiss">Not now</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(installBanner);
+    setTimeout(() => installBanner.classList.add('show'), 100);
+
+    // Handle install acceptance
+    document.getElementById('install-accept')?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[App] Install prompt outcome:', outcome);
+
+        if (outcome === 'accepted') {
+          HapticEngine.success();
+        }
+
+        localStorage.setItem('installPromptShown', 'true');
+        installBanner.remove();
+        deferredPrompt = null;
+      }
+    });
+
+    // Handle dismissal
+    document.getElementById('install-dismiss')?.addEventListener('click', () => {
+      HapticEngine.light();
+      localStorage.setItem('installPromptShown', 'true');
+      installBanner.classList.remove('show');
+      setTimeout(() => installBanner.remove(), 300);
+    });
+  }
+
   // Initialize app
   loadQuestions();
   initPerformanceMonitoring();
   initKeyboardHandling();
   initOfflineSupport();
+  initServiceWorker();
+  initInstallPrompt();
 })();
