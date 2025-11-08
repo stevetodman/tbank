@@ -69,8 +69,7 @@ Neither was properly configured, causing the 404.
 ## Expected Result
 
 After implementing Option 1 or 2, your site will display:
-- Main page at: https://stevetodman.github.io/tbank/
-- Interactive questions at: https://stevetodman.github.io/tbank/questions/
+- Main page and interactive quiz at: https://stevetodman.github.io/tbank/
 
 ## Verification Steps
 

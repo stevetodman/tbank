@@ -44,6 +44,10 @@ The ductus arteriosus normally closes within the first 2 days after birth as ris
 - **E.** Nitric oxide synthase inhibition causes systemic vasoconstriction without targeting the ductus.
 - **F.** Endothelin-1 receptor blockade (eg, bosentan) treats pulmonary hypertension, not PDA.
 
+**Educational objective**
+
+Indomethacin and ibuprofen close a patent ductus arteriosus by inhibiting cyclooxygenase (COX-1 and COX-2), decreasing prostaglandin E₂ levels. Loss of this vasodilatory stimulus causes ductal smooth-muscle constriction and functional closure.
+
 **Rapid review**
 
 - Indomethacin/ibuprofen → COX inhibition → ↓ PGE₂ → ductal smooth muscle contraction.
@@ -93,6 +97,10 @@ This infant has transposition of the great arteries (TGA), suggested by profound
 - **E.** PDE III inhibitors (eg, milrinone) increase inotropy and vasodilation but do not affect the ductus.
 - **F.** Phospholipase A₂ inhibition by corticosteroids broadly suppresses eicosanoids and is not used for ductal maintenance.
 
+**Educational objective**
+
+In ductal-dependent congenital heart disease (e.g., transposition of the great arteries, pulmonary atresia, tricuspid atresia), continuous infusion of prostaglandin E₁ (alprostadil) activates EP receptors on ductal smooth muscle, increasing cAMP and causing vasodilation that maintains ductal patency until surgical repair.
+
 **Rapid review**
 
 - Ductal-dependent lesions (TGA, pulmonary/tricuspid atresia, critical coarctation) require immediate PGE₁ infusion.
@@ -139,6 +147,10 @@ The left recurrent laryngeal nerve (RLN), a branch of the vagus nerve, loops und
 - **C.** Bilateral vagal traction would impair both vocal cords and cause parasympathetic symptoms.
 - **D.** Sympathetic chain transection causes Horner syndrome (ptosis, miosis, anhidrosis), not vocal cord paralysis.
 - **E.** The right RLN loops under the right subclavian artery in the neck and is not compromised during PDA surgery.
+
+**Educational objective**
+
+During surgical repair of a patent ductus arteriosus, the left recurrent laryngeal nerve (RLN)—a branch of the vagus—can be injured because it loops under the aortic arch, posterior to the ligamentum arteriosum. Damage produces ipsilateral vocal-cord paralysis (hoarseness, weak cry) and occasionally elevated hemidiaphragm.
 
 **Rapid review**
 
@@ -187,6 +199,10 @@ During weeks 5-6 of gestation, neural crest cells drive formation of the aortico
 - **D.** Failed pulmonary vein connection produces total anomalous pulmonary venous return (TAPVR).
 - **E.** Complete failure of truncal division leads to persistent truncus arteriosus (single outflow tract), not TGA.
 
+**Educational objective**
+
+Transposition of the great arteries results from failed spiraling of the aorticopulmonary septum, creating ventriculoarterial discordance and parallel pulmonary and systemic circuits. Urgent therapy promotes mixing (prostaglandin E₁ infusion and balloon atrial septostomy) before definitive arterial switch repair.
+
 **Rapid review**
 
 - Failed AP septal spiraling → ventriculoarterial discordance → d-TGA.
@@ -234,6 +250,10 @@ This infant exhibits hallmark Down syndrome findings: hypotonia, up-slanting pal
 - **D.** Edwards syndrome features clenched fists, rocker-bottom feet, and severe growth restriction.
 - **E.** Patau syndrome produces midline defects (holoprosencephaly, cleft lip/palate) and polydactyly.
 
+**Educational objective**
+
+Down syndrome (Trisomy 21) most commonly results from maternal meiotic nondisjunction. Characteristic manifestations include hypotonia, congenital heart defects (complete AVSD or VSD), duodenal atresia, and developmental delay. Associated risks include acute leukemia and early-onset Alzheimer disease.
+
 **Rapid review**
 
 - Down syndrome → endocardial cushion defect → complete AVSD most common.
@@ -280,6 +300,10 @@ Edwards syndrome (trisomy 18) is characterized by growth restriction, micrognath
 - **C.** Down syndrome features hypotonia, flat facies, and single palmar creases.
 - **D.** Turner syndrome affects phenotypic females with streak ovaries, webbed neck, and coarctation.
 - **E.** Klinefelter syndrome presents in males with hypogonadism and tall stature at puberty.
+
+**Educational objective**
+
+Edwards syndrome (trisomy 18) is caused by meiotic nondisjunction, resulting in 47, XX/XY, +18. It presents with growth restriction, micrognathia, low-set ears, prominent occiput, and overlapping fingers with clenched fists. The feet show rocker-bottom appearance. Congenital heart defects (especially VSD) are common, and most affected infants die within the first year.
 
 **Rapid review**
 
@@ -329,6 +353,10 @@ Patau syndrome (trisomy 13) produces classic midline defects—holoprosencephaly
 - **D/E.** Klinefelter and Turner syndromes involve sex-chromosome abnormalities with distinct adolescent or female presentations.
 - **F.** Triploidy causes numerous anomalies and is typically lethal early in gestation.
 
+**Educational objective**
+
+Patau syndrome (trisomy 13) results from meiotic nondisjunction. Extra chromosome 13 → defective midline development → holoprosencephaly, cleft lip/palate, microphthalmia, omphalocele, polydactyly, cutis aplasia. Most die within 6 months.
+
 **Rapid review**
 
 - Trisomy 13 → midline defects + polydactyly + cutis aplasia.
@@ -375,6 +403,10 @@ Turner syndrome arises from complete or partial monosomy X, leading to streak ov
 - **C.** Cri-du-chat syndrome presents with microcephaly, cat-like cry, and facial anomalies rather than Turner features.
 - **D.** Edwards syndrome manifests in infancy with clenched hands and rocker-bottom feet.
 - **E.** DiGeorge syndrome presents neonatally with conotruncal defects, hypocalcemia, and thymic aplasia.
+
+**Educational objective**
+
+Turner syndrome (45,X) results from complete or partial monosomy of the X chromosome, leading to streak ovaries, short stature, broad chest, and webbed neck. Cardiac anomalies include bicuspid aortic valve and coarctation of the aorta. Estrogen deficiency causes amenorrhea, infertility, and osteoporosis.
 
 **Rapid review**
 

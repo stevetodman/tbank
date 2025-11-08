@@ -6,16 +6,15 @@ TBank provides high-yield board-style questions on congenital heart disease, wit
 
 ## 🎯 For Students: Start Quizzing
 
-**[Launch Interactive Quiz →](https://stevetodman.github.io/tbank/questions/)**
+**[Launch Interactive Quiz →](https://stevetodman.github.io/tbank/)**
 
 ### How to Use TBank
 
 1. **Interactive Browser Quizzing** (Recommended)
-   - Visit the [interactive question player](https://stevetodman.github.io/tbank/questions/)
-   - Select a question set from the dropdown
+   - Visit the [interactive question player](https://stevetodman.github.io/tbank/)
    - Work through questions at your own pace
    - Reveal detailed explanations when ready
-   - Filter by system or search by keyword
+   - Track your progress with the question menu
    - **No login, no downloads, no hassle**
 
 2. **Download for Offline Study**
@@ -55,7 +54,14 @@ TBank provides high-yield board-style questions on congenital heart disease, wit
 - Neonatal circulation transitions
 - Turner syndrome cardiac manifestations
 
-**Total: 37 questions across 4 question sets**
+### Part 5: Maternal Risk Factors, Rare Defects, and Complications
+**15 questions** | **Advanced difficulty**
+- Maternal diabetes and CHD risk
+- Rare structural anomalies
+- Complications and complex presentations
+- Advanced pathophysiology
+
+**Total: 52 questions across 5 question sets**
 
 ## 🔍 What Makes TBank Different
 
@@ -143,12 +149,14 @@ Each question includes:
 
 ## 🗺️ Roadmap
 
-### Current Content (37 questions)
+### Current Content (52 questions)
 - ✅ Tetralogy of Fallot fundamentals
 - ✅ Shunt lesions (VSD, ASD, PDA)
 - ✅ Transposition and ductal-dependent lesions
 - ✅ Genetic syndromes (Williams, DiGeorge, Turner)
 - ✅ Vascular rings and paradoxical emboli
+- ✅ Maternal risk factors and teratology
+- ✅ Rare structural defects and complications
 
 ### Planned Expansions
 - 🔄 Neonatal cyanosis differential diagnosis
@@ -177,6 +185,6 @@ TBank is built by medical students, for medical students. Contributions from the
 
 ---
 
-**Ready to start studying?** [Launch Interactive Quiz →](https://stevetodman.github.io/tbank/questions/)
+**Ready to start studying?** [Launch Interactive Quiz →](https://stevetodman.github.io/tbank/)
 
 **Have questions or feedback?** [Open an issue](https://github.com/stevetodman/tbank/issues) or contribute improvements!

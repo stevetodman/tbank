@@ -1,5 +1,7 @@
 # TBank Codebase Evaluation Report
 
+> **⚠️ NOTE (Updated Nov 2025):** This report reflects the repository structure at the time of evaluation. The site structure has since been updated: the `/questions/` subdirectory has been removed and the interactive quiz is now served directly from the root URL at https://stevetodman.github.io/tbank/. Part 5 (15 questions) has been added, bringing the total to 52 questions.
+
 **Date:** 2025-11-07
 **Branch:** claude/evaluate-top-to-bottom-011CUsZvQdALNmZLS54w4hN1
 **Evaluator:** Claude (Comprehensive Top-to-Bottom Analysis)
