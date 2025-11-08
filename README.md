@@ -90,7 +90,9 @@ Visit [TBank](https://stevetodman.github.io/tbank/) in any modern browser and st
 ✅ **Key facts sections** for rapid review
 ✅ **Progressive Web App** with offline support and installability
 ✅ **Haptic feedback** for enhanced mobile learning experience
-✅ **Advanced gestures** - swipe to navigate, double-tap to submit
+✅ **Advanced gestures** - swipe to navigate, long-press for quick actions, pull-to-refresh
+✅ **Dark mode** - Automatic system detection with manual override
+✅ **Share results** - Native sharing on mobile devices
 ✅ **Works offline** after first visit (PWA caching)
 ✅ **Searchable and filterable** by topic, system, difficulty
 ✅ **Open-source** and community-driven
@@ -114,6 +116,8 @@ TBank is optimized for mobile studying with advanced touch interactions:
 - **Swipe left on answer** - Cross out (eliminate) wrong answers
 - **Swipe right on answer** - Undo elimination
 - **Double-tap answer** - Quick select and submit
+- **Long-press flag button** - Quick navigation menu (jump to next unanswered/flagged/incorrect)
+- **Pull-to-refresh** - Pull down on question to randomize question order
 - **Visual feedback** - See arrows and hints during swipes
 
 ### iPhone-Specific Optimizations
@@ -123,6 +127,18 @@ TBank is optimized for mobile studying with advanced touch interactions:
 - Optimized touch targets (minimum 44x44px)
 - iOS momentum scrolling
 - Keyboard detection and modal adjustment
+
+### Dark Mode
+- Automatic detection of system theme preference
+- Manual toggle in settings modal
+- Optimized colors for comfortable night studying
+- Smooth transitions between themes
+
+### Sharing & Collaboration
+- Native share on mobile devices (iOS/Android)
+- Share your quiz results and progress
+- Clipboard fallback for desktop browsers
+- Quick share from session summary
 
 ### Offline Capability
 - Works completely offline after first visit
@@ -266,10 +282,14 @@ tbank/
 - ✅ Progressive Web App (PWA) support
 - ✅ Offline capability with Service Worker
 - ✅ Haptic feedback (15 interaction points)
-- ✅ Advanced gestures (swipe navigation, double-tap submit)
+- ✅ Advanced gestures (swipe navigation, double-tap submit, long-press, pull-to-refresh)
 - ✅ iOS-specific optimizations (status bar, safe areas)
 - ✅ Install prompt and home screen installation
 - ✅ Full-screen mode on mobile
+- ✅ Dark mode support (automatic system detection + manual toggle)
+- ✅ Share functionality (Web Share API with clipboard fallback)
+- ✅ Long-press gestures for quick navigation
+- ✅ Pull-to-refresh question randomization
 
 ### 🔄 Planned Enhancements
 
@@ -281,11 +301,10 @@ tbank/
 - 🔄 Additional syndromic associations
 
 **UX Improvements**
-- 🔄 Dark mode support
 - 🔄 Progress persistence across sessions
-- 🔄 Share functionality (Web Share API)
-- 🔄 Long-press gestures for advanced features
-- 🔄 Pull-to-refresh question randomization
+- 🔄 Spaced repetition algorithm
+- 🔄 Custom study sets and tags
+- 🔄 Performance analytics dashboard
 
 Want to help expand TBank? Submit questions or features via pull request!
 

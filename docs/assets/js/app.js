@@ -173,6 +173,9 @@
   let timerPaused = false;
   let questionStartTime = null;
 
+  // Dark mode state
+  let darkModeEnabled = false;
+
   // Highlighting state
   let highlightToolbar = null;
   let currentSelection = null;
@@ -205,6 +208,7 @@
   const settingsBtn = document.getElementById("settings-btn");
   const settingsModal = document.getElementById("settings-modal");
   const settingsClose = document.getElementById("settings-close");
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
   const timedModeToggle = document.getElementById("timed-mode-toggle");
   const timerDurationInput = document.getElementById("timer-duration");
   const timerDurationGroup = document.getElementById("timer-duration-group");
@@ -214,6 +218,7 @@
   const sessionSummaryModal = document.getElementById("session-summary-modal");
   const summaryContent = document.getElementById("summary-content");
   const summaryClose = document.getElementById("summary-close");
+  const summaryShare = document.getElementById("summary-share");
   const summaryContinue = document.getElementById("summary-continue");
   const summaryReset = document.getElementById("summary-reset");
 
@@ -436,6 +441,234 @@
     HapticEngine.light(); // Light haptic for flag toggle
     renderQuestion();
     updateQuestionGrid();
+  }
+
+  // Pull-to-refresh functionality for question display
+  function initPullToRefresh() {
+    const questionDisplay = document.getElementById('question-display');
+    let pullStartY = 0;
+    let pulling = false;
+    let pullIndicator = null;
+
+    // Create pull indicator
+    function createPullIndicator() {
+      if (!pullIndicator) {
+        pullIndicator = document.createElement('div');
+        pullIndicator.className = 'pull-indicator';
+        pullIndicator.innerHTML = '<div class="pull-icon">↻</div><div class="pull-text">Pull to randomize questions</div>';
+        questionDisplay.insertBefore(pullIndicator, questionDisplay.firstChild);
+      }
+      return pullIndicator;
+    }
+
+    // Update pull indicator based on distance
+    function updatePullIndicator(distance) {
+      const indicator = createPullIndicator();
+      const threshold = 80;
+      const percentage = Math.min((distance / threshold) * 100, 100);
+
+      indicator.style.height = `${Math.min(distance, threshold)}px`;
+      indicator.style.opacity = percentage / 100;
+
+      const icon = indicator.querySelector('.pull-icon');
+      icon.style.transform = `rotate(${percentage * 3.6}deg)`;
+
+      if (percentage >= 100) {
+        indicator.classList.add('ready');
+        indicator.querySelector('.pull-text').textContent = 'Release to randomize';
+      } else {
+        indicator.classList.remove('ready');
+        indicator.querySelector('.pull-text').textContent = 'Pull to randomize questions';
+      }
+    }
+
+    // Handle touch start
+    questionDisplay.addEventListener('touchstart', (e) => {
+      // Only activate at top of scroll
+      if (questionDisplay.scrollTop === 0 && !pulling) {
+        pullStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    // Handle touch move
+    questionDisplay.addEventListener('touchmove', (e) => {
+      if (pullStartY > 0 && questionDisplay.scrollTop === 0) {
+        const pullDistance = e.touches[0].clientY - pullStartY;
+
+        if (pullDistance > 0) {
+          pulling = true;
+          updatePullIndicator(pullDistance);
+
+          // Prevent default scrolling when pulling
+          if (pullDistance > 10) {
+            e.preventDefault();
+          }
+        }
+      }
+    }, { passive: false });
+
+    // Handle touch end
+    questionDisplay.addEventListener('touchend', (e) => {
+      if (pulling && pullIndicator) {
+        const threshold = 80;
+        const currentHeight = parseInt(pullIndicator.style.height) || 0;
+
+        if (currentHeight >= threshold) {
+          // Trigger randomize
+          HapticEngine.success();
+          pullIndicator.classList.add('triggered');
+          pullIndicator.querySelector('.pull-text').textContent = 'Randomizing...';
+
+          setTimeout(() => {
+            randomizeQuestions();
+            removePullIndicator();
+          }, 500);
+        } else {
+          removePullIndicator();
+        }
+      }
+
+      pullStartY = 0;
+      pulling = false;
+    });
+
+    // Remove pull indicator
+    function removePullIndicator() {
+      if (pullIndicator) {
+        pullIndicator.classList.add('hiding');
+        setTimeout(() => {
+          if (pullIndicator && pullIndicator.parentNode) {
+            pullIndicator.remove();
+            pullIndicator = null;
+          }
+        }, 300);
+      }
+    }
+  }
+
+  // Randomize question order
+  function randomizeQuestions() {
+    // Fisher-Yates shuffle algorithm
+    const shuffledIndices = [...Array(questions.length).keys()];
+    for (let i = shuffledIndices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledIndices[i], shuffledIndices[j]] = [shuffledIndices[j], shuffledIndices[i]];
+    }
+
+    // Create a mapping from old indices to new indices
+    const newUserAnswers = {};
+    shuffledIndices.forEach((oldIndex, newIndex) => {
+      if (userAnswers[oldIndex]) {
+        newUserAnswers[newIndex] = { ...userAnswers[oldIndex] };
+      }
+    });
+
+    // Shuffle the questions array
+    const shuffledQuestions = shuffledIndices.map(i => questions[i]);
+    questions.splice(0, questions.length, ...shuffledQuestions);
+
+    // Update user answers with new indices
+    userAnswers = newUserAnswers;
+
+    // Reset to first question
+    currentQuestionIndex = 0;
+
+    // Re-render
+    renderQuestion();
+    updateQuestionGrid();
+
+    showToast('🔀 Questions randomized!', 'success');
+  }
+
+  // Show quick navigation menu (long-press on flag button)
+  function showQuickNavMenu() {
+    // Find next unanswered question
+    const nextUnanswered = questions.findIndex((q, idx) =>
+      idx > currentQuestionIndex && !userAnswers[idx]?.submitted
+    );
+
+    // Find next flagged question
+    const nextFlagged = questions.findIndex((q, idx) =>
+      idx > currentQuestionIndex && userAnswers[idx]?.flagged
+    );
+
+    // Find next incorrect question
+    const nextIncorrect = questions.findIndex((q, idx) =>
+      idx > currentQuestionIndex && userAnswers[idx]?.submitted && !userAnswers[idx]?.correct
+    );
+
+    // Build menu options
+    const options = [];
+    if (nextUnanswered !== -1) {
+      options.push({
+        label: `Jump to next unanswered (Q${nextUnanswered + 1})`,
+        action: () => jumpToQuestion(nextUnanswered)
+      });
+    }
+    if (nextFlagged !== -1) {
+      options.push({
+        label: `Jump to next flagged (Q${nextFlagged + 1})`,
+        action: () => jumpToQuestion(nextFlagged)
+      });
+    }
+    if (nextIncorrect !== -1) {
+      options.push({
+        label: `Jump to next incorrect (Q${nextIncorrect + 1})`,
+        action: () => jumpToQuestion(nextIncorrect)
+      });
+    }
+
+    // If no options available, just show a message
+    if (options.length === 0) {
+      showToast('No more questions to jump to', 'info');
+      return;
+    }
+
+    // Create and show menu
+    const menu = document.createElement('div');
+    menu.className = 'quick-nav-menu';
+    menu.innerHTML = `
+      <div class="quick-nav-header">
+        <span>Quick Navigation</span>
+        <button class="quick-nav-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="quick-nav-options">
+        ${options.map((opt, idx) => `
+          <button class="quick-nav-option" data-index="${idx}">${opt.label}</button>
+        `).join('')}
+      </div>
+    `;
+
+    document.body.appendChild(menu);
+
+    // Add event listeners
+    const closeBtn = menu.querySelector('.quick-nav-close');
+    closeBtn.addEventListener('click', () => {
+      HapticEngine.light();
+      menu.classList.remove('show');
+      setTimeout(() => menu.remove(), 300);
+    });
+
+    menu.querySelectorAll('.quick-nav-option').forEach((btn, idx) => {
+      btn.addEventListener('click', () => {
+        HapticEngine.medium();
+        options[idx].action();
+        menu.classList.remove('show');
+        setTimeout(() => menu.remove(), 300);
+      });
+    });
+
+    // Close on backdrop click
+    menu.addEventListener('click', (e) => {
+      if (e.target === menu) {
+        HapticEngine.light();
+        menu.classList.remove('show');
+        setTimeout(() => menu.remove(), 300);
+      }
+    });
+
+    // Show with animation
+    setTimeout(() => menu.classList.add('show'), 10);
   }
 
   // Toggle elimination of an answer choice
@@ -785,10 +1018,67 @@
       }
     }
 
-    // Add flag button event listener
+    // Add flag button event listener with long-press support
     const flagBtn = document.getElementById('flag-btn');
     if (flagBtn) {
-      flagBtn.addEventListener('click', toggleFlag);
+      let longPressTimer = null;
+      let longPressTriggered = false;
+
+      flagBtn.addEventListener('touchstart', (e) => {
+        longPressTriggered = false;
+        longPressTimer = setTimeout(() => {
+          longPressTriggered = true;
+          HapticEngine.medium();
+          showQuickNavMenu();
+        }, 500); // 500ms for long press
+      }, { passive: true });
+
+      flagBtn.addEventListener('touchend', (e) => {
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+        }
+        if (!longPressTriggered) {
+          toggleFlag();
+        }
+      });
+
+      flagBtn.addEventListener('touchcancel', (e) => {
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+        }
+      });
+
+      // For desktop/non-touch devices, use regular click
+      flagBtn.addEventListener('click', (e) => {
+        // Only handle click if it's not a touch device
+        if (!('ontouchstart' in window)) {
+          toggleFlag();
+        }
+      });
+
+      // Also support mousedown/mouseup for desktop long-press
+      flagBtn.addEventListener('mousedown', (e) => {
+        if ('ontouchstart' in window) return; // Skip on touch devices
+        longPressTriggered = false;
+        longPressTimer = setTimeout(() => {
+          longPressTriggered = true;
+          showQuickNavMenu();
+        }, 500);
+      });
+
+      flagBtn.addEventListener('mouseup', (e) => {
+        if ('ontouchstart' in window) return;
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+        }
+        // Click is handled by the click event listener
+      });
+
+      flagBtn.addEventListener('mouseleave', (e) => {
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+        }
+      });
     }
 
     // Add eliminate button event listeners
@@ -1233,11 +1523,42 @@
     }, CONSTANTS.TOAST_DURATION);
   }
 
+  // Dark mode functions
+  function initDarkMode() {
+    // Check localStorage for saved preference
+    const savedDarkMode = localStorage.getItem('darkMode');
+
+    if (savedDarkMode !== null) {
+      // User has manually set a preference
+      darkModeEnabled = savedDarkMode === 'true';
+    } else {
+      // No saved preference, check system preference
+      darkModeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    applyDarkMode();
+  }
+
+  function applyDarkMode() {
+    if (darkModeEnabled) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }
+
+  function toggleDarkMode(enabled) {
+    darkModeEnabled = enabled;
+    applyDarkMode();
+    localStorage.setItem('darkMode', enabled.toString());
+  }
+
   // Settings modal functions
   function openSettings() {
     settingsModal.hidden = false;
     settingsModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    darkModeToggle.checked = darkModeEnabled;
     timedModeToggle.checked = timedMode;
     timerDurationInput.value = timerDuration;
     timerDurationGroup.hidden = !timedMode;
@@ -1250,6 +1571,10 @@
   }
 
   function saveSettings() {
+    // Save dark mode setting
+    toggleDarkMode(darkModeToggle.checked);
+
+    // Save timer settings
     const wasTimedMode = timedMode;
     timedMode = timedModeToggle.checked;
     timerDuration = parseInt(timerDurationInput.value);
@@ -1270,7 +1595,7 @@
     HapticEngine.medium(); // Medium haptic for settings save
 
     closeSettings();
-    showToast(timedMode ? `Timed mode enabled (${timerDuration}s per question)` : 'Timed mode disabled', 'success');
+    showToast('Settings saved!', 'success');
   }
 
   // Session summary functions
@@ -1383,6 +1708,12 @@
     `;
 
     summaryContent.innerHTML = html;
+
+    // Show share button if Web Share API or Clipboard API is supported
+    if (navigator.share || (navigator.clipboard && navigator.clipboard.writeText)) {
+      summaryShare.hidden = false;
+    }
+
     sessionSummaryModal.hidden = false;
     sessionSummaryModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -1393,6 +1724,69 @@
     sessionSummaryModal.hidden = true;
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
+  }
+
+  // Web Share API - Share progress
+  function shareSessionResults() {
+    const answered = Object.values(userAnswers).filter(a => a.submitted).length;
+    const correct = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
+    const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+
+    const shareText = `TBank Quiz Results 📊\n\n` +
+      `Questions: ${answered}/${questions.length}\n` +
+      `Score: ${percentage}% (${correct}/${answered} correct)\n` +
+      `Streak: ${bestStreak} correct in a row 🔥\n\n` +
+      `Study congenital heart disease with TBank!`;
+
+    const shareData = {
+      title: 'TBank Quiz Results',
+      text: shareText,
+      url: window.location.href
+    };
+
+    // Check if Web Share API is supported
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      navigator.share(shareData)
+        .then(() => {
+          HapticEngine.success();
+          showToast('Results shared successfully!', 'success');
+        })
+        .catch((error) => {
+          // User cancelled or error occurred
+          if (error.name !== 'AbortError') {
+            console.warn('[Share] Error sharing:', error);
+            showToast('Unable to share results', 'error');
+          }
+        });
+    } else if (navigator.share) {
+      // Fallback for browsers that support share but not canShare
+      navigator.share(shareData)
+        .then(() => {
+          HapticEngine.success();
+          showToast('Results shared successfully!', 'success');
+        })
+        .catch((error) => {
+          if (error.name !== 'AbortError') {
+            console.warn('[Share] Error sharing:', error);
+            showToast('Unable to share results', 'error');
+          }
+        });
+    } else {
+      // Web Share API not supported - copy to clipboard as fallback
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            HapticEngine.medium();
+            showToast('Results copied to clipboard!', 'success');
+          })
+          .catch((error) => {
+            console.warn('[Share] Error copying to clipboard:', error);
+            showToast('Unable to share results', 'error');
+          });
+      } else {
+        showToast('Sharing not supported on this device', 'error');
+      }
+    }
   }
 
   // Reset progress function
@@ -1452,6 +1846,7 @@
   endSessionBtn.addEventListener('click', showSessionSummary);
   resetProgressBtn.addEventListener('click', resetProgress);
   summaryClose.addEventListener('click', closeSessionSummary);
+  summaryShare.addEventListener('click', shareSessionResults);
   summaryContinue.addEventListener('click', closeSessionSummary);
   summaryReset.addEventListener('click', resetProgress);
 
@@ -1663,9 +2058,11 @@
   }
 
   // Initialize app
+  initDarkMode();
   loadQuestions();
   initPerformanceMonitoring();
   initKeyboardHandling();
+  initPullToRefresh();
   initOfflineSupport();
   initServiceWorker();
   initInstallPrompt();
