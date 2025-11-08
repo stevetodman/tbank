@@ -3330,8 +3330,8 @@
 
       HapticEngine.success();
       showToast(`Exported ${noteCount} note${noteCount > 1 ? 's' : ''} successfully!`, 'success');
-    } catch (error) {
-      // Fallback to clipboard
+    } catch (_error) {
+      // Fallback to clipboard - error intentionally unused
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(exportText)
           .then(() => {
@@ -3380,8 +3380,6 @@
 
   // Handle skip question (Issue #23)
   function handleSkip() {
-    const answer = userAnswers[currentQuestionIndex];
-
     // Mark as skipped
     if (!userAnswers[currentQuestionIndex]) {
       userAnswers[currentQuestionIndex] = {};
