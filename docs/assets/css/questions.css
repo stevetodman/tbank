@@ -1403,7 +1403,7 @@
    PHASE 1, 2, 3 NEW FEATURES STYLING
    ======================================== */
 
-/* Timer Display */
+/* Timer Display - Issue #8: Enhanced timer UX */
 .timer-display {
   display: flex;
   align-items: center;
@@ -1414,8 +1414,17 @@
   border-radius: var(--radius-md);
   font-weight: 600;
   color: var(--color-neutral-700);
+  transition: all 0.3s ease;
 }
 
+/* Issue #8: Intermediate warning state (30 seconds remaining) */
+.timer-display.timer-caution {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+/* Issue #8: Critical warning state (10 seconds remaining) */
 .timer-display.timer-warning {
   background: var(--color-error-50);
   border-color: var(--color-error-500);

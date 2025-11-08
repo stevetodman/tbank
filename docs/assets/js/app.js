@@ -911,7 +911,8 @@
       clearInterval(currentTimer);
       currentTimer = null;
     }
-    timerDisplay.classList.remove('timer-warning');
+    // Issue #8: Remove all timer warning classes
+    timerDisplay.classList.remove('timer-warning', 'timer-caution');
 
     // Record time spent if question is being submitted
     if (questionStartTime) {
@@ -936,10 +937,23 @@
     timerToggleBtn.setAttribute('aria-label', 'Pause timer');
   }
 
+  // Issue #8: Enhanced timer display with color warnings
   function updateTimerDisplay() {
     const minutes = Math.floor(timerSeconds / 60);
     const seconds = timerSeconds % 60;
     timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    // Add color states based on remaining time (Issue #8)
+    timerDisplay.classList.remove('timer-caution', 'timer-warning');
+
+    if (timerSeconds <= CONSTANTS.TIMER_WARNING_THRESHOLD) {
+      // Critical: 10 seconds or less - red with pulse
+      timerDisplay.classList.add('timer-warning');
+    } else if (timerSeconds <= 30) {
+      // Caution: 30 seconds or less - yellow
+      timerDisplay.classList.add('timer-caution');
+    }
+    // Normal: more than 30 seconds - default gray
   }
 
   function handleTimeExpired() {
@@ -2029,10 +2043,22 @@
   }
 
   // Update progress bar
+  // Issue #27: Add progress bar tooltip
   function updateProgressBar() {
     const answeredQuestions = Object.values(userAnswers).filter(a => a.submitted).length;
+    const correctQuestions = Object.values(userAnswers).filter(a => a.submitted && a.correct).length;
     const percentage = (answeredQuestions / questions.length) * 100;
+    const accuracyPercentage = answeredQuestions > 0 ? Math.round((correctQuestions / answeredQuestions) * 100) : 0;
+
     progressBar.style.width = `${percentage}%`;
+
+    // Add tooltip with detailed progress (Issue #27)
+    const tooltipText = answeredQuestions > 0
+      ? `Progress: ${answeredQuestions}/${questions.length} questions answered (${Math.round(percentage)}%)\nAccuracy: ${correctQuestions}/${answeredQuestions} correct (${accuracyPercentage}%)`
+      : `Progress: 0/${questions.length} questions answered - Let's get started!`;
+
+    progressBar.title = tooltipText;
+    progressBar.parentElement.title = tooltipText; // Also add to container for better UX
   }
 
   // Update question grid styling
@@ -2196,6 +2222,12 @@
     questionMenu.hidden = false;
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when menu is open
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     updateStats();
     updateTopicMastery();
   }
@@ -2204,6 +2236,11 @@
     questionMenu.hidden = true;
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when menu is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   // Generic toast notification
@@ -2265,6 +2302,12 @@
     settingsModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when modal is open
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     darkModeToggle.checked = darkModeEnabled;
     pullToRefreshToggle.checked = pullToRefreshEnabled;
     hapticFeedbackToggle.checked = hapticsEnabled;
@@ -2278,6 +2321,11 @@
     settingsModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   function saveSettings() {
@@ -2447,6 +2495,12 @@
     sessionSummaryModal.hidden = false;
     sessionSummaryModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+
+    // Issue #30: Pause timer when modal opens
+    if (timedMode && currentTimer && !timerPaused) {
+      pauseTimer();
+    }
+
     closeMenu();
   }
 
@@ -2455,6 +2509,11 @@
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #30: Resume timer when modal closes
+    if (timedMode && currentTimer && timerPaused) {
+      resumeTimer();
+    }
   }
 
   // Web Share API - Share progress

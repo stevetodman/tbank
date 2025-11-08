@@ -417,8 +417,16 @@ body.dark-mode .timer-display {
   color: #e5e7eb;
 }
 
+/* Issue #8: Dark mode for timer caution state */
+body.dark-mode .timer-display.timer-caution {
+  background-color: #78350f;
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
 body.dark-mode .timer-display.timer-warning {
   background-color: #dc2626;
+  border-color: #b91c1c;
   color: white;
 }
 
