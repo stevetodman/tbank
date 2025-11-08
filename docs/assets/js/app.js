@@ -843,7 +843,12 @@
     const newUserAnswers = {};
     shuffledIndices.forEach((oldIndex, newIndex) => {
       if (userAnswers[oldIndex]) {
-        newUserAnswers[newIndex] = { ...userAnswers[oldIndex] };
+        // Deep copy to avoid shared array references
+        newUserAnswers[newIndex] = {
+          ...userAnswers[oldIndex],
+          eliminated: userAnswers[oldIndex].eliminated ? [...userAnswers[oldIndex].eliminated] : [],
+          highlights: userAnswers[oldIndex].highlights ? [...userAnswers[oldIndex].highlights] : []
+        };
       }
     });
 
