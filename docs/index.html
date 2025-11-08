@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/questions.css" />
+    <link rel="stylesheet" href="assets/css/dark-mode-quiz.css" />
   </head>
   <body>
     <a href="#question-display" class="skip-to-content">Skip to main content</a>
@@ -105,6 +106,13 @@
         <div class="modal-body">
           <div class="setting-group">
             <label class="setting-label">
+              <input type="checkbox" id="dark-mode-toggle" />
+              <span>Dark Mode</span>
+            </label>
+            <p class="setting-description">Override system theme preference</p>
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">
               <input type="checkbox" id="timed-mode-toggle" />
               <span>Timed Mode</span>
             </label>
@@ -135,6 +143,7 @@
           <!-- Summary content will be injected here -->
         </div>
         <div class="modal-footer">
+          <button id="summary-share" class="button-secondary" hidden>📤 Share Results</button>
           <button id="summary-continue" class="button-primary">Continue Studying</button>
           <button id="summary-reset" class="button-secondary">Start Over</button>
         </div>

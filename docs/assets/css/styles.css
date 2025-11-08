@@ -28,7 +28,7 @@
   --color-error-600: #c53030;
   --color-error-700: #9b2c2c;
 
-  /* Neutrals (Soft Grays) */
+  /* Neutrals (Soft Grays) - Light Mode */
   --color-neutral-50: #f7fafc;
   --color-neutral-100: #edf2f7;
   --color-neutral-200: #e2e8f0;
@@ -372,4 +372,162 @@ img {
   .nav-links[aria-expanded="true"] {
     display: flex;
   }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode color overrides */
+    --color-neutral-50: #1a202c;
+    --color-neutral-100: #2d3748;
+    --color-neutral-200: #4a5568;
+    --color-neutral-300: #718096;
+    --color-neutral-400: #a0aec0;
+    --color-neutral-500: #cbd5e0;
+    --color-neutral-600: #e2e8f0;
+    --color-neutral-700: #edf2f7;
+    --color-neutral-800: #f7fafc;
+    --color-neutral-900: #ffffff;
+
+    --color-background: #1a202c;
+    --color-text: #edf2f7;
+    --color-text-muted: #a0aec0;
+    --color-border: #4a5568;
+    --color-border-dark: #718096;
+
+    /* Adjust primary colors for dark mode */
+    --color-primary: var(--color-primary-400);
+    --color-primary-light: var(--color-primary-300);
+  }
+
+  body {
+    background-color: #1a202c;
+    color: #edf2f7;
+  }
+
+  .site-header {
+    background-color: #2d3748;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .card {
+    background-color: #2d3748;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .button:hover,
+  .button:focus {
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  }
+
+  .button-secondary {
+    background-color: #2d3748;
+    color: var(--color-primary-300);
+    border-color: #4a5568;
+  }
+
+  .button-secondary:hover {
+    background: #4a5568;
+    border-color: #718096;
+  }
+
+  .filters input,
+  .filters select {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #edf2f7;
+  }
+
+  .card-actions a {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: var(--color-primary-300);
+  }
+
+  .card-actions a:hover,
+  .card-actions a:focus {
+    background-color: #4a5568;
+  }
+}
+
+/* Dark mode manual override class */
+body.dark-mode {
+  /* Dark mode color overrides */
+  --color-neutral-50: #1a202c;
+  --color-neutral-100: #2d3748;
+  --color-neutral-200: #4a5568;
+  --color-neutral-300: #718096;
+  --color-neutral-400: #a0aec0;
+  --color-neutral-500: #cbd5e0;
+  --color-neutral-600: #e2e8f0;
+  --color-neutral-700: #edf2f7;
+  --color-neutral-800: #f7fafc;
+  --color-neutral-900: #ffffff;
+
+  --color-background: #1a202c;
+  --color-text: #edf2f7;
+  --color-text-muted: #a0aec0;
+  --color-border: #4a5568;
+  --color-border-dark: #718096;
+
+  --color-primary: var(--color-primary-400);
+  --color-primary-light: var(--color-primary-300);
+
+  background-color: #1a202c;
+  color: #edf2f7;
+}
+
+body.dark-mode .site-header {
+  background-color: #2d3748;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .card {
+  background-color: #2d3748;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .button {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .button:hover,
+body.dark-mode .button:focus {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+body.dark-mode .button-secondary {
+  background-color: #2d3748;
+  color: var(--color-primary-300);
+  border-color: #4a5568;
+}
+
+body.dark-mode .button-secondary:hover {
+  background: #4a5568;
+  border-color: #718096;
+}
+
+body.dark-mode .filters input,
+body.dark-mode .filters select {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: #edf2f7;
+}
+
+body.dark-mode .card-actions a {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: var(--color-primary-300);
+}
+
+body.dark-mode .card-actions a:hover,
+body.dark-mode .card-actions a:focus {
+  background-color: #4a5568;
 }
