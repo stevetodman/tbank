@@ -275,6 +275,11 @@
   const topicMasterySection = document.getElementById('topic-mastery');
   const topicList = document.getElementById('topic-list');
 
+  // Issue #7: Search elements
+  const questionSearch = document.getElementById('question-search');
+  const clearSearchBtn = document.getElementById('clear-search-btn');
+  const searchResultsCount = document.getElementById('search-results-count');
+
   // New feature elements
   const timerDisplay = document.getElementById('timer-display');
   const timerText = document.getElementById('timer-text');
@@ -290,6 +295,7 @@
   const timerDurationGroup = document.getElementById('timer-duration-group');
   const settingsSaveBtn = document.getElementById('settings-save');
   const endSessionBtn = document.getElementById('end-session-btn');
+  const exportNotesBtn = document.getElementById('export-notes-btn');
   const resetProgressBtn = document.getElementById('reset-progress-btn');
   const sessionSummaryModal = document.getElementById('session-summary-modal');
   const summaryContent = document.getElementById('summary-content');
@@ -873,6 +879,15 @@
         btn.appendChild(flagIcon);
       }
 
+      // Issue #6: Add note indicator if question has a note
+      if (loadNote(index)) {
+        const noteIcon = document.createElement('span');
+        noteIcon.className = 'grid-note-icon';
+        noteIcon.textContent = '📝';
+        noteIcon.setAttribute('aria-label', 'Has note');
+        btn.appendChild(noteIcon);
+      }
+
       btn.onclick = () => jumpToQuestion(index);
       questionGrid.appendChild(btn);
     });
@@ -929,12 +944,14 @@
     timerPaused = true;
     timerToggleBtn.textContent = '▶';
     timerToggleBtn.setAttribute('aria-label', 'Resume timer');
+    timerToggleBtn.setAttribute('aria-pressed', 'true'); // Issue #10: Update ARIA pressed state
   }
 
   function resumeTimer() {
     timerPaused = false;
     timerToggleBtn.textContent = '⏸';
     timerToggleBtn.setAttribute('aria-label', 'Pause timer');
+    timerToggleBtn.setAttribute('aria-pressed', 'false'); // Issue #10: Update ARIA pressed state
   }
 
   // Issue #8: Enhanced timer display with color warnings
@@ -1520,27 +1537,33 @@
       const checked = isSelected ? 'checked' : '';
 
       html += `<label class="${choiceClass}">`;
-      html += `<input type="radio" name="answer" value="${escapeHtml(letter)}" ${checked} ${disabled} />`;
-      html += `<span class="choice-letter">${escapeHtml(letter)}</span>`;
-      html += `<span class="choice-text">${escapeHtml(choice.text)}</span>`;
+      // Issue #10: Add comprehensive ARIA labels for answer choices
+      let ariaLabel = `Answer ${letter}: ${choice.text}`;
+      if (isEliminated) ariaLabel += ' (crossed out)';
+      if (isSubmitted && isCorrect) ariaLabel += ' - Correct answer';
+      if (isSubmitted && isSelected && !isCorrect) ariaLabel += ' - Incorrect (your answer)';
+      html += `<input type="radio" name="answer" value="${escapeHtml(letter)}" ${checked} ${disabled} aria-label="${escapeHtml(ariaLabel)}" />`;
+      html += `<span class="choice-letter" aria-hidden="true">${escapeHtml(letter)}</span>`;
+      html += `<span class="choice-text" aria-hidden="true">${escapeHtml(choice.text)}</span>`;
 
       // Add eliminate button (only show before submission)
       if (!isSubmitted) {
-        html += `<button class="eliminate-btn" data-choice="${letter}" type="button">
+        const eliminateLabel = isEliminated ? `Undo cross out for answer ${letter}` : `Cross out answer ${letter}`;
+        html += `<button class="eliminate-btn" data-choice="${letter}" type="button" aria-label="${eliminateLabel}">
           ${isEliminated ? 'Undo' : 'Cross out'}
         </button>`;
       }
 
-      if (isSubmitted && isCorrect) html += '<span class="choice-icon">✓</span>';
-      if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon">✗</span>';
+      if (isSubmitted && isCorrect) html += '<span class="choice-icon" aria-hidden="true">✓</span>';
+      if (isSubmitted && isSelected && !isCorrect) html += '<span class="choice-icon" aria-hidden="true">✗</span>';
       html += '</label>';
     });
     html += '</fieldset>';
 
     // Explanation (shown after submission) - Enhanced for Issues #1 and #4
     if (isSubmitted) {
-      html += '<div class="explanation-section" id="explanation-section">';
-      html += '<h3>📚 Explanation</h3>';
+      html += '<div class="explanation-section" id="explanation-section" role="region" aria-labelledby="explanation-heading-' + currentQuestionIndex + '">';
+      html += '<h3 id="explanation-heading-' + currentQuestionIndex + '">📚 Explanation</h3>';
 
       // Add TL;DR section with educational objective (Issue #4)
       if (question.educationalObjective) {
@@ -1589,6 +1612,40 @@
       html += `<div class="explanation-actions">
         <button id="reset-question-btn" class="reset-question-btn">🔄 Reset This Question</button>
         <a href="${githubIssueUrl}" target="_blank" class="report-error-btn">🐛 Report Error</a>
+      </div>`;
+
+      // Issue #6: Notes section
+      const existingNote = loadNote(currentQuestionIndex);
+      const noteText = existingNote ? existingNote.text : '';
+      const noteDate = existingNote ? existingNote.date : '';
+      const maxChars = 1000;
+
+      html += `<div class="notes-section">
+        <div class="notes-header">
+          <h4>📝 Personal Notes</h4>
+          ${existingNote ? `<span class="note-date">Last edited: ${noteDate}</span>` : ''}
+        </div>
+        <div class="notes-editor">
+          <textarea
+            id="note-textarea"
+            class="note-textarea"
+            placeholder="Add your personal notes, insights, or mnemonics for this question..."
+            maxlength="${maxChars}"
+            aria-label="Personal notes for this question"
+          >${escapeHtml(noteText)}</textarea>
+          <div class="notes-footer">
+            <div class="notes-char-count">
+              <span id="char-count">${noteText.length}</span>/${maxChars}
+            </div>
+            <div class="notes-actions">
+              ${existingNote ? `<button id="delete-note-btn" class="note-action-btn note-delete-btn" aria-label="Delete note">🗑️ Delete</button>` : ''}
+              <button id="save-note-btn" class="note-action-btn note-save-btn" aria-label="Save note">💾 Save Note</button>
+            </div>
+          </div>
+        </div>
+        <div class="notes-formatting-hint">
+          <strong>Tip:</strong> Use ** for <strong>bold</strong>, * for <em>italic</em>, - for bullet points
+        </div>
       </div>`;
 
       html += '</div>';
@@ -1897,6 +1954,54 @@
       });
     }
 
+    // Event listeners for Notes feature (Issue #6)
+    const noteTextarea = document.getElementById('note-textarea');
+    const charCount = document.getElementById('char-count');
+    const saveNoteBtn = document.getElementById('save-note-btn');
+    const deleteNoteBtn = document.getElementById('delete-note-btn');
+
+    if (noteTextarea && charCount) {
+      // Update character count as user types
+      noteTextarea.addEventListener('input', () => {
+        charCount.textContent = noteTextarea.value.length;
+      });
+    }
+
+    if (saveNoteBtn) {
+      saveNoteBtn.addEventListener('click', () => {
+        const noteText = noteTextarea.value.trim();
+        const success = saveNote(currentQuestionIndex, noteText);
+
+        if (success) {
+          HapticEngine.medium();
+          showToast('Note saved successfully!', 'success');
+          // Re-render to update the note date and delete button
+          renderQuestion();
+          updateQuestionGrid(); // Update grid to show note indicator
+        } else {
+          showToast('Failed to save note. Please try again.', 'error');
+        }
+      });
+    }
+
+    if (deleteNoteBtn) {
+      deleteNoteBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete this note?')) {
+          const success = deleteNote(currentQuestionIndex);
+
+          if (success) {
+            HapticEngine.medium();
+            showToast('Note deleted', 'info');
+            // Re-render to remove the note
+            renderQuestion();
+            updateQuestionGrid(); // Update grid to remove note indicator
+          } else {
+            showToast('Failed to delete note. Please try again.', 'error');
+          }
+        }
+      });
+    }
+
     // Scroll to top or explanation section (Issue #1 - auto-scroll to explanation)
     // Use requestAnimationFrame to ensure DOM has updated
     requestAnimationFrame(() => {
@@ -1956,6 +2061,14 @@
 
     userAnswers[currentQuestionIndex].submitted = true;
     userAnswers[currentQuestionIndex].correct = isCorrect;
+
+    // Issue #10: Screen reader announcement for result
+    const answerLetter = answer.selected;
+    if (isCorrect) {
+      announceToScreenReader(`Correct! Your answer ${answerLetter} is the right choice.`);
+    } else {
+      announceToScreenReader(`Incorrect. You selected ${answerLetter}. The correct answer is ${correctAnswer}.`);
+    }
 
     // Haptic feedback based on correctness
     if (isCorrect) {
@@ -2119,6 +2232,10 @@
   function updateNavigationButtons() {
     prevBtn.disabled = currentQuestionIndex === 0;
     nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+
+    // Issue #10: Update ARIA disabled states
+    prevBtn.setAttribute('aria-disabled', currentQuestionIndex === 0 ? 'true' : 'false');
+    nextBtn.setAttribute('aria-disabled', currentQuestionIndex === questions.length - 1 ? 'true' : 'false');
   }
 
   // Update progress bar
@@ -2130,6 +2247,11 @@
     const accuracyPercentage = answeredQuestions > 0 ? Math.round((correctQuestions / answeredQuestions) * 100) : 0;
 
     progressBar.style.width = `${percentage}%`;
+
+    // Issue #10: Update ARIA attributes for progress bar
+    const progressBarContainer = progressBar.parentElement;
+    progressBarContainer.setAttribute('aria-valuenow', Math.round(percentage));
+    progressBarContainer.setAttribute('aria-valuetext', `${answeredQuestions} of ${questions.length} questions answered, ${accuracyPercentage}% correct`);
 
     // Add tooltip with detailed progress (Issue #27)
     const tooltipText = answeredQuestions > 0
@@ -2216,6 +2338,86 @@
     showIncorrectBtn.classList.toggle('active', filterType === 'incorrect');
     showUnansweredBtn.classList.toggle('active', filterType === 'unanswered');
     showFlaggedBtn.classList.toggle('active', filterType === 'flagged');
+
+    // Issue #10: Update ARIA pressed states for filter buttons
+    showAllBtn.setAttribute('aria-pressed', filterType === 'all' ? 'true' : 'false');
+    showIncorrectBtn.setAttribute('aria-pressed', filterType === 'incorrect' ? 'true' : 'false');
+    showUnansweredBtn.setAttribute('aria-pressed', filterType === 'unanswered' ? 'true' : 'false');
+    showFlaggedBtn.setAttribute('aria-pressed', filterType === 'flagged' ? 'true' : 'false');
+  }
+
+  // Issue #7: Search functionality
+  function searchQuestions(searchTerm) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    let matchCount = 0;
+
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach((btn, index) => {
+      const question = questions[index];
+      let matches = false;
+
+      // Search across question text, topic, and keywords
+      const searchableText = [
+        question.vignette || '',
+        question.questionText || '',
+        question.topic || '',
+        ...(question.answerChoices?.map(c => c.text) || [])
+      ].join(' ').toLowerCase();
+
+      matches = searchableText.includes(lowerSearchTerm);
+
+      // Show/hide based on match
+      btn.style.display = matches ? '' : 'none';
+      if (matches) matchCount++;
+    });
+
+    // Update results count
+    updateSearchResultsCount(matchCount, searchTerm);
+
+    // Deactivate all filter buttons when searching
+    showAllBtn.classList.remove('active');
+    showIncorrectBtn.classList.remove('active');
+    showUnansweredBtn.classList.remove('active');
+    showFlaggedBtn.classList.remove('active');
+
+    // Update ARIA states
+    showAllBtn.setAttribute('aria-pressed', 'false');
+    showIncorrectBtn.setAttribute('aria-pressed', 'false');
+    showUnansweredBtn.setAttribute('aria-pressed', 'false');
+    showFlaggedBtn.setAttribute('aria-pressed', 'false');
+
+    // Announce results to screen readers
+    announceToScreenReader(`Search found ${matchCount} matching question${matchCount !== 1 ? 's' : ''}`);
+  }
+
+  function clearSearch() {
+    questionSearch.value = '';
+    clearSearchBtn.hidden = true;
+    searchResultsCount.hidden = true;
+
+    // Show all questions
+    const buttons = questionGrid.querySelectorAll('.grid-question-btn');
+    buttons.forEach(btn => {
+      btn.style.display = '';
+    });
+
+    // Re-activate "All" filter
+    filterQuestionGrid('all');
+
+    // Announce to screen readers
+    announceToScreenReader('Search cleared, showing all questions');
+  }
+
+  function updateSearchResultsCount(count, searchTerm) {
+    searchResultsCount.hidden = false;
+
+    if (count === 0) {
+      searchResultsCount.className = 'search-results-count no-results';
+      searchResultsCount.textContent = `No questions found matching "${searchTerm}"`;
+    } else {
+      searchResultsCount.className = 'search-results-count';
+      searchResultsCount.textContent = `Found ${count} question${count !== 1 ? 's' : ''} matching "${searchTerm}"`;
+    }
   }
 
   // Update topic mastery display
@@ -2302,6 +2504,10 @@
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when menu is open
 
+    // Issue #10: Update ARIA expanded state and trap focus
+    menuToggle.setAttribute('aria-expanded', 'true');
+    trapFocus(questionMenu);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2315,6 +2521,10 @@
     questionMenu.hidden = true;
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when menu is closed
+
+    // Issue #10: Update ARIA expanded state and remove focus trap
+    menuToggle.setAttribute('aria-expanded', 'false');
+    removeFocusTrap(questionMenu);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
@@ -2335,6 +2545,75 @@
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), CONSTANTS.TOAST_FADE_OUT);
     }, CONSTANTS.TOAST_DURATION);
+  }
+
+  // Issue #10: Screen reader announcements
+  function announceToScreenReader(message) {
+    const srAnnouncements = document.getElementById('sr-announcements');
+    if (srAnnouncements) {
+      // Clear previous announcement
+      srAnnouncements.textContent = '';
+      // Trigger reflow to ensure screen readers pick up the change
+      void srAnnouncements.offsetHeight;
+      // Set new announcement
+      srAnnouncements.textContent = message;
+    }
+  }
+
+  // Issue #10: Focus trap for modals
+  let lastFocusedElement = null;
+  const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  function trapFocus(modal) {
+    const focusableElements = modal.querySelectorAll(focusableSelectors);
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    // Save currently focused element
+    lastFocusedElement = document.activeElement;
+
+    // Focus first element
+    if (firstFocusable) {
+      setTimeout(() => firstFocusable.focus(), 100);
+    }
+
+    // Add keydown listener for focus trapping
+    const handleFocusTrap = (e) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    };
+
+    modal.addEventListener('keydown', handleFocusTrap);
+    modal.dataset.focusTrapActive = 'true';
+
+    // Store the handler so we can remove it later
+    modal._focusTrapHandler = handleFocusTrap;
+  }
+
+  function removeFocusTrap(modal) {
+    if (modal._focusTrapHandler) {
+      modal.removeEventListener('keydown', modal._focusTrapHandler);
+      delete modal._focusTrapHandler;
+      delete modal.dataset.focusTrapActive;
+    }
+
+    // Restore focus to last focused element
+    if (lastFocusedElement && lastFocusedElement.focus) {
+      lastFocusedElement.focus();
+    }
   }
 
   // Dark mode functions
@@ -2382,6 +2661,9 @@
     document.body.style.overflow = 'hidden';
     setSwipesEnabled(false); // Disable swipes when modal is open
 
+    // Issue #10: Trap focus in modal
+    trapFocus(settingsModal);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2400,6 +2682,9 @@
     settingsModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #10: Remove focus trap
+    removeFocusTrap(settingsModal);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
@@ -2454,6 +2739,254 @@
     showToast('Settings saved!', 'success');
   }
 
+  // Issue #11: Keyboard shortcuts help modal
+  function showKeyboardShortcutsHelp() {
+    // Check if modal already exists
+    let helpModal = document.getElementById('keyboard-shortcuts-modal');
+
+    if (!helpModal) {
+      // Create modal dynamically
+      helpModal = document.createElement('div');
+      helpModal.id = 'keyboard-shortcuts-modal';
+      helpModal.className = 'modal';
+      helpModal.hidden = false;
+      helpModal.innerHTML = `
+        <div class="modal-content keyboard-shortcuts-modal">
+          <div class="modal-header">
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <button id="keyboard-shortcuts-close" class="close-btn" aria-label="Close keyboard shortcuts">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="shortcuts-section">
+              <h3>Navigation</h3>
+              <div class="shortcut-item">
+                <kbd>←</kbd> <kbd>→</kbd>
+                <span>Previous / Next question</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>M</kbd>
+                <span>Open question menu</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>Esc</kbd>
+                <span>Close menu or modal</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>Answering Questions</h3>
+              <div class="shortcut-item">
+                <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd>
+                <span>Select answer choice</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>Enter</kbd> or <kbd>S</kbd>
+                <span>Submit answer</span>
+              </div>
+              <div class="shortcut-item">
+                <kbd>F</kbd>
+                <span>Flag question for review</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>After Submitting</h3>
+              <div class="shortcut-item">
+                <kbd>Space</kbd>
+                <span>Toggle detailed explanation</span>
+              </div>
+            </div>
+
+            <div class="shortcuts-section">
+              <h3>Help</h3>
+              <div class="shortcut-item">
+                <kbd>?</kbd>
+                <span>Show this help menu</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="keyboard-shortcuts-ok" class="button-primary">Got it!</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(helpModal);
+
+      // Add event listeners
+      const closeBtn = document.getElementById('keyboard-shortcuts-close');
+      const okBtn = document.getElementById('keyboard-shortcuts-ok');
+
+      const closeModal = () => {
+        helpModal.hidden = true;
+        document.body.style.overflow = '';
+        HapticEngine.light();
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      okBtn.addEventListener('click', closeModal);
+
+      // Close on background click
+      helpModal.addEventListener('click', (e) => {
+        if (e.target === helpModal) {
+          closeModal();
+        }
+      });
+    } else {
+      helpModal.hidden = false;
+    }
+
+    document.body.style.overflow = 'hidden';
+    HapticEngine.light();
+  }
+
+  // Issue #6: Notes management
+  function saveNote(questionIndex, noteText) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+
+      if (noteText.trim().length === 0) {
+        // If note is empty, delete it
+        delete notes[questionIndex];
+      } else {
+        notes[questionIndex] = {
+          text: noteText.trim(),
+          timestamp: Date.now(),
+          date: new Date().toLocaleDateString(),
+          questionId: `Q${questionIndex + 1}`
+        };
+      }
+
+      localStorage.setItem('questionNotes', JSON.stringify(notes));
+      return true;
+    } catch (error) {
+      console.warn('[Notes] Failed to save:', error);
+      return false;
+    }
+  }
+
+  function loadNote(questionIndex) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      return notes[questionIndex] || null;
+    } catch (error) {
+      console.warn('[Notes] Failed to load:', error);
+      return null;
+    }
+  }
+
+  function deleteNote(questionIndex) {
+    try {
+      const notes = JSON.parse(localStorage.getItem('questionNotes') || '{}');
+      delete notes[questionIndex];
+      localStorage.setItem('questionNotes', JSON.stringify(notes));
+      return true;
+    } catch (error) {
+      console.warn('[Notes] Failed to delete:', error);
+      return false;
+    }
+  }
+
+  function getAllNotes() {
+    try {
+      return JSON.parse(localStorage.getItem('questionNotes') || '{}');
+    } catch (error) {
+      console.warn('[Notes] Failed to retrieve all notes:', error);
+      return {};
+    }
+  }
+
+  function exportNotesAsText() {
+    const notes = getAllNotes();
+    const noteCount = Object.keys(notes).length;
+
+    if (noteCount === 0) {
+      return 'No notes to export.';
+    }
+
+    let exportText = `TBank Study Notes\n`;
+    exportText += `Exported: ${new Date().toLocaleString()}\n`;
+    exportText += `Total Notes: ${noteCount}\n`;
+    exportText += `${'='.repeat(60)}\n\n`;
+
+    // Sort by question index
+    const sortedNotes = Object.entries(notes)
+      .sort(([a], [b]) => parseInt(a) - parseInt(b));
+
+    sortedNotes.forEach(([index, note]) => {
+      const question = questions[parseInt(index)];
+      const topic = question?.topic || 'General';
+
+      exportText += `${note.questionId} - ${topic}\n`;
+      exportText += `Date: ${note.date}\n`;
+      exportText += `${'-'.repeat(60)}\n`;
+      exportText += `${note.text}\n`;
+      exportText += `\n${'='.repeat(60)}\n\n`;
+    });
+
+    return exportText;
+  }
+
+  // Issue #9: Session history management
+  function saveSessionHistory(sessionData) {
+    try {
+      let history = JSON.parse(localStorage.getItem('sessionHistory') || '[]');
+
+      // Add current session with timestamp
+      history.push({
+        ...sessionData,
+        timestamp: Date.now(),
+        date: new Date().toLocaleDateString()
+      });
+
+      // Keep only last 20 sessions to avoid localStorage limits
+      if (history.length > 20) {
+        history = history.slice(-20);
+      }
+
+      localStorage.setItem('sessionHistory', JSON.stringify(history));
+    } catch (error) {
+      console.warn('[Session History] Failed to save:', error);
+    }
+  }
+
+  function getSessionHistory() {
+    try {
+      return JSON.parse(localStorage.getItem('sessionHistory') || '[]');
+    } catch (error) {
+      console.warn('[Session History] Failed to retrieve:', error);
+      return [];
+    }
+  }
+
+  function getHistoricalComparison(currentPercentage, currentAnswered) {
+    const history = getSessionHistory();
+    if (history.length === 0) return null;
+
+    // Get previous sessions with similar question counts (±5 questions)
+    const comparableSessions = history.filter(s =>
+      Math.abs(s.answered - currentAnswered) <= 5
+    );
+
+    if (comparableSessions.length === 0) return { isFirstSession: true };
+
+    const lastSession = comparableSessions[comparableSessions.length - 1];
+    const avgPercentage = Math.round(
+      comparableSessions.reduce((sum, s) => sum + s.percentage, 0) / comparableSessions.length
+    );
+
+    const improvement = currentPercentage - lastSession.percentage;
+    const vsAverage = currentPercentage - avgPercentage;
+
+    return {
+      lastSession,
+      improvement,
+      vsAverage,
+      avgPercentage,
+      sessionCount: history.length
+    };
+  }
+
   // Session summary functions
   function showSessionSummary() {
     setSwipesEnabled(false); // Disable swipes when summary modal is open
@@ -2495,6 +3028,50 @@
       }))
       .sort((a, b) => a.percentage - b.percentage);
 
+    // Issue #9: Get historical comparison
+    const comparison = getHistoricalComparison(percentage, answered);
+
+    // Issue #9: Identify questions where too slow
+    const slowQuestions = Object.entries(userAnswers)
+      .filter(([_, answer]) => answer.submitted && answer.timeSpent && answer.timeSpent > timerDuration * 1.5)
+      .map(([index, answer]) => ({
+        index: parseInt(index),
+        timeSpent: answer.timeSpent,
+        topic: questions[index]?.topic || 'General'
+      }));
+
+    // Issue #9: Get weakest topic
+    const weakestTopic = sortedTopics.length > 0 ? sortedTopics[0] : null;
+
+    // Issue #9: Generate recommendations
+    const recommendations = [];
+    if (weakestTopic && weakestTopic.percentage < 70) {
+      recommendations.push(`Focus on ${weakestTopic.topic} (${weakestTopic.percentage}% accuracy)`);
+    }
+    if (slowQuestions.length > 3) {
+      recommendations.push(`Practice time management - ${slowQuestions.length} questions took too long`);
+    }
+    if (flagged > 0) {
+      recommendations.push(`Review ${flagged} flagged question${flagged > 1 ? 's' : ''}`);
+    }
+    if (incorrect > correct && answered > 5) {
+      recommendations.push('Review fundamental concepts before continuing');
+    }
+    if (avgTime > timerDuration && timedMode) {
+      recommendations.push(`Aim for ${timerDuration}s per question (current avg: ${avgTime}s)`);
+    }
+
+    // Issue #9: Save this session to history
+    saveSessionHistory({
+      answered,
+      correct,
+      incorrect,
+      percentage,
+      avgTime,
+      totalTime,
+      topicStats: sortedTopics
+    });
+
     const html = `
       <div class="summary-stats">
         <div class="summary-stat-card">
@@ -2514,6 +3091,68 @@
           <div class="stat-label">Incorrect</div>
         </div>
       </div>
+
+      ${comparison && !comparison.isFirstSession ? `
+        <div class="summary-comparison">
+          <h3>📊 Performance Trend</h3>
+          <div class="comparison-stats">
+            ${comparison.improvement !== 0 ? `
+              <div class="comparison-item ${comparison.improvement > 0 ? 'comparison-positive' : 'comparison-negative'}">
+                <span class="comparison-icon">${comparison.improvement > 0 ? '📈' : '📉'}</span>
+                <span class="comparison-text">
+                  ${comparison.improvement > 0 ? '+' : ''}${comparison.improvement}% vs last session
+                  <span class="comparison-detail">(${comparison.lastSession.percentage}% → ${percentage}%)</span>
+                </span>
+              </div>
+            ` : ''}
+            ${comparison.vsAverage !== 0 ? `
+              <div class="comparison-item ${comparison.vsAverage > 0 ? 'comparison-positive' : 'comparison-neutral'}">
+                <span class="comparison-icon">${comparison.vsAverage > 0 ? '⭐' : '📊'}</span>
+                <span class="comparison-text">
+                  ${comparison.vsAverage > 0 ? '+' : ''}${comparison.vsAverage}% vs your average
+                  <span class="comparison-detail">(avg: ${comparison.avgPercentage}% over ${comparison.sessionCount} session${comparison.sessionCount > 1 ? 's' : ''})</span>
+                </span>
+              </div>
+            ` : ''}
+            ${comparison.improvement === 0 && comparison.vsAverage === 0 ? `
+              <div class="comparison-item comparison-neutral">
+                <span class="comparison-icon">📊</span>
+                <span class="comparison-text">
+                  Consistent with your average (${comparison.avgPercentage}% over ${comparison.sessionCount} session${comparison.sessionCount > 1 ? 's' : ''})
+                </span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      ` : ''}
+
+      ${recommendations.length > 0 ? `
+        <div class="summary-recommendations">
+          <h3>💡 Personalized Recommendations</h3>
+          <ul class="recommendations-list">
+            ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      ${slowQuestions.length > 0 && timedMode ? `
+        <div class="summary-slow-questions">
+          <h3>⏱️ Time Management</h3>
+          <p class="slow-questions-intro">
+            <strong>${slowQuestions.length} question${slowQuestions.length > 1 ? 's' : ''}</strong> took longer than expected (>${Math.round(timerDuration * 1.5)}s):
+          </p>
+          <div class="slow-questions-list">
+            ${slowQuestions.slice(0, 5).map(sq => `
+              <div class="slow-question-item">
+                <span class="slow-question-number">Q${sq.index + 1}</span>
+                <span class="slow-question-topic">${sq.topic}</span>
+                <span class="slow-question-time">${sq.timeSpent}s</span>
+              </div>
+            `).join('')}
+            ${slowQuestions.length > 5 ? `<div class="slow-questions-more">... and ${slowQuestions.length - 5} more</div>` : ''}
+          </div>
+        </div>
+      ` : ''}
 
       ${timesSpent.length > 0 ? `
         <div class="summary-time">
@@ -2575,6 +3214,9 @@
     sessionSummaryModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
+    // Issue #10: Trap focus in modal
+    trapFocus(sessionSummaryModal);
+
     // Issue #30: Pause timer when modal opens
     if (timedMode && currentTimer && !timerPaused) {
       pauseTimer();
@@ -2588,6 +3230,9 @@
     sessionSummaryModal.style.display = 'none';
     document.body.style.overflow = '';
     setSwipesEnabled(true); // Re-enable swipes when modal is closed
+
+    // Issue #10: Remove focus trap
+    removeFocusTrap(sessionSummaryModal);
 
     // Issue #30: Resume timer when modal closes
     if (timedMode && currentTimer && timerPaused) {
@@ -2654,6 +3299,51 @@
           });
       } else {
         showToast('Sharing not supported on this device', 'error');
+      }
+    }
+  }
+
+  // Issue #6: Export notes function
+  function handleExportNotes() {
+    const notes = getAllNotes();
+    const noteCount = Object.keys(notes).length;
+
+    if (noteCount === 0) {
+      showToast('No notes to export yet. Add notes to questions first!', 'info');
+      return;
+    }
+
+    const exportText = exportNotesAsText();
+
+    // Try to download as file first
+    try {
+      const blob = new Blob([exportText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const date = new Date().toISOString().split('T')[0];
+      a.href = url;
+      a.download = `TBank_Notes_${date}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      HapticEngine.success();
+      showToast(`Exported ${noteCount} note${noteCount > 1 ? 's' : ''} successfully!`, 'success');
+    } catch (error) {
+      // Fallback to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(exportText)
+          .then(() => {
+            HapticEngine.medium();
+            showToast(`${noteCount} note${noteCount > 1 ? 's' : ''} copied to clipboard!`, 'success');
+          })
+          .catch((err) => {
+            console.warn('[Export Notes] Error:', err);
+            showToast('Failed to export notes', 'error');
+          });
+      } else {
+        showToast('Export not supported on this device', 'error');
       }
     }
   }
@@ -2730,6 +3420,19 @@
   showUnansweredBtn.addEventListener('click', () => filterQuestionGrid('unanswered'));
   showFlaggedBtn.addEventListener('click', () => filterQuestionGrid('flagged'));
 
+  // Issue #7: Search event listeners
+  questionSearch.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.trim();
+    if (searchTerm.length > 0) {
+      searchQuestions(searchTerm);
+      clearSearchBtn.hidden = false;
+    } else {
+      clearSearch();
+    }
+  });
+
+  clearSearchBtn.addEventListener('click', clearSearch);
+
   // New feature event listeners
   settingsBtn.addEventListener('click', openSettings);
   settingsClose.addEventListener('click', closeSettings);
@@ -2745,18 +3448,124 @@
     }
   });
   endSessionBtn.addEventListener('click', showSessionSummary);
+  exportNotesBtn.addEventListener('click', handleExportNotes);
   resetProgressBtn.addEventListener('click', resetProgress);
   summaryClose.addEventListener('click', closeSessionSummary);
   summaryShare.addEventListener('click', shareSessionResults);
   summaryContinue.addEventListener('click', closeSessionSummary);
   summaryReset.addEventListener('click', resetProgress);
 
-  // Keyboard navigation
+  // Issue #11: Enhanced keyboard navigation
   document.addEventListener('keydown', (e) => {
+    // Don't trigger shortcuts if user is typing in an input/textarea
+    const target = e.target;
+    const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+
+    // Don't trigger shortcuts if any modal is open (except menu close with Escape)
+    const modalOpen = !settingsModal.hidden || !sessionSummaryModal.hidden;
+
+    // Help modal shortcut (always available)
+    if (e.key === '?' && !isTyping) {
+      e.preventDefault();
+      showKeyboardShortcutsHelp();
+      return;
+    }
+
+    // Close modals with Escape
+    if (e.key === 'Escape') {
+      if (!questionMenu.hidden) {
+        closeMenu();
+        return;
+      }
+      if (!settingsModal.hidden) {
+        closeSettings();
+        return;
+      }
+      if (!sessionSummaryModal.hidden) {
+        closeSessionSummary();
+        return;
+      }
+      // Close keyboard shortcuts help if open
+      const helpModal = document.getElementById('keyboard-shortcuts-modal');
+      if (helpModal && !helpModal.hidden) {
+        helpModal.hidden = true;
+        document.body.style.overflow = '';
+        return;
+      }
+    }
+
+    // Don't trigger other shortcuts if modal is open or user is typing
+    if (modalOpen || isTyping) return;
+
+    // Menu toggle
+    if (e.key.toLowerCase() === 'm' && questionMenu.hidden) {
+      e.preventDefault();
+      openMenu();
+      return;
+    }
+
+    // Navigation shortcuts (when menu is closed)
     if (questionMenu.hidden) {
-      if (e.key === 'ArrowLeft' && !prevBtn.disabled) goToPrevious();
-      if (e.key === 'ArrowRight' && !nextBtn.disabled) goToNext();
-      if (e.key === 'Enter' && !submitBtn.disabled && submitBtn.style.display !== 'none') handleSubmit();
+      // Arrow key navigation
+      if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+        e.preventDefault();
+        goToPrevious();
+        return;
+      }
+      if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+        e.preventDefault();
+        goToNext();
+        return;
+      }
+
+      // Submit shortcuts
+      if ((e.key === 'Enter' || e.key.toLowerCase() === 's') && !submitBtn.disabled && submitBtn.style.display !== 'none') {
+        e.preventDefault();
+        handleSubmit();
+        return;
+      }
+
+      // Flag question
+      if (e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        toggleFlag();
+        return;
+      }
+
+      // Answer selection shortcuts (A-E)
+      const answer = userAnswers[currentQuestionIndex];
+      const isSubmitted = answer?.submitted;
+
+      if (!isSubmitted) {
+        const key = e.key.toLowerCase();
+        if (key >= 'a' && key <= 'e') {
+          e.preventDefault();
+          const answerLetter = key.toUpperCase();
+          const question = questions[currentQuestionIndex];
+
+          // Check if this answer choice exists
+          const choice = question.answerChoices.find(c => c.letter === answerLetter);
+          if (choice) {
+            const radio = document.querySelector(`input[name="answer"][value="${answerLetter}"]`);
+            if (radio) {
+              radio.checked = true;
+              // Trigger the change event to update state
+              radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+          return;
+        }
+      }
+
+      // Toggle explanation details (Space key)
+      if (e.key === ' ' && isSubmitted) {
+        const toggleBtn = document.querySelector('.toggle-details-btn');
+        if (toggleBtn) {
+          e.preventDefault();
+          toggleBtn.click();
+          return;
+        }
+      }
     }
   });
 

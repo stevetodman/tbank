@@ -637,3 +637,274 @@ body.dark-mode .answer-choice.answer-peek .choice-letter {
   background: var(--color-primary-500);
   border-color: var(--color-primary-400);
 }
+
+/* ===========================================================================
+   Dark mode for Issue #11: Keyboard Shortcuts Modal
+   =========================================================================== */
+
+body.dark-mode .shortcuts-section h3 {
+  color: var(--color-primary-300);
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .shortcut-item {
+  background: #1f2937;
+}
+
+body.dark-mode .shortcut-item:hover {
+  background: #374151;
+}
+
+body.dark-mode .shortcut-item kbd {
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-color: #4b5563;
+  color: #e5e7eb;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .shortcut-item span {
+  color: #d1d5db;
+}
+
+/* Dark mode focus indicators */
+body.dark-mode button:focus-visible,
+body.dark-mode .nav-btn:focus-visible,
+body.dark-mode .submit-btn:focus-visible,
+body.dark-mode .skip-btn:focus-visible,
+body.dark-mode .flag-btn:focus-visible,
+body.dark-mode .settings-btn:focus-visible,
+body.dark-mode .menu-btn:focus-visible,
+body.dark-mode a:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .answer-choice:focus-within {
+  outline-color: var(--color-primary-400);
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+}
+
+body.dark-mode input[type="radio"]:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .filter-btn:focus-visible,
+body.dark-mode .grid-question-btn:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+body.dark-mode .grid-question-btn:focus-visible {
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+}
+
+body.dark-mode *:focus-visible {
+  outline-color: var(--color-primary-400);
+}
+
+/* ===========================================================================
+   Dark mode for Issue #7: Search Functionality
+   =========================================================================== */
+
+body.dark-mode .search-container {
+  background: #1f2937;
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .search-icon {
+  color: #9ca3af;
+}
+
+body.dark-mode .search-input {
+  background: #111827;
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .search-input:focus {
+  border-color: var(--color-primary-400);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+body.dark-mode .search-input::placeholder {
+  color: #6b7280;
+}
+
+body.dark-mode .clear-search-btn {
+  color: #9ca3af;
+}
+
+body.dark-mode .clear-search-btn:hover {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .search-results-count {
+  background: #1e3a5f;
+  border-left-color: var(--color-primary-400);
+  color: var(--color-primary-200);
+}
+
+body.dark-mode .search-results-count.no-results {
+  background: #7f1d1d;
+  border-left-color: var(--color-error-400);
+  color: #fca5a5;
+}
+
+body.dark-mode .search-highlight {
+  background: #78350f;
+  color: #fde68a;
+}
+
+/* Issue #9: Enhanced session summary - dark mode */
+
+/* Performance comparison */
+body.dark-mode .summary-comparison {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e3354 100%);
+  border-left-color: var(--color-primary-400);
+}
+
+body.dark-mode .summary-comparison h3 {
+  color: var(--color-primary-300);
+}
+
+body.dark-mode .comparison-item {
+  background: #1f2937;
+  border-left-width: 3px;
+}
+
+body.dark-mode .comparison-item.comparison-positive {
+  border-left-color: var(--color-success-400);
+}
+
+body.dark-mode .comparison-item.comparison-negative {
+  border-left-color: var(--color-error-400);
+}
+
+body.dark-mode .comparison-item.comparison-neutral {
+  border-left-color: #6b7280;
+}
+
+body.dark-mode .comparison-text {
+  color: #e5e7eb;
+}
+
+body.dark-mode .comparison-detail {
+  color: #9ca3af;
+}
+
+/* Recommendations */
+body.dark-mode .summary-recommendations {
+  background: linear-gradient(135deg, #78350f 0%, #713f12 100%);
+  border-left-color: #fbbf24;
+}
+
+body.dark-mode .summary-recommendations h3 {
+  color: #fde68a;
+}
+
+body.dark-mode .recommendations-list li {
+  color: #e5e7eb;
+}
+
+body.dark-mode .recommendations-list li::before {
+  color: #fbbf24;
+}
+
+/* Slow questions */
+body.dark-mode .summary-slow-questions {
+  background: linear-gradient(135deg, #7f1d1d 0%, #771d1d 100%);
+  border-left-color: var(--color-error-400);
+}
+
+body.dark-mode .summary-slow-questions h3 {
+  color: #fca5a5;
+}
+
+body.dark-mode .slow-questions-intro {
+  color: #d1d5db;
+}
+
+body.dark-mode .slow-question-item {
+  background: #1f2937;
+}
+
+body.dark-mode .slow-question-number {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+body.dark-mode .slow-question-topic {
+  color: #d1d5db;
+}
+
+body.dark-mode .slow-question-time {
+  color: #f87171;
+}
+
+body.dark-mode .slow-questions-more {
+  color: #9ca3af;
+}
+
+/* Issue #6: Notes feature - dark mode */
+
+body.dark-mode .notes-section {
+  background: linear-gradient(135deg, #78350f 0%, #713f12 100%);
+  border-left-color: #fbbf24;
+}
+
+body.dark-mode .notes-header h4 {
+  color: #fde68a;
+}
+
+body.dark-mode .note-date {
+  color: #fcd34d;
+}
+
+body.dark-mode .note-textarea {
+  background: #1f2937;
+  border-color: #92400e;
+  color: #e5e7eb;
+}
+
+body.dark-mode .note-textarea:focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+}
+
+body.dark-mode .note-textarea::placeholder {
+  color: #d97706;
+  opacity: 0.7;
+}
+
+body.dark-mode .notes-char-count {
+  color: #fcd34d;
+}
+
+body.dark-mode .notes-char-count span {
+  color: #fde68a;
+}
+
+body.dark-mode .note-save-btn {
+  background: #fbbf24;
+  color: #78350f;
+}
+
+body.dark-mode .note-save-btn:hover {
+  background: #fcd34d;
+}
+
+body.dark-mode .note-delete-btn {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+body.dark-mode .note-delete-btn:hover {
+  background: #991b1b;
+}
+
+body.dark-mode .notes-formatting-hint {
+  color: #fcd34d;
+}
+
+body.dark-mode .notes-formatting-hint strong {
+  color: #fde68a;
+}
