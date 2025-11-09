@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/questions.css" />
     <link rel="stylesheet" href="assets/css/dark-mode-quiz.css" />
+    <link rel="stylesheet" href="assets/css/tbank-theme.css" />
   </head>
   <body>
     <!-- Issue #10: Screen reader announcements -->
@@ -62,13 +63,13 @@
       <div class="quiz-header-content">
         <h1 class="logo">TBank</h1>
         <div class="progress-info" role="navigation" aria-label="Quiz controls">
-          <div id="timer-display" class="timer-display" hidden aria-live="off">
+          <div id="timer-display" class="timer-display" hidden role="status" aria-live="polite">
             <span id="timer-text" aria-label="Time remaining">--:--</span>
             <button id="timer-toggle" class="timer-toggle-btn" aria-label="Pause timer" aria-pressed="false">⏸</button>
           </div>
           <span id="question-counter" aria-live="polite">Question 1 of 52</span>
-          <button id="settings-btn" class="settings-btn" aria-label="Open settings menu">⚙️</button>
-          <button id="menu-toggle" class="menu-btn" aria-label="Open question menu" aria-expanded="false">☰</button>
+          <button id="settings-btn" class="settings-btn" aria-label="Open settings menu"><span aria-hidden="true">⚙️</span><span class="sr-only">Settings</span></button>
+          <button id="menu-toggle" class="menu-btn" aria-label="Open question menu" aria-expanded="false"><span aria-hidden="true">☰</span><span class="sr-only">Menu</span></button>
         </div>
       </div>
       <div class="progress-bar-container" role="progressbar" aria-label="Quiz progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
@@ -100,7 +101,7 @@
         <div id="search-results-count" class="search-results-count" hidden></div>
       </div>
 
-      <div class="question-menu-stats" role="region" aria-label="Session statistics">
+      <div class="question-menu-stats session-stats" role="status" aria-live="polite" aria-label="Session statistics">
         <span id="answered-count" aria-label="Questions answered">Answered: 0/52</span>
         <span id="correct-count" aria-label="Correct answers">Correct: 0</span>
         <span id="percentage" aria-label="Accuracy percentage">0%</span>
