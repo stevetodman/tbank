@@ -1,0 +1,868 @@
+/* ============================================================================
+   TBank Design System - macOS-Native Theme
+   Based on comprehensive visual audit & accessibility improvements
+   ============================================================================ */
+
+/* ============================================================================
+   1. DESIGN TOKENS - System-First Approach
+   ============================================================================ */
+
+:root {
+  /* Tell browser to optimize form controls for light/dark */
+  color-scheme: light dark;
+
+  /* ===== Typography ===== */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Oxygen", "Ubuntu", sans-serif;
+  --font-vignette: Georgia, "Times New Roman", serif;
+  --font-mono: "SF Mono", Consolas, Monaco, monospace;
+
+  /* Base size optimized for macOS comfort */
+  --fs-body: 17px;
+  --lh: 1.55;
+  --lh-tight: 1.25;
+  --lh-relaxed: 1.75;
+  --lh-vignette: 1.8;
+
+  /* Modular scale (1.125 - Major Second) */
+  --scale-sm: 0.889;
+  --scale-base: 1;
+  --scale-1: 1.125;
+  --scale-2: 1.266;
+  --scale-3: 1.424;
+  --scale-4: 1.602;
+
+  /* ===== Semantic Colors (Canvas-based, system adaptive) ===== */
+  --bg: Canvas;
+  --surface: color-mix(in oklab, Canvas 94%, CanvasText 6%);
+  --surface-2: color-mix(in oklab, Canvas 90%, CanvasText 10%);
+  --fg: CanvasText;
+  --fg-muted: color-mix(in oklab, CanvasText 70%, Canvas 30%);
+  --border: color-mix(in oklab, CanvasText 12%, Canvas 88%);
+  --border-strong: color-mix(in oklab, CanvasText 20%, Canvas 80%);
+
+  /* System accent color (respects macOS preference) */
+  --accent: AccentColor;
+  --accent-contrast: AccentColorText;
+  --focus: AccentColor;
+
+  /* State colors (WCAG-compliant, color-blind safe) */
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+  --success-fg: #15803d;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-fg: #b91c1c;
+  --warning: #d97706;
+  --warning-bg: #fef3c7;
+  --warning-fg: #92400e;
+  --info: #3182ce;
+  --info-bg: #eff6ff;
+  --info-fg: #1e40af;
+
+  /* ===== Spacing (4/8 Grid System) ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ===== Border Radius ===== */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 999px;
+
+  /* ===== Shadows ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+  /* Focus ring */
+  --ring: 2px;
+  --ring-offset: 2px;
+
+  /* ===== Timing & Easing ===== */
+  --t-instant: 0ms;
+  --t-quick: 120ms;
+  --t-normal: 200ms;
+  --t-slow: 300ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ===== Dark Mode Overrides ===== */
+@media (prefers-color-scheme: dark) {
+  :root:not(.force-light) {
+    --bg: #0f1419;
+    --surface: #1f2937;
+    --surface-2: #374151;
+    --fg: #e5e7eb;
+    --fg-muted: #9ca3af;
+    --border: #374151;
+    --border-strong: #4b5563;
+
+    /* Adjust state colors for dark mode */
+    --success-bg: #064e3b;
+    --success-fg: #a7f3d0;
+    --danger-bg: #7f1d1d;
+    --danger-fg: #fca5a5;
+    --warning-bg: #78350f;
+    --warning-fg: #fde68a;
+    --info-bg: #1e3a5f;
+    --info-fg: #bae6fd;
+
+    /* Increase line-height slightly in dark mode for better readability */
+    --lh: 1.6;
+
+    /* Softer shadows for dark mode */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Manual dark mode override class (for user toggle) */
+html.dark-mode,
+body.dark-mode {
+  --bg: #0f1419;
+  --surface: #1f2937;
+  --surface-2: #374151;
+  --fg: #e5e7eb;
+  --fg-muted: #9ca3af;
+  --border: #374151;
+  --border-strong: #4b5563;
+  --success-bg: #064e3b;
+  --success-fg: #a7f3d0;
+  --danger-bg: #7f1d1d;
+  --danger-fg: #fca5a5;
+  --warning-bg: #78350f;
+  --warning-fg: #fde68a;
+  --info-bg: #1e3a5f;
+  --info-fg: #bae6fd;
+  --lh: 1.6;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================================
+   2. BASE STYLES
+   ============================================================================ */
+
+body {
+  font: 400 var(--fs-body) / var(--lh) var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography scale application */
+h1 {
+  font-size: calc(1rem * var(--scale-3));
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: calc(1rem * var(--scale-2));
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: calc(1rem * var(--scale-1));
+  line-height: var(--lh-tight);
+  font-weight: 600;
+}
+
+/* Tabular numbers for stats and counters */
+.session-stats,
+.timer-display,
+#question-counter,
+#answered-count,
+#correct-count,
+#percentage,
+.progress-info,
+.question-menu-stats {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Main content constraint */
+main {
+  max-width: 72ch;
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+/* ============================================================================
+   3. UNIVERSAL FOCUS RING (Keyboard Accessibility)
+   ============================================================================ */
+
+/* Remove default outlines first */
+:where(button, [role="button"], a, input, select, textarea, [tabindex]:not([tabindex="-1"])) {
+  outline: none;
+}
+
+/* Apply visible focus ring on keyboard navigation */
+:where(button, [role="button"], a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  box-shadow:
+    0 0 0 var(--ring-offset) color-mix(in oklab, var(--bg) 85%, var(--focus) 15%),
+    0 0 0 calc(var(--ring) + var(--ring-offset)) var(--focus);
+  outline: none;
+  z-index: 1;
+  position: relative;
+}
+
+/* Special focus for radio inputs within answer choices */
+.answer-choice:focus-within {
+  box-shadow:
+    0 0 0 var(--ring-offset) color-mix(in oklab, var(--bg) 85%, var(--focus) 15%),
+    0 0 0 calc(var(--ring) + var(--ring-offset)) var(--focus);
+}
+
+/* ============================================================================
+   4. BUTTON COMPONENT STATES
+   ============================================================================ */
+
+button,
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--t-quick) var(--ease),
+    border-color var(--t-quick) var(--ease),
+    transform var(--t-quick) var(--ease),
+    box-shadow var(--t-quick) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* Hover state */
+button:hover:not(:disabled),
+.btn:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--surface) 90%, var(--fg) 10%);
+  border-color: var(--border-strong);
+}
+
+/* Active/pressed state */
+button:active:not(:disabled),
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Disabled state */
+button:disabled,
+.btn:disabled,
+button[aria-disabled="true"],
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Primary button variant */
+button.primary,
+.button-primary,
+.submit-btn {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+button.primary:hover:not(:disabled),
+.button-primary:hover:not(:disabled),
+.submit-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+/* Secondary button variant */
+button.secondary,
+.button-secondary {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--fg);
+}
+
+button.secondary:hover:not(:disabled),
+.button-secondary:hover:not(:disabled) {
+  background: var(--surface);
+}
+
+/* Danger button variant */
+button.danger,
+.menu-action-btn:contains("Reset") {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+button.danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: white;
+}
+
+/* ============================================================================
+   5. MCQ SEMANTIC MARKUP (Fieldset + Legend + Labels)
+   ============================================================================ */
+
+/* Fieldset reset */
+.mcq,
+.answer-choices {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Legend styling */
+.mcq legend,
+.answer-choices legend {
+  font-weight: 600;
+  font-size: calc(1rem * var(--scale-1));
+  padding: 0;
+  margin-bottom: var(--space-4);
+  color: var(--fg);
+}
+
+/* MCQ option as label wrapper */
+.mcq-option,
+.answer-choice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all var(--t-quick) var(--ease);
+  min-height: 44px;
+}
+
+.mcq-option:hover,
+.answer-choice:hover {
+  background: color-mix(in oklab, var(--surface) 94%, var(--fg) 6%);
+  border-color: var(--border-strong);
+}
+
+/* Selected state */
+.mcq-option:has(input:checked),
+.answer-choice:has(input:checked),
+.answer-choice.answer-selected {
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface) 90%);
+  border-color: var(--accent);
+}
+
+.mcq-option:has(input:checked) .mcq-text,
+.answer-choice:has(input:checked) .choice-text {
+  font-weight: 600;
+}
+
+/* Radio input (visually hidden but accessible) */
+.mcq-option input[type="radio"],
+.answer-choice input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Choice letter/marker */
+.choice-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 2px solid var(--border-strong);
+  font-weight: 700;
+  font-size: calc(1rem * var(--scale-1));
+  transition: all var(--t-quick) var(--ease);
+}
+
+.mcq-option:has(input:checked) .choice-letter,
+.answer-choice:has(input:checked) .choice-letter,
+.answer-choice.answer-selected .choice-letter {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Correct/Incorrect states with icons */
+.answer-choice.answer-correct {
+  background: var(--success-bg);
+  border-color: var(--success);
+}
+
+.answer-choice.answer-correct .choice-letter {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.answer-choice.answer-correct::after {
+  content: "✓ Correct";
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--success);
+  margin-left: auto;
+}
+
+.answer-choice.answer-incorrect {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+.answer-choice.answer-incorrect .choice-letter {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.answer-choice.answer-incorrect::after {
+  content: "✗ Incorrect";
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--danger);
+  margin-left: auto;
+}
+
+/* Strike-through toggle button within option */
+.strike,
+.eliminate-btn {
+  min-height: 32px;
+  min-width: 32px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--t-quick) var(--ease);
+}
+
+.mcq-option:hover .strike,
+.answer-choice:hover .eliminate-btn {
+  opacity: 1;
+}
+
+.strike[aria-pressed="true"],
+.answer-choice.eliminated .eliminate-btn {
+  opacity: 1;
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Strike-through effect */
+.strike[aria-pressed="true"] ~ .mcq-text,
+.answer-choice.eliminated .choice-text {
+  text-decoration: line-through;
+  text-decoration-color: var(--danger);
+  text-decoration-thickness: 2px;
+  opacity: 0.6;
+}
+
+.answer-choice.eliminated {
+  opacity: 0.5;
+}
+
+/* ============================================================================
+   6. MODAL DIALOGS (Focus Trap & Accessibility)
+   ============================================================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+  backdrop-filter: blur(4px);
+}
+
+.modal[hidden] {
+  display: none !important;
+}
+
+.modal-content {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--fg);
+}
+
+.modal-body {
+  padding: var(--space-6);
+  color: var(--fg);
+  flex: 1;
+  overflow: auto;
+}
+
+.modal-footer {
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+/* Close button */
+.close-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--t-quick) var(--ease);
+}
+
+.close-btn:hover {
+  background: var(--surface-2);
+  color: var(--fg);
+}
+
+/* ============================================================================
+   7. LIVE REGIONS & PROGRESS AFFORDANCES
+   ============================================================================ */
+
+/* Screen reader announcements */
+#sr-announcements,
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Progress info with live region */
+.progress-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.session-stats {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+/* Timer display */
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Timer warning states */
+.timer-display.timer-caution {
+  background: var(--warning-bg);
+  border-color: var(--warning);
+  color: var(--warning-fg);
+}
+
+.timer-display.timer-warning {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger-fg);
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* ============================================================================
+   8. SPACING & RHYTHM UTILITIES
+   ============================================================================ */
+
+/* Vertical rhythm helpers */
+.stack-2 > * + * { margin-top: var(--space-2); }
+.stack-3 > * + * { margin-top: var(--space-3); }
+.stack-4 > * + * { margin-top: var(--space-4); }
+.stack-6 > * + * { margin-top: var(--space-6); }
+
+/* Consistent card/surface spacing */
+.card,
+.question-display,
+.question-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+
+/* Question vignette */
+.vignette {
+  background: color-mix(in oklab, var(--surface) 50%, var(--bg) 50%);
+  border-left: 4px solid var(--accent);
+  padding: var(--space-5);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-vignette);
+  font-size: calc(1rem * var(--scale-1));
+  line-height: var(--lh-vignette);
+  max-width: 70ch;
+}
+
+/* Question text emphasis */
+.question-text {
+  font-weight: 600;
+  font-size: calc(1rem * var(--scale-1));
+  line-height: var(--lh-relaxed);
+  padding: var(--space-3) 0;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  margin: var(--space-4) 0;
+}
+
+/* ============================================================================
+   9. TAP TARGET NORMALIZATION (≥44×44px)
+   ============================================================================ */
+
+/* All interactive elements */
+button,
+[role="button"],
+a[href],
+input[type="checkbox"],
+input[type="radio"],
+select,
+.grid-question-btn,
+.menu-btn,
+.settings-btn,
+.nav-btn,
+.filter-btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Question grid buttons */
+.grid-question-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--t-quick) var(--ease);
+}
+
+.grid-question-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+}
+
+.grid-question-btn.current {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 20%, var(--surface) 80%);
+}
+
+.grid-question-btn.correct {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.grid-question-btn.incorrect {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+/* ============================================================================
+   10. PERFORMANCE & MOTION
+   ============================================================================ */
+
+/* Honor reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: var(--space-4);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 9999;
+  transition: top var(--t-quick) var(--ease);
+}
+
+.skip-to-content:focus {
+  top: var(--space-4);
+}
+
+/* ============================================================================
+   11. RESPONSIVE & SAFE AREAS
+   ============================================================================ */
+
+/* iOS safe area support */
+.quiz-header {
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+}
+
+.quiz-container {
+  padding-bottom: max(var(--space-6), env(safe-area-inset-bottom));
+}
+
+.question-menu {
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  padding-right: max(var(--space-4), env(safe-area-inset-right));
+}
+
+/* Container queries for responsive components */
+@container (max-width: 600px) {
+  .modal-content {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 640px) {
+  :root {
+    --fs-body: 16px;
+  }
+
+  .modal-content {
+    max-width: 100%;
+  }
+
+  .question-grid {
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  }
+}
+
+/* ============================================================================
+   12. UTILITY CLASSES
+   ============================================================================ */
+
+/* Text utilities */
+.text-muted { color: var(--fg-muted); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.text-warning { color: var(--warning); }
+
+/* Background utilities */
+.bg-surface { background: var(--surface); }
+.bg-success { background: var(--success-bg); }
+.bg-danger { background: var(--danger-bg); }
+.bg-warning { background: var(--warning-bg); }
+
+/* Border utilities */
+.border { border: 1px solid var(--border); }
+.border-strong { border-color: var(--border-strong); }
+.rounded { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+
+/* Spacing utilities */
+.p-4 { padding: var(--space-4); }
+.p-6 { padding: var(--space-6); }
+.m-0 { margin: 0; }
+.mt-4 { margin-top: var(--space-4); }
+.mb-4 { margin-bottom: var(--space-4); }
+.gap-4 { gap: var(--space-4); }
+
+/* Flexbox utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+
+/* Grid utilities */
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+/* ============================================================================
+   End of TBank Design System Theme
+   ============================================================================ */
