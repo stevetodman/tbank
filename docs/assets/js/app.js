@@ -182,21 +182,6 @@
     element.addEventListener('touchmove', handleTouchMove, { passive: true });
     element.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-    // Store cleanup function
-    element._swipeCleanup = () => {
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
-      element._swipeInitialized = false;
-      delete element._swipeCleanup;
-    };
-  }
-
-  // Cleanup swipe gestures for an element
-  function cleanupSwipeGesture(element) {
-    if (element._swipeCleanup) {
-      element._swipeCleanup();
-    }
   }
 
   // State management

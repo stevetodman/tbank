@@ -85,6 +85,29 @@ export default [
     }
   },
   {
+    files: ['docs/assets/js/instructor.js', 'docs/assets/js/sessionManager.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        ...globals.browser
+      }
+    },
+    rules: {
+      'no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }],
+      'no-console': ['warn', { allow: ['error', 'warn', 'info'] }],
+      'eqeqeq': ['error', 'always'],
+      'no-eval': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'semi': ['warn', 'always'],
+      'quotes': ['warn', 'single', { avoidEscape: true }]
+    }
+  },
+  {
     files: ['scripts/**/*.js', '**/*.config.js'],
     languageOptions: {
       ecmaVersion: 2022,
