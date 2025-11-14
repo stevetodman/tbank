@@ -6,11 +6,15 @@ const RUNTIME_CACHE = 'tbank-runtime-v1.0.0';
 const STATIC_ASSETS = [
   '/tbank/',
   '/tbank/index.html',
+  '/tbank/instructor.html',
   '/tbank/assets/css/styles.css',
   '/tbank/assets/css/questions.css',
+  '/tbank/assets/css/instructor.css',
   '/tbank/assets/js/app.js',
   '/tbank/assets/js/questionData.js',
   '/tbank/assets/js/questionsPage.js',
+  '/tbank/assets/js/instructor.js',
+  '/tbank/assets/js/sessionManager.js',
   '/tbank/manifest.webmanifest'
 ];
 
