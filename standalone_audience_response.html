@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Audience Response System</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+        }
+        
+        .card h2 {
+            color: #2d3748;
+            font-size: 22px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .student-view {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .student-view h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .student-view .session-code {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .question-display {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .question-display h3 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .option-button {
+            background: white;
+            border: 3px solid #e2e8f0;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: left;
+            transition: all 0.2s;
+            width: 100%;
+            min-height: 60px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .option-button:active {
+            transform: scale(0.98);
+        }
+        
+        .option-button:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+        
+        @media (hover: none) {
+            .option-button:hover {
+                transform: none;
+            }
+        }
+        
+        .option-button.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option-button.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .submit-button {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+            min-height: 60px;
+            width: 100%;
+            max-width: 300px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .submit-button:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        
+        .submit-button:hover:not(:disabled) {
+            background: #38a169;
+        }
+        
+        @media (hover: none) {
+            .submit-button:hover:not(:disabled) {
+                background: #48bb78;
+            }
+        }
+        
+        .submit-button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+        
+        .control-panel {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 48px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .button:active {
+            transform: scale(0.98);
+        }
+        
+        .button-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .button-primary:hover {
+            background: #5568d3;
+        }
+        
+        .button-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .button-success:hover {
+            background: #38a169;
+        }
+        
+        .button-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .button-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .button-secondary {
+            background: #edf2f7;
+            color: #2d3748;
+        }
+        
+        .button-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .option-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .option-input-row input {
+            flex: 1;
+        }
+        
+        .option-input-row button {
+            padding: 8px 12px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-card .label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .results-list {
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .result-item .option-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-bar {
+            background: #e2e8f0;
+            height: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .result-bar-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .waiting-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+        
+        .waiting-message .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .qr-code {
+            margin: 20px 0;
+        }
+        
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .mode-selector {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .mode-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-width: 250px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .mode-card:active {
+            transform: scale(0.98);
+        }
+        
+        .mode-card:hover {
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        @media (hover: none) {
+            .mode-card:hover {
+                transform: none;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mode-selector {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mode-card {
+                min-width: 100%;
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .question-display h3 {
+                font-size: 20px;
+            }
+            
+            .option-button {
+                font-size: 16px;
+                padding: 18px;
+            }
+        }
+        
+        .mode-card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-card h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .mode-card p {
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // LocalStorage-based database (works across browser tabs)
+        // Firebase Database Class
+        class FirebaseDB {
+            constructor() {
+                // Your Firebase configuration
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBWHwQ9eCYPNggZA1m6VFtWgcJjTxPmdGw",
+                    authDomain: "audience-response-b6101.firebaseapp.com",
+                    databaseURL: "https://audience-response-b6101-default-rtdb.firebaseio.com",
+                    projectId: "audience-response-b6101",
+                    storageBucket: "audience-response-b6101.firebasestorage.app",
+                    messagingSenderId: "333854301450",
+                    appId: "1:333854301450:web:9a10d5859bcbfdb422aef3"
+                };
+                
+                // Initialize Firebase
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                this.database = firebase.database();
+            }
+            
+            createSession(sessionId) {
+                return this.database.ref(`sessions/${sessionId}`).set({
+                    id: sessionId,
+                    active: true,
+                    currentQuestion: null,
+                    isPolling: false,
+                    createdAt: Date.now()
+                }).then(() => sessionId);
+            }
+            
+            getSession(sessionId) {
+                return this.database.ref(`sessions/${sessionId}`).once('value')
+                    .then(snapshot => snapshot.val());
+            }
+            
+            updateSession(sessionId, updates) {
+                return this.database.ref(`sessions/${sessionId}`).update(updates);
+            }
+            
+            startPoll(sessionId, question) {
+                // Clear previous responses
+                this.database.ref(`responses/${sessionId}`).remove();
+                return this.database.ref(`sessions/${sessionId}`).update({
+                    currentQuestion: question,
+                    isPolling: true
+                });
+            }
+            
+            stopPoll(sessionId) {
+                return this.updateSession(sessionId, { isPolling: false });
+            }
+            
+            submitResponse(sessionId, response) {
+                const responseRef = this.database.ref(`responses/${sessionId}`).push();
+                return responseRef.set({
+                    ...response,
+                    timestamp: Date.now()
+                }).then(() => true);
+            }
+            
+            getResponses(sessionId) {
+                return this.database.ref(`responses/${sessionId}`).once('value')
+                    .then(snapshot => {
+                        const responses = [];
+                        snapshot.forEach(child => {
+                            responses.push(child.val());
+                        });
+                        return responses;
+                    });
+            }
+            
+            subscribe(sessionId, callback) {
+                const sessionRef = this.database.ref(`sessions/${sessionId}`);
+                const responsesRef = this.database.ref(`responses/${sessionId}`);
+                
+                const handler = () => callback();
+                
+                sessionRef.on('value', handler);
+                responsesRef.on('value', handler);
+                
+                return () => {
+                    sessionRef.off('value', handler);
+                    responsesRef.off('value', handler);
+                };
+            }
+        }
+        
+        // Global database instance
+        const db = new FirebaseDB();
+        
+        // Instructor Dashboard Component
+        function InstructorDashboard({ sessionId }) {
+            const [currentQuestion, setCurrentQuestion] = useState('');
+            const [options, setOptions] = useState(['', '', '', '']);
+            const [isPolling, setIsPolling] = useState(false);
+            const [responses, setResponses] = useState([]);
+            const [showCreateForm, setShowCreateForm] = useState(false);
+            const qrCanvasRef = useRef(null);
+            
+            useEffect(() => {
+                const updateData = async () => {
+                    try {
+                        const session = await db.getSession(sessionId);
+                        if (session) {
+                            setIsPolling(session.isPolling);
+                            if (session.currentQuestion) {
+                                setCurrentQuestion(session.currentQuestion.text);
+                                setOptions(session.currentQuestion.options);
+                            }
+                        }
+                        const responsesData = await db.getResponses(sessionId);
+                        setResponses(responsesData);
+                    } catch (error) {
+                        console.error('Error updating data:', error);
+                    }
+                };
+                
+                updateData();
+                const unsubscribe = db.subscribe(sessionId, updateData);
+                const interval = setInterval(updateData, 1000);
+                
+                return () => {
+                    unsubscribe();
+                    clearInterval(interval);
+                };
+            }, [sessionId]);
+            
+            useEffect(() => {
+                if (qrCanvasRef.current) {
+                    const url = `${window.location.origin}${window.location.pathname}#student-${sessionId}`;
+                    // Clear any existing QR code
+                    qrCanvasRef.current.innerHTML = '';
+                    
+                    if (typeof QRCode !== 'undefined') {
+                        try {
+                            new QRCode(qrCanvasRef.current, {
+                                text: url,
+                                width: 200,
+                                height: 200,
+                                colorDark: "#000000",
+                                colorLight: "#ffffff",
+                                correctLevel: QRCode.CorrectLevel.H
+                            });
+                        } catch (error) {
+                            console.error('QRCode generation error:', error);
+                            qrCanvasRef.current.innerHTML = '<p style="color: #718096;">QR Code: ' + url + '</p>';
+                        }
+                    } else {
+                        console.warn('QRCode library not loaded');
+                        qrCanvasRef.current.innerHTML = '<p style="color: #718096;">QR Code library loading...</p>';
+                    }
+                }
+            }, [sessionId]);
+            
+            const startPoll = () => {
+                if (currentQuestion && options.filter(o => o.trim()).length >= 2) {
+                    db.startPoll(sessionId, {
+                        text: currentQuestion,
+                        options: options.filter(o => o.trim())
+                    });
+                    setShowCreateForm(false);
+                }
+            };
+            
+            const stopPoll = () => {
+                db.stopPoll(sessionId);
+            };
+            
+            const addOption = () => {
+                setOptions([...options, '']);
+            };
+            
+            const removeOption = (index) => {
+                setOptions(options.filter((_, i) => i !== index));
+            };
+            
+            const updateOption = (index, value) => {
+                const newOptions = [...options];
+                newOptions[index] = value;
+                setOptions(newOptions);
+            };
+            
+            const calculateResults = () => {
+                const counts = {};
+                options.filter(o => o.trim()).forEach(opt => {
+                    counts[opt] = 0;
+                });
+                
+                responses.forEach(response => {
+                    if (counts.hasOwnProperty(response.answer)) {
+                        counts[response.answer]++;
+                    }
+                });
+                
+                return options.filter(o => o.trim()).map(opt => ({
+                    option: opt,
+                    count: counts[opt] || 0,
+                    percentage: responses.length > 0 
+                        ? ((counts[opt] || 0) / responses.length * 100).toFixed(1)
+                        : 0
+                }));
+            };
+            
+            const results = calculateResults();
+            const studentUrl = `${window.location.origin}${window.location.pathname}#student-${sessionId}`;
+            
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>Instructor Dashboard</h1>
+                        <p>Session Code: <strong>{sessionId}</strong></p>
+                    </div>
+                    
+                    <div className="main-grid">
+                        <div className="card">
+                            <h2>Session Access</h2>
+                            <p style={{marginBottom: '15px', color: '#718096'}}>
+                                Students can join at: <strong>{studentUrl}</strong>
+                            </p>
+                            <div className="qr-code">
+                                <div ref={qrCanvasRef}></div>
+                            </div>
+                            <p style={{fontSize: '14px', color: '#718096'}}>
+                                Students can scan this QR code to join
+                            </p>
+                        </div>
+                        
+                        <div className="card">
+                            <h2>Quick Stats</h2>
+                            <div className="stats-grid">
+                                <div className="stat-card">
+                                    <div className="number">{responses.length}</div>
+                                    <div className="label">Responses</div>
+                                </div>
+                                <div className="stat-card">
+                                    <div className="number">{isPolling ? '🟢' : '⭕'}</div>
+                                    <div className="label">{isPolling ? 'Live' : 'Stopped'}</div>
+                                </div>
+                            </div>
+                            
+                            <div className="control-panel">
+                                {!isPolling ? (
+                                    <button 
+                                        className="button button-primary"
+                                        onClick={() => setShowCreateForm(!showCreateForm)}
+                                    >
+                                        {showCreateForm ? 'Cancel' : 'Create New Poll'}
+                                    </button>
+                                ) : (
+                                    <button 
+                                        className="button button-danger"
+                                        onClick={stopPoll}
+                                    >
+                                        Stop Poll
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {showCreateForm && (
+                        <div className="card" style={{marginTop: '20px'}}>
+                            <h2>Create New Poll</h2>
+                            <div className="form-group">
+                                <label>Question</label>
+                                <textarea
+                                    value={currentQuestion}
+                                    onChange={(e) => setCurrentQuestion(e.target.value)}
+                                    placeholder="Enter your question here..."
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>Options</label>
+                                <div className="option-inputs">
+                                    {options.map((opt, idx) => (
+                                        <div key={idx} className="option-input-row">
+                                            <input
+                                                type="text"
+                                                value={opt}
+                                                onChange={(e) => updateOption(idx, e.target.value)}
+                                                placeholder={`Option ${String.fromCharCode(65 + idx)}`}
+                                            />
+                                            {options.length > 2 && (
+                                                <button 
+                                                    className="button button-danger"
+                                                    onClick={() => removeOption(idx)}
+                                                >
+                                                    ✕
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                                {options.length < 10 && (
+                                    <button 
+                                        className="button button-secondary"
+                                        onClick={addOption}
+                                        style={{marginTop: '10px'}}
+                                    >
+                                        + Add Option
+                                    </button>
+                                )}
+                            </div>
+                            
+                            <button 
+                                className="button button-success"
+                                onClick={startPoll}
+                                disabled={!currentQuestion || options.filter(o => o.trim()).length < 2}
+                            >
+                                Start Poll
+                            </button>
+                        </div>
+                    )}
+                    
+                    {isPolling && currentQuestion && (
+                        <div className="card" style={{marginTop: '20px'}}>
+                            <h2>Current Poll - Live Results</h2>
+                            <div className="question-display">
+                                <h3>{currentQuestion}</h3>
+                            </div>
+                            
+                            <div className="results-list">
+                                {results.map((result, idx) => (
+                                    <div key={idx} className="result-item">
+                                        <div className="option-text">
+                                            <span>{String.fromCharCode(65 + idx)}. {result.option}</span>
+                                            <span>{result.count} votes ({result.percentage}%)</span>
+                                        </div>
+                                        <div className="result-bar">
+                                            <div 
+                                                className="result-bar-fill"
+                                                style={{width: `${result.percentage}%`}}
+                                            >
+                                                {result.percentage > 10 && `${result.percentage}%`}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        
+        // Student View Component
+        function StudentView({ sessionId }) {
+            const [session, setSession] = useState(null);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+            const [hasSubmitted, setHasSubmitted] = useState(false);
+            
+            useEffect(() => {
+                const updateSession = async () => {
+                    try {
+                        const sessionData = await db.getSession(sessionId);
+                        setSession(sessionData);
+                        
+                        // Reset submission state when new poll starts
+                        if (sessionData && sessionData.isPolling && !hasSubmitted) {
+                            const currentQ = sessionData.currentQuestion;
+                            if (currentQ) {
+                                setSelectedAnswer(null);
+                            }
+                        }
+                        
+                        // Reset when poll stops
+                        if (sessionData && !sessionData.isPolling) {
+                            setHasSubmitted(false);
+                            setSelectedAnswer(null);
+                        }
+                    } catch (error) {
+                        console.error('Error updating session:', error);
+                    }
+                };
+                
+                updateSession();
+                const unsubscribe = db.subscribe(sessionId, updateSession);
+                const interval = setInterval(updateSession, 1000);
+                
+                return () => {
+                    unsubscribe();
+                    clearInterval(interval);
+                };
+            }, [sessionId, hasSubmitted]);
+            
+            const submitResponse = () => {
+                if (selectedAnswer) {
+                    db.submitResponse(sessionId, { answer: selectedAnswer });
+                    setHasSubmitted(true);
+                }
+            };
+            
+            if (!session) {
+                return (
+                    <div className="student-view">
+                        <h1>Session Not Found</h1>
+                        <p>Please check your session code and try again.</p>
+                    </div>
+                );
+            }
+            
+            if (!session.isPolling || !session.currentQuestion) {
+                return (
+                    <div className="student-view">
+                        <h1>Audience Response</h1>
+                        <div className="session-code">{sessionId}</div>
+                        <div className="waiting-message">
+                            <div className="icon">⏳</div>
+                            <h2>Waiting for question...</h2>
+                            <p>Your instructor will start the poll shortly.</p>
+                        </div>
+                    </div>
+                );
+            }
+            
+            if (hasSubmitted) {
+                return (
+                    <div className="student-view">
+                        <h1>Response Submitted!</h1>
+                        <div className="success-message">
+                            ✓ Your answer has been recorded
+                        </div>
+                        <p style={{marginTop: '20px', color: '#718096'}}>
+                            Waiting for next question...
+                        </p>
+                    </div>
+                );
+            }
+            
+            return (
+                <div className="student-view">
+                    <h1>Audience Response</h1>
+                    <div className="session-code">{sessionId}</div>
+                    
+                    <div className="question-display">
+                        <h3>{session.currentQuestion.text}</h3>
+                        
+                        <div style={{marginTop: '20px'}}>
+                            {session.currentQuestion.options.map((option, idx) => (
+                                <button
+                                    key={idx}
+                                    className={`option-button ${selectedAnswer === option ? 'selected' : ''}`}
+                                    onClick={() => setSelectedAnswer(option)}
+                                >
+                                    <strong>{String.fromCharCode(65 + idx)}.</strong> {option}
+                                </button>
+                            ))}
+                        </div>
+                        
+                        <button
+                            className="submit-button"
+                            onClick={submitResponse}
+                            disabled={!selectedAnswer}
+                        >
+                            Submit Answer
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Mode Selection Component
+        function ModeSelection({ onSelectMode }) {
+            return (
+                <div className="container">
+                    <div className="student-view">
+                        <h1>Audience Response System</h1>
+                        <p style={{fontSize: '18px', color: '#718096', marginTop: '10px'}}>
+                            For Medical Education Lectures
+                        </p>
+                        
+                        <div className="mode-selector">
+                            <div className="mode-card" onClick={() => onSelectMode('instructor')}>
+                                <div className="icon">👨‍🏫</div>
+                                <h3>Instructor</h3>
+                                <p>Create and manage polls</p>
+                            </div>
+                            
+                            <div className="mode-card" onClick={() => onSelectMode('student')}>
+                                <div className="icon">👨‍🎓</div>
+                                <h3>Student</h3>
+                                <p>Join with session code</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Main App Component
+        function App() {
+            const [mode, setMode] = useState(null);
+            const [sessionId, setSessionId] = useState(null);
+            
+            useEffect(() => {
+                // Check URL hash for direct links
+                const initializeFromHash = async () => {
+                    const hash = window.location.hash.substring(1);
+                    if (hash.startsWith('student-')) {
+                        const sid = hash.replace('student-', '');
+                        setSessionId(sid);
+                        setMode('student');
+                    } else if (hash.startsWith('instructor-')) {
+                        const sid = hash.replace('instructor-', '');
+                        // Create session if it doesn't exist
+                        const existingSession = await db.getSession(sid);
+                        if (!existingSession) {
+                            await db.createSession(sid);
+                        }
+                        setSessionId(sid);
+                        setMode('instructor');
+                    }
+                };
+                
+                initializeFromHash();
+            }, []);
+            
+            const selectMode = async (selectedMode) => {
+                if (selectedMode === 'instructor') {
+                    // Generate random session ID
+                    const sid = Math.random().toString(36).substring(2, 8).toUpperCase();
+                    await db.createSession(sid);
+                    setSessionId(sid);
+                    setMode('instructor');
+                    window.location.hash = `instructor-${sid}`;
+                } else {
+                    // Ask for session code
+                    const code = prompt('Enter session code:');
+                    if (code) {
+                        const upperCode = code.toUpperCase().trim();
+                        const session = await db.getSession(upperCode);
+                        if (session) {
+                            setSessionId(upperCode);
+                            setMode('student');
+                            window.location.hash = `student-${upperCode}`;
+                        } else {
+                            alert('Invalid session code. Please try again.');
+                        }
+                    }
+                }
+            };
+            
+            if (!mode || !sessionId) {
+                return <ModeSelection onSelectMode={selectMode} />;
+            }
+            
+            if (mode === 'instructor') {
+                return <InstructorDashboard sessionId={sessionId} />;
+            }
+            
+            return <StudentView sessionId={sessionId} />;
+        }
+        
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
