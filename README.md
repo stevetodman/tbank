@@ -46,6 +46,18 @@ Visit [TBank](https://stevetodman.github.io/tbank/) in any modern browser and st
    - Add personal notes and annotations
    - Sync updates as new questions are added
 
+## 🧑‍🏫 For Instructors: Build Sessions Ahead of Time
+
+TBank now includes an **Instructor Studio** for planning live classroom polls and active learning sessions.
+
+- **Create sessions in advance** with friendly access codes for your students.
+- **Prepare question decks** (multiple choice, open response, Likert, and image prompts) before lecture day.
+- **Reorder, edit, and tag questions** to match the flow of your teaching.
+- **Launch polls instantly** during class with a live control panel for next/previous navigation.
+- **Export & import** session JSON files to share with colleagues or version-control your decks.
+
+👉 [Open the Instructor Studio](https://stevetodman.github.io/tbank/instructor.html)
+
 ## 📚 Available Content
 
 ### Part 1: Tetralogy of Fallot and Shunt Lesions

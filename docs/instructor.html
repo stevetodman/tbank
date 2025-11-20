@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TBank Instructor Studio</title>
+    <meta
+      name="description"
+      content="Prepare interactive polling sessions in advance with TBank's instructor-grade authoring tools."
+    />
+    <link rel="stylesheet" href="assets/css/instructor.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#session-content">Skip to session workspace</a>
+    <header>
+      <div class="header-content">
+        <div>
+          <h1>Instructor Studio</h1>
+          <p>
+            Design, rehearse, and deploy classroom polls before you walk into the lecture hall. Everything stays synced locally
+            so you can iterate without friction.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" aria-label="Return to learner experience">
+            ← Back to Quiz Experience
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Your Sessions</h2>
+        <form id="session-form" class="session-form" autocomplete="off">
+          <label>
+            <span>Session name</span>
+            <input
+              id="session-name"
+              name="session-name"
+              type="text"
+              placeholder="Cardiology Grand Rounds"
+              required
+            />
+          </label>
+          <label>
+            <span>Access code (optional)</span>
+            <input
+              id="session-code"
+              name="session-code"
+              type="text"
+              placeholder="Generate a student-friendly code"
+              maxlength="12"
+            />
+          </label>
+          <button class="button-primary" type="submit">Create session</button>
+        </form>
+
+        <div class="session-summary" id="session-stats" hidden>
+          <strong>Session snapshot</strong>
+          <span id="session-count"></span>
+          <span id="question-count"></span>
+          <span id="last-updated"></span>
+        </div>
+
+        <div class="session-list" id="session-list" role="list"></div>
+      </section>
+
+      <section class="panel" id="session-panel" aria-live="polite">
+        <div class="empty-state" id="session-empty">Create a session or select one from the left to begin planning.</div>
+
+        <div id="session-content" hidden>
+          <div class="session-toolbar">
+            <div class="toolbar-group">
+              <div>
+                <h2 id="active-session-name"></h2>
+                <p id="active-session-code" aria-live="polite"></p>
+              </div>
+              <div class="status-pill" id="polling-status" data-status="inactive">Polling inactive</div>
+            </div>
+            <div class="toolbar-group">
+              <button class="button-secondary" id="rename-session-btn" type="button">Rename</button>
+              <button class="button-secondary" id="edit-code-btn" type="button">Update code</button>
+              <button class="button-secondary" id="export-session-btn" type="button">Export JSON</button>
+              <label class="import-input">
+                <input id="import-session-input" type="file" accept="application/json" />
+                <span>Import questions</span>
+              </label>
+              <button class="button-danger" id="delete-session-btn" type="button">Delete session</button>
+            </div>
+          </div>
+
+          <div class="meta-grid">
+            <div class="meta-tile">
+              <span>Prepared Questions</span>
+              <strong id="prepared-count">0</strong>
+            </div>
+            <div class="meta-tile">
+              <span>Current Question</span>
+              <strong id="current-question-label">None</strong>
+            </div>
+            <div class="meta-tile">
+              <span>Polling Mode</span>
+              <strong id="polling-label">Inactive</strong>
+            </div>
+          </div>
+
+          <form id="question-form" class="question-form" autocomplete="off">
+            <h3 id="question-form-title">Prepare a question</h3>
+            <label>
+              <span>Question type</span>
+              <select id="question-type" name="question-type">
+                <option value="multiple-choice">Multiple choice</option>
+                <option value="open-response">Open response</option>
+                <option value="likert">Likert scale</option>
+                <option value="image">Image prompt</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Prompt</span>
+              <textarea id="question-prompt" name="question-prompt" placeholder="Write the question stem" required></textarea>
+            </label>
+
+            <label>
+              <span>Teaching notes (optional)</span>
+              <textarea id="question-notes" name="question-notes" placeholder="Reinforcement pearls or teaching plan"></textarea>
+            </label>
+
+            <label>
+              <span>Reference link (optional)</span>
+              <input id="question-reference" name="question-reference" type="url" placeholder="https://" />
+            </label>
+
+            <label>
+              <span>Tags</span>
+              <input
+                id="question-tags"
+                name="question-tags"
+                type="text"
+                placeholder="Hemodynamics, Pediatrics, Physiology"
+              />
+            </label>
+
+            <div id="options-container"></div>
+
+            <div class="option-actions">
+              <button class="button-secondary" id="add-option-btn" type="button">Add answer option</button>
+              <button class="button-primary" type="submit" id="save-question-btn">Add question</button>
+            </div>
+          </form>
+
+          <div class="session-toolbar">
+            <div class="toolbar-group">
+              <button class="button-primary" id="start-first-btn" type="button">Start first question</button>
+              <button class="button-secondary" id="previous-question-btn" type="button">Previous</button>
+              <button class="button-secondary" id="next-question-btn" type="button">Next</button>
+              <button class="button-secondary" id="stop-polling-btn" type="button">Stop polling</button>
+            </div>
+          </div>
+
+          <ol class="question-list" id="prepared-questions"></ol>
+        </div>
+      </section>
+    </main>
+
+    <template id="question-card-template">
+      <li class="question-card">
+        <header>
+          <h3></h3>
+          <span class="question-type"></span>
+        </header>
+        <p class="question-prompt"></p>
+        <div class="tag-list"></div>
+        <div class="card-actions">
+          <button data-action="start" type="button">Start</button>
+          <button data-action="edit" type="button">Edit</button>
+          <button data-action="move-up" type="button">Move up</button>
+          <button data-action="move-down" type="button">Move down</button>
+          <button data-action="delete" type="button">Delete</button>
+        </div>
+      </li>
+    </template>
+
+    <script type="module" src="assets/js/instructor.js"></script>
+  </body>
+</html>
